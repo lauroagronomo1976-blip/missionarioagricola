@@ -1,0 +1,77 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+}
+
+.header {
+  background: #e6e6e6;
+  color: green;
+  text-align: center;
+  padding: 8px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.app {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 6px;
+}
+
+.card {
+  background: white;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+h2 {
+  margin: 0 0 6px;
+  color: green;
+  font-size: 14px;
+}
+
+label { font-size: 12px; }
+
+input, select, textarea {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+.small-input { width: 100%; padding: 4px; font-size: 12px; }
+
+button {
+  width: 100%;
+  padding: 8px;
+  background: green;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+
+button.sec { background: #777; }
+.small-btn { width: 100%; padding: 6px; font-size: 12px; }
+
+#map-container { position: relative; width: 100%; }
+#map { height: 220px; width: 100%; border-radius: 8px; }
+#mapControls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+.tiny-btn {
+  font-size: 11px;
+  padding: 4px;
+  flex: 1;
+  margin: 0 2px;
+  border-radius: 4px;
+}
+
+#resumoPontos { padding-left: 16px; font-size: 12px; }
