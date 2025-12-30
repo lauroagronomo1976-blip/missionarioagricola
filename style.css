@@ -87,3 +87,17 @@ input {
 button {
   cursor: pointer;
 }
+
+/* ===== CORREÇÃO MAPA LEAFLET ===== */
+#map {
+  width: 100%;
+  height: 260px;   /* tamanho controlado para mobile */
+  max-height: 40vh;
+  border-radius: 8px;
+}
+
+/* Garante que o mapa não estoure a página */
+.container-mapa {
+  width: 100%;
+  overflow: hidden;
+}
