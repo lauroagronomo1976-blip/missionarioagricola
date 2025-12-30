@@ -1,67 +1,58 @@
-<div class="header">Missionário Verde</div>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Missionário Verde</title>
 
-<div class="app">
+  <!-- ESSENCIAL PARA MOBILE -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <section class="card">
-    <h2>Nova Missão</h2>
+  <!-- ESTILO -->
+  <link rel="stylesheet" href="style.css">
 
-    <label>Safra</label>
-    <input type="text" placeholder="2024/2025">
+  <!-- LEAFLET (MAPA) -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+</head>
 
-    <label>Fazenda</label>
-    <input type="text">
+<body>
 
-    <label>Talhão</label>
-    <input type="text">
-  </section>
+  <header class="topo">
+    <h1>Missionário Verde</h1>
+  </header>
 
-  <section class="card">
-    <h2>Novo Ponto</h2>
+  <main class="conteudo">
 
-    <button id="btnGps" class="small-btn">📍 Usar localização atual</button>
+    <section class="bloco">
+      <h2>Nova Missão</h2>
 
-    <label>Latitude</label>
-    <input id="lat" type="number" step="any" class="small-input">
+      <label>Safra</label>
+      <input type="text" placeholder="Ex: 2024/2025">
 
-    <label>Longitude</label>
-    <input id="lng" type="number" step="any" class="small-input">
+      <label>Fazenda</label>
+      <input type="text">
 
-    <label>Precisão do GPS (m)</label>
-    <input id="acc" type="number" disabled class="small-input">
+      <label>Talhão</label>
+      <input type="text">
+    </section>
 
-    <label>Problema</label>
-    <select id="problema" class="small-input">
-      <option>Pragas</option>
-      <option>Doenças</option>
-      <option>Plantas Daninhas</option>
-      <option>Outros</option>
-    </select>
-
-    <label>Quantidade</label>
-    <input id="quantidade" type="number" class="small-input">
-
-    <label>Observações</label>
-    <textarea id="obs" rows="2" class="small-input"></textarea>
-
-    <button id="addPonto" class="small-btn">Adicionar ponto</button>
-    <button id="limparCampos" class="sec small-btn">Limpar campos</button>
-  </section>
-
-  <section class="card">
-    <h2>Mapa</h2>
-    <div id="map-container">
+    <section class="bloco">
+      <h2>Mapa</h2>
       <div id="map"></div>
-      <div id="mapControls">
-        <button id="btnLayer" class="tiny-btn">Camadas</button>
-        <button id="btnGpsMap" class="tiny-btn">📍 Mira GPS</button>
-        <input type="file" id="kmlUpload" accept=".kml" class="tiny-btn">
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="card">
-    <h2>Resumo da Missão</h2>
-    <ul id="resumoPontos"></ul>
-  </section>
+    <section class="bloco">
+      <h2>Resumo da Missão</h2>
+      <div id="resumo"></div>
+    </section>
 
-</div>
+  </main>
+
+  <!-- SCRIPT -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>
