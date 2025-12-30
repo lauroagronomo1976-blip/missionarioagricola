@@ -19,6 +19,11 @@ const controleCamadas = L.control({ position: "topright" });
 
 controleCamadas.onAdd = function () {
   const div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+  div.style.width = "48px";
+div.style.height = "48px";
+div.style.lineHeight = "48px";
+div.style.fontSize = "22px";
+div.style.textAlign = "center";
   div.innerHTML = "🗺️";
   div.title = "Alternar camadas";
 
@@ -45,6 +50,11 @@ const controleGPS = L.control({ position: "topright" });
 
 controleGPS.onAdd = function () {
   const div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+  div.style.width = "48px";
+div.style.height = "48px";
+div.style.lineHeight = "48px";
+div.style.fontSize = "22px";
+div.style.textAlign = "center";
   div.innerHTML = "🎯";
   div.title = "Minha localização";
 
@@ -78,4 +88,5 @@ controleGPS.onAdd = function () {
 };
 
 controleGPS.addTo(map);
+
 
