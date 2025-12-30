@@ -91,4 +91,19 @@ button.sec { background: #777; }
 }
 
 #resumoPontos { padding-left: 16px; font-size: 12px; }
+/* Campos superiores - versão mobile compacta */
+.campo-safra,
+.campo-fazenda,
+.campo-talhao {
+  width: 50%;
+  padding: 6px;
+  font-size: 13px;
+}
+
+/* Se estiverem dentro de um container */
+.container-missao input,
+.container-missao select {
+  height: 32px;
+}
+
 
