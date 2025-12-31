@@ -108,23 +108,28 @@ body {
     transform: scale(1);
   }
 }
-/* ===== Ajuste botão de camadas (igual à mira GPS) ===== */
+/* ===== Botão de camadas IGUAL ao botão da mira ===== */
 .leaflet-control-layers {
-  width: 36px;
-  height: 36px;
+  width: 36px !important;
+  height: 36px !important;
   border-radius: 6px;
-  overflow: hidden;
+  box-shadow: none;
 }
 
 .leaflet-control-layers-toggle {
   width: 36px !important;
   height: 36px !important;
-  background-size: 18px 18px;
+  background-size: 18px 18px !important;
+  background-position: center center !important;
 }
 
-/* Remove estilos antigos que deixam grande */
+/* Remove padding interno do Leaflet */
+.leaflet-control-layers-toggle::after {
+  display: none;
+}
+
+/* Quando expandir, mantém o menu normal */
 .leaflet-control-layers-expanded {
-  width: auto;
-  height: auto;
+  width: auto !important;
+  height: auto !important;
 }
-
