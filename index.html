@@ -2,113 +2,74 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Missionária Verde</title>
+  <title>Missionário Verde</title>
 
-  <!-- Leaflet CSS -->
+  <!-- Leaflet -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
 
-  <!-- CSS LOCAL -->
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
-  <!-- ================= CABEÇALHO ================= -->
+  <!-- CABEÇALHO -->
   <header class="app-header">
-    <h1>Missionária Verde</h1>
-    <p>Coleta técnica de campo</p>
+    <h1>Missionário Verde</h1>
   </header>
 
-  <!-- ================= FORMULÁRIO ================= -->
   <main class="app-container">
 
+    <!-- NOVA MISSÃO -->
     <section class="card form-card">
-
       <h2>Nova Missão</h2>
 
-      <!-- SAFRA -->
       <div class="form-group">
-        <label for="safra">Safra</label>
-        <input
-          type="text"
-          id="safra"
-          placeholder="Ex: 2024/2025"
-        />
+        <label>Safra</label>
+        <input type="text" placeholder="Ex: 2024/2025" />
       </div>
 
-      <!-- MISSÃO -->
       <div class="form-group">
-        <label for="missao">Missão</label>
-        <select id="missao">
-          <option value="">Selecione</option>
+        <label>Missão</label>
+        <select>
+          <option>Selecione</option>
           <option>Inspeção Técnica de Lavoura</option>
-          <option>Monitoramento de Pragas</option>
-          <option>Avaliação de Colheita</option>
-          <option>Vistoria Agronômica</option>
         </select>
       </div>
 
-      <!-- FAZENDA -->
       <div class="form-group">
-        <label for="fazenda">Fazenda</label>
-        <input
-          type="text"
-          id="fazenda"
-          placeholder="Nome da fazenda"
-        />
+        <label>Fazenda</label>
+        <input type="text" />
       </div>
 
-      <!-- TALHÃO -->
       <div class="form-group">
-        <label for="talhao">Talhão</label>
-        <input
-          type="text"
-          id="talhao"
-          placeholder="Ex: Talhão 05"
-        />
+        <label>Talhão</label>
+        <input type="text" />
       </div>
-
-      <!-- KML -->
-      <div class="form-group">
-        <label for="kmlInput">Arquivo do Talhão (KML)</label>
-        <input
-          type="file"
-          id="kmlInput"
-          accept=".kml"
-        />
-      </div>
-
     </section>
 
-    <!-- ================= MAPA ================= -->
+    <!-- MAPA -->
     <section class="card map-card">
       <div id="map"></div>
     </section>
 
-    <!-- ================= RESUMO ================= -->
+    <!-- RESUMO -->
     <section class="card resumo-card">
       <h2>Resumo da Missão</h2>
-
-      <p><strong>Safra:</strong> <span id="resumoSafra">-</span></p>
-      <p><strong>Missão:</strong> <span id="resumoMissao">-</span></p>
-      <p><strong>Fazenda:</strong> <span id="resumoFazenda">-</span></p>
-      <p><strong>Talhão:</strong> <span id="resumoTalhao">-</span></p>
-
-      <button id="btnSalvar" class="primary-btn">
-        Salvar Missão
-      </button>
+      <p>Aguardando lançamentos...</p>
     </section>
 
   </main>
 
-  <!-- ================= SCRIPTS ================= -->
+  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-omnivore@0.3.4/leaflet-omnivore.min.js"></script>
+
+  <!-- JS -->
   <script src="script.js"></script>
 
 </body>
