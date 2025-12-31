@@ -5,12 +5,18 @@ const map = L.map("map").setView([-15.7801, -47.9292], 5);
 // Camadas
 const camadaRua = L.tileLayer(
   "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  { maxZoom: 19 }
+  {
+    maxZoom: 19
+  }
+);
 ).addTo(map);
 
 const camadaSatelite = L.tileLayer(
   "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-  { maxZoom: 19 }
+  {
+    maxZoom: 19,
+    maxNativeZoom: 18
+  }
 );
 
 let usandoSatelite = false;
@@ -64,12 +70,13 @@ controleGPS.onAdd = function () {
   div.onclick = function (e) {
     L.DomEvent.stop(e);
 
-    map.locate({
-      setView: true,
-      maxZoom: 18,
-      enableHighAccuracy: true
-    });
-  };
+   const zoomGPS = map.hasLayer(camadaSatelite) ? 17 : 18;
+
+map.locate({
+  setView: true,
+  maxZoom: zoomGPS,
+  enableHighAccuracy: true
+});
 
   return div;
 };
@@ -101,3 +108,4 @@ map.on("locationfound", function (e) {
 map.on("locationerror", function () {
   alert("Não foi possível obter a localização GPS.");
 });
+
