@@ -1,4 +1,4 @@
-/* ================= RESET BÁSICO ================= */
+/* RESET */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -8,14 +8,12 @@
 
 body {
   background: #f4f6f8;
-  color: #333;
 }
 
-/* ================= CABEÇALHO ================= */
+/* CABEÇALHO */
 .app-header {
   background: #e6e6e6;
   padding: 14px 16px;
-  text-align: center;
   border-bottom: 1px solid #ccc;
 }
 
@@ -23,53 +21,45 @@ body {
   color: #1f7a1f;
   font-size: 20px;
   font-weight: 600;
-  margin-bottom: 4px;
+  text-align: left; /* ← CORRIGIDO */
 }
 
-.app-header p {
-  font-size: 13px;
-  color: #555;
-}
-
-/* ================= CONTAINER ================= */
+/* CONTAINER */
 .app-container {
   padding: 12px;
   max-width: 480px;
   margin: 0 auto;
 }
 
-/* ================= CARDS ================= */
+/* CARDS */
 .card {
-  background: transparent;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
-/* ================= FORMULÁRIO ================= */
+/* FORM */
 .form-card {
   background: #ffffff;
   padding: 16px;
   border-radius: 10px;
 }
 
-/* Título Nova Missão */
 .form-card h2 {
   color: #1f7a1f;
   font-size: 18px;
-  margin-bottom: 18px;
-  text-align: center;
+  margin-bottom: 14px;
+  text-align: left; /* ← CORRIGIDO */
 }
 
-/* ================= CAMPOS ================= */
+/* CAMPOS */
 .form-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 18px; /* MAIS ESPAÇO ENTRE OS CAMPOS */
+  margin-bottom: 16px; /* ← 10% MENOR */
 }
 
 .form-group label {
   font-size: 13px;
-  color: #444;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 
 .form-group input,
@@ -81,7 +71,7 @@ body {
   font-size: 15px;
 }
 
-/* ================= MAPA ================= */
+/* MAPA */
 .map-card {
   background: #ffffff;
   padding: 6px;
@@ -94,7 +84,15 @@ body {
   border-radius: 8px;
 }
 
-/* ================= RESUMO ================= */
+/* BOTÕES LEAFLET */
+.leaflet-control-layers,
+.gps-button {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+}
+
+/* RESUMO */
 .resumo-card {
   background: #ffffff;
   padding: 16px;
@@ -104,36 +102,4 @@ body {
 .resumo-card h2 {
   color: #1f7a1f;
   font-size: 18px;
-  margin-bottom: 12px;
-  text-align: center;
-}
-
-.resumo-card p {
-  font-size: 14px;
-  margin-bottom: 6px;
-}
-
-/* ================= BOTÃO ================= */
-.primary-btn {
-  margin-top: 14px;
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  background: #1f7a1f;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.primary-btn:active {
-  opacity: 0.9;
-}
-
-/* ================= RESPONSIVO ================= */
-@media (max-width: 360px) {
-  #map {
-    height: 280px;
-  }
 }
