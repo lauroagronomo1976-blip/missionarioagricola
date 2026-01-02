@@ -119,49 +119,50 @@ body {
 .leaflet-control-layers-toggle {
   display: none !important;
 }
+/* ================= CONTROLES DO MAPA – FIX DEFINITIVO ================= */
 
-/* ================= MAPA – AJUSTE FINO DE CONTROLES ================= */
-
-/* Reduz tamanho do botão de camadas */
+/* Botão de camadas – tamanho correto */
 .leaflet-control-layers {
-  width: 34px;
-  height: 34px;
+  width: auto;
+  height: auto;
+  background: #ffffff;
   border-radius: 6px;
 }
 
-/* Ícone do botão de camadas */
+/* Ícone padrão do Leaflet (não esconder) */
 .leaflet-control-layers-toggle {
   width: 34px !important;
   height: 34px !important;
   background-size: 16px 16px;
 }
 
-/* Reduz botão da mira GPS para mesma proporção */
+/* Botão GPS proporcional */
 .gps-button {
   width: 34px !important;
   height: 34px !important;
   font-size: 18px !important;
 }
 
-/* Área expandida das camadas */
+/* Quando expandido, jogar opções para o lado */
 .leaflet-control-layers-expanded {
   position: absolute !important;
   top: 0;
-  right: 38px; /* <<< joga opções para o LADO */
-  white-space: nowrap;
+  right: 40px; /* opções aparecem ao LADO */
   padding: 6px 8px;
   border-radius: 6px;
+  white-space: nowrap;
 }
 
-/* Corrige labels */
+/* Labels clicáveis */
 .leaflet-control-layers-expanded label {
   display: flex;
   align-items: center;
   font-size: 12px;
   margin-bottom: 4px;
+  cursor: pointer;
 }
 
-/* Remove sobreposição em mobile */
+/* Organização vertical dos controles */
 .leaflet-top.leaflet-right {
   display: flex;
   flex-direction: column;
