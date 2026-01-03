@@ -2,78 +2,61 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
   <title>Missionário Verde</title>
 
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-
-  <!-- App CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
-  <!-- CABEÇALHO -->
-  <header class="header">
-    Missionário Verde
-  </header>
+<header class="header">
+  Missionário Verde
+</header>
 
-  <!-- CONTEÚDO -->
-  <main class="container">
+<main class="container">
 
-    <h2 class="titulo">Nova Missão</h2>
+  <h2 class="titulo">Nova Missão</h2>
 
-    <!-- FORMULÁRIO -->
-    <section class="form-box">
-      <label>Safra</label>
-      <input type="text" />
+  <section class="form-box">
+    <label>Safra</label>
+    <input type="text">
 
-      <label>Missão</label>
-      <input type="text" />
+    <label>Missão</label>
+    <input type="text">
 
-      <label>Fazenda</label>
-      <input type="text" />
+    <label>Fazenda</label>
+    <input type="text">
 
-      <label>Talhão</label>
-      <input type="text" />
-    </section>
+    <label>Talhão</label>
+    <input type="text">
+  </section>
 
-    <!-- MAPA -->
-    <section class="map-box">
-      <div id="map"></div>
+  <section class="map-box">
+    <div id="map"></div>
 
-      <!-- BOTÕES DO MAPA -->
-      <div class="map-controls">
+    <div class="map-controls">
+      <button class="map-btn" onclick="toggleCamadas()">🗺️</button>
+      <button class="map-btn" onclick="localizar()">🎯</button>
 
-        <button class="map-btn" onclick="toggleCamadas()">🗺️</button>
-        <button class="map-btn" onclick="localizar()">🎯</button>
-
-        <div id="menu-camadas" class="camadas hidden">
-          <button onclick="usarRua()">Rua</button>
-          <button onclick="usarSatelite()">Satélite</button>
-        </div>
-
+      <div id="menu-camadas" class="camadas hidden">
+        <button onclick="usarRua()">Rua</button>
+        <button onclick="usarSatelite()">Satélite</button>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- RESUMO -->
-    <section class="resumo-box">
-      <h3>Resumo Geral</h3>
-      <p>Aguardando informações…</p>
-    </section>
+  <section class="resumo-box">
+    <h3>Resumo Geral</h3>
+    <p>Aguardando dados…</p>
+  </section>
 
-  </main>
+</main>
 
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- App JS -->
-  <script src="script.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
