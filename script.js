@@ -1,3 +1,4 @@
+let marcadorLocalizacao = null;
 const map = L.map('map', {
   zoomControl: true,
   maxZoom: 19
@@ -29,14 +30,44 @@ function toggleCamadas() {
   document.getElementById('menu-camadas').classList.toggle('hidden');
 }
 
-function localizar() {
-  map.locate({
-    setView: true,
-    maxZoom: 17,
-    enableHighAccuracy: true
-  });
-}
+function localizarUsuario() {
+  if (!navigator.geolocation) {
+    alert("Geolocalização não suportada no dispositivo.");
+    return;
+  }
 
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      // cria ou atualiza a bolinha azul
+      if (marcadorLocalizacao) {
+        marcadorLocalizacao.setLatLng([lat, lng]);
+      } else {
+        marcadorLocalizacao = L.circleMarker([lat, lng], {
+          radius: 8,
+          color: "#1e88e5",
+          fillColor: "#1e88e5",
+          fillOpacity: 0.8
+        }).addTo(map);
+      }
+
+      // zoom suave e controlado (não estoura satélite)
+      map.flyTo([lat, lng], 16, {
+        animate: true,
+        duration: 1.2
+      });
+    },
+    (error) => {
+      alert("Não foi possível obter a localização.");
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 5000
+    }
+  );
+}
 map.on('locationfound', e => {
   L.circleMarker(e.latlng, {
     radius: 8,
@@ -45,3 +76,4 @@ map.on('locationfound', e => {
     fillOpacity: 0.8
   }).addTo(map);
 });
+
