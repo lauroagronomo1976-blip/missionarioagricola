@@ -59,10 +59,10 @@ function localizarUsuario() {
       }
 
       // zoom suave e controlado (não estoura satélite)
-      map.flyTo([lat, lng], 16, {
-        animate: true,
-        duration: 1.2
-      });
+      map.flyTo([lat, lng], Math.min(map.getZoom(), 18), {
+  animate: true,
+  duration: 1.2
+});
     },
     (error) => {
       alert("Não foi possível obter a localização.");
@@ -81,5 +81,6 @@ map.on('locationfound', e => {
     fillOpacity: 0.8
   }).addTo(map);
 });
+
 
 
