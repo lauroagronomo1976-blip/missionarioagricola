@@ -1,5 +1,14 @@
 let marcadorLocalizacao = null;
+// ===== CRIAÇÃO SEGURA DO MAPA =====
 const map = L.map('map', {
+  center: [-15.0, -50.0], // centro neutro Brasil
+  zoom: 12,
+  zoomControl: true
+});
+const rua = L.tileLayer(...);
+const satelite = L.tileLayer(...);
+
+rua.addTo(map);
   zoomControl: true,
   maxZoom: 19
 }).setView([-15.8, -47.9], 5);
@@ -81,6 +90,7 @@ map.on('locationfound', e => {
     fillOpacity: 0.8
   }).addTo(map);
 });
+
 
 
 
