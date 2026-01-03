@@ -12,6 +12,30 @@ const map = L.map("map", {
 }).setView(mapaInicial, 4);
 
 // ================= CAMADAS =================
+const rua = L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  { maxZoom: 19 }
+);
+
+const satelite = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/' +
+  'World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  { maxZoom: 19 }
+);
+
+// inicia com rua
+rua.addTo(map);
+
+// função para trocar camada
+function usarRua() {
+  map.removeLayer(satelite);
+  rua.addTo(map);
+}
+
+function usarSatelite() {
+  map.removeLayer(rua);
+  satelite.addTo(map);
+}
 
 // Rua
 const rua = L.tileLayer(
@@ -112,4 +136,5 @@ function localizarComPrecisao() {
     }
   );
 }
+
 
