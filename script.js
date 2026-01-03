@@ -60,8 +60,6 @@ const satelite = L.tileLayer(
 rua.addTo(map);
 
 // ================= CONTROLE DE CAMADAS =================
-L.control.layers(
-  {
     "Rua": rua,
     "Satélite": satelite
   },
@@ -136,5 +134,6 @@ function localizarComPrecisao() {
     }
   );
 }
+
 
 
