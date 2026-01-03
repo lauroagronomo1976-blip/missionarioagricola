@@ -5,10 +5,15 @@ const map = L.map('map', {
 }).setView([-15.8, -47.9], 5);
 
 const rua = L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  { maxZoom: 19 }
+const satelite = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/' +
+  'World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  {
+    maxZoom: 22,          // permite mais zoom
+    maxNativeZoom: 19,    // limite real da imagem
+    zoomOffset: 0
+  }
 );
-
 const satelite = L.tileLayer(
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   { maxZoom: 17 } // evita estouro
@@ -76,4 +81,5 @@ map.on('locationfound', e => {
     fillOpacity: 0.8
   }).addTo(map);
 });
+
 
