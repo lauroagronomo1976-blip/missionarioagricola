@@ -1,4 +1,19 @@
 <!DOCTYPE html>
+<div class="map-buttons">
+  <button class="map-btn" onclick="toggleCamadas()">🗺️</button>
+
+  <div id="menu-camadas" class="camadas-menu hidden">
+    <button onclick="usarRua()">Rua</button>
+    <button onclick="usarSatelite()">Satélite</button>
+  </div>
+</div>
+<script>
+  function toggleCamadas() {
+    const menu = document.getElementById('menu-camadas');
+    menu.classList.toggle('hidden');
+  }
+</script>
+
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -74,3 +89,4 @@
 
 </body>
 </html>
+
