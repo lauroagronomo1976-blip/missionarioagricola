@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <title>Missionário Verde</title>
+
+  <!-- LEAFLET CSS (OBRIGATÓRIO) -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <!-- CSS DO PROJETO -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- CABEÇALHO -->
+  <header class="header">
+    Missionário Verde
+  </header>
+
+  <!-- CONTEÚDO -->
+  <main class="container">
+
+    <h2 class="section-title">Nova Missão</h2>
+
+    <div class="form-area">
+      <input type="text" placeholder="Safra" />
+      <input type="text" placeholder="Missão" />
+      <input type="text" placeholder="Fazenda" />
+      <input type="text" placeholder="Talhão" />
+    </div>
+
+    <!-- MAPA -->
+    <div id="map-container">
+      <div id="map"></div>
+
+      <!-- BOTÕES SOBRE O MAPA -->
+      <div class="map-buttons">
+        <button id="btnLayers">🗺</button>
+        <button id="btnLocate">🎯</button>
+      </div>
+    </div>
+
+    <h2 class="section-title">Resumo da Missão</h2>
+
+  </main>
+
+  <!-- LEAFLET JS (TEM QUE VIR ANTES DO SEU JS) -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- JS DO PROJETO -->
+  <script src="script.js"></script>
+
+</body>
+</html>
