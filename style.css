@@ -5,158 +5,78 @@
 
 body {
   margin: 0;
-  background: #f2f2f2;
+  background: #f5f5f5;
 }
 
+/* CABEÇALHO */
 .header {
-  background: #dedede;
-  color: green;
+  background: #e0e0e0;
+  color: #1f7a1f;
+  font-size: 20px;
   font-weight: bold;
   padding: 12px;
   text-align: left;
 }
 
+/* CONTEÚDO */
 .container {
-  padding: 12px;
+  padding: 10px;
 }
 
-.titulo {
-  color: green;
-  margin: 10px 0;
+/* TÍTULOS */
+.section-title {
+  color: #1f7a1f;
+  margin: 10px 0 8px 0;
 }
 
-.form-box {
+/* CAMPOS */
+.form-area {
   background: white;
-  padding: 14px;
+  padding: 10px;
   border-radius: 10px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
-.form-box label {
-  display: block;
-  margin-top: 10px;
+.form-area input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
   font-size: 14px;
 }
 
-.form-box input {
-  width: 100%;
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
 /* MAPA */
-.map-box {
+#map-container {
   position: relative;
-  height: 320px;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 12px;
+  width: 100%;
+  height: 350px;
+  margin-bottom: 10px;
 }
 
 #map {
-  position: relative;
   width: 100%;
-  height: 55vh;
-}
-
-/* BOTÕES */
-.map-controls {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-  .map-buttons {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.map-buttons button {
-  width: 52px;
-  height: 52px;
-  border: none;
-  border-radius: 10px;
-  background: #fff;
-  font-size: 20px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  cursor: pointer;
-}
-
-.camadas-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.map-btn {
-  width: 40px;
-  height: 40px;
-  border: none;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  font-size: 18px;
-}
-
-.camadas-menu {
-  position: absolute;
-  right: 45px;
-  display: flex;
-  gap: 6px;
-}
-
-.camadas-menu.hidden {
-  display: none;
-}
-.camadas {
-  display: flex;
-  gap: 6px;
-}
-
-.camadas button {
-  padding: 6px 10px;
-  font-size: 12px;
-  border-radius: 8px;
-  border: none;
-  background: white;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-}
-
-.hidden {
-  display: none;
-}
-
-.resumo-box {
-  background: white;
-  padding: 14px;
-  border-radius: 10px;
-}
-#map {
-  width: 100%;
-  height: 60vh;
-  background: #e0e0e0;
-}
-html, body {
   height: 100%;
-  margin: 0;
+  border-radius: 10px;
 }
 
-#map {
-  width: 100%;
-  height: 55vh;
-  border-radius: 12px;
+/* BOTÕES NO MAPA */
+.map-buttons {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
 }
 
-
-
-
-
+.map-buttons button {
+  width: 48px;
+  height: 48px;
+  background: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
