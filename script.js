@@ -1,11 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-  const map = L.map("map", {
-    zoomControl: true,
-    attributionControl: false
-  }).setView([-15.7801, -47.9292], 5);
+  // ===== MAPA =====
+  const map = L.map("map").setView([-15.78, -47.93], 5);
 
-  // ===== CAMADAS =====
+  // CAMADAS
   const rua = L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     { maxZoom: 19 }
@@ -13,15 +11,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const satelite = L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    { maxZoom: 19 }
+    { maxZoom: 18 }
   );
 
-  let camadaAtual = "rua";
   rua.addTo(map);
 
-  // ===== BOTÃO CAMADAS (CUSTOM) =====
-  const btnLayers = document.getElementById("btnLayers");
-  btnLayers.addEventListener("click", () => {
+  let camadaAtual = "rua";
+
+  // ===== BOTÃO CAMADAS =====
+  document.getElementById("btnLayers").addEventListener("click", () => {
     if (camadaAtual === "rua") {
       map.removeLayer(rua);
       satelite.addTo(map);
@@ -33,24 +31,21 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // ===== LOCALIZAÇÃO (BOLINHA AZUL) =====
-  let userCircle;
+  // ===== LOCALIZAÇÃO =====
+  let userMarker;
 
-  const btnLocate = document.getElementById("btnLocate");
-  btnLocate.addEventListener("click", () => {
+  document.getElementById("btnLocate").addEventListener("click", () => {
     map.locate({
       setView: true,
-      maxZoom: 18,
+      maxZoom: 17,
       enableHighAccuracy: true
     });
   });
 
   map.on("locationfound", (e) => {
-    if (userCircle) {
-      map.removeLayer(userCircle);
-    }
+    if (userMarker) map.removeLayer(userMarker);
 
-    userCircle = L.circleMarker(e.latlng, {
+    userMarker = L.circleMarker(e.latlng, {
       radius: 8,
       color: "#1e90ff",
       fillColor: "#1e90ff",
@@ -59,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   map.on("locationerror", () => {
-    alert("Não foi possível obter a localização.");
+    alert("Não foi possível acessar a localização.");
   });
 
 });
