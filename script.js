@@ -18,19 +18,35 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let camadaAtual = "rua";
 
-  // ===== BOTÃO CAMADAS =====
-  document.getElementById("btnLayers").addEventListener("click", () => {
-    if (camadaAtual === "rua") {
-      map.removeLayer(rua);
-      satelite.addTo(map);
-      camadaAtual = "satelite";
-    } else {
-      map.removeLayer(satelite);
-      rua.addTo(map);
-      camadaAtual = "rua";
-    }
-  });
+  // ===== MENU DE CAMADAS =====
+let menuVisible = false;
 
+const menu = document.createElement("div");
+menu.className = "layer-menu";
+menu.innerHTML = `
+  <div id="optRua">Rua</div>
+  <div id="optSat">Satélite</div>
+`;
+document.getElementById("map-container").appendChild(menu);
+
+document.getElementById("btnLayers").addEventListener("click", () => {
+  menuVisible = !menuVisible;
+  menu.style.display = menuVisible ? "block" : "none";
+});
+
+document.getElementById("optRua").addEventListener("click", () => {
+  map.removeLayer(satelite);
+  rua.addTo(map);
+  menu.style.display = "none";
+  menuVisible = false;
+});
+
+document.getElementById("optSat").addEventListener("click", () => {
+  map.removeLayer(rua);
+  satelite.addTo(map);
+  menu.style.display = "none";
+  menuVisible = false;
+});
   // ===== LOCALIZAÇÃO =====
   let userMarker;
 
@@ -58,3 +74,4 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
+
