@@ -74,4 +74,25 @@ document.getElementById("optSat").addEventListener("click", () => {
   });
 
 });
+// ==========================
+// MISSÕES - ARMAZENAMENTO LOCAL
+// ==========================
+
+const missaoInput = document.getElementById("missaoInput");
+
+if (missaoInput) {
+  missaoInput.addEventListener("blur", () => {
+    const valor = missaoInput.value.trim();
+    if (!valor) return;
+
+    let missoes = JSON.parse(localStorage.getItem("missoes")) || [];
+
+    if (!missoes.includes(valor)) {
+      missoes.push(valor);
+      localStorage.setItem("missoes", JSON.stringify(missoes));
+      console.log("Missão salva:", valor);
+    }
+  });
+}
+
 
