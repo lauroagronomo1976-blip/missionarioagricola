@@ -160,25 +160,24 @@ body {
 
 /* BOTÃO MARCAR PONTO */
 .action-area {
-  margin: 16px 0;
-  text-align: center;
+  margin: 12px 0;
+  text-align: left;
 }
 
 .btn-marcar {
   background-color: #1f7a1f;
   color: #fff;
   border: none;
-  border-radius: 10px;
-  padding: 14px 28px;
-  font-size: 16px;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
   font-weight: bold;
   cursor: pointer;
-  width: 80%;
-  max-width: 300px;
 }
 
 .btn-marcar:active {
   opacity: 0.85;
 }
+
 
 
