@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-  // ===== MAPA =====
+  // ==========================
+  // MAPA
+  // ==========================
   const map = L.map("map").setView([-15.78, -47.93], 5);
 
   const rua = L.tileLayer(
@@ -15,7 +17,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   rua.addTo(map);
 
-  // ===== MENU DE CAMADAS =====
+  // ==========================
+  // MENU DE CAMADAS
+  // ==========================
   let menuVisible = false;
 
   const menu = document.createElement("div");
@@ -45,15 +49,13 @@ document.addEventListener("DOMContentLoaded", function () {
     menuVisible = false;
   });
 
-  // ===== LOCALIZAÇÃO =====
+  // ==========================
+  // LOCALIZAÇÃO (MIRA)
+  // ==========================
   let userMarker;
 
   document.getElementById("btnLocate").addEventListener("click", () => {
-    map.locate({
-      setView: true,
-      maxZoom: 17,
-      enableHighAccuracy: true
-    });
+    map.locate({ setView: true, maxZoom: 17, enableHighAccuracy: true });
   });
 
   map.on("locationfound", (e) => {
@@ -67,89 +69,40 @@ document.addEventListener("DOMContentLoaded", function () {
     }).addTo(map);
   });
 
-  map.on("locationerror", () => {
-    alert("Não foi possível acessar a localização.");
-  });
-
-  // ===== MISSÕES (LOCAL STORAGE) =====
-  const missaoInput = document.getElementById("missaoInput");
-
-  if (missaoInput) {
-    missaoInput.addEventListener("blur", () => {
-      const valor = missaoInput.value.trim();
-      if (!valor) return;
-
-      let missoes = JSON.parse(localStorage.getItem("missoes")) || [];
-
-      if (!missoes.includes(valor)) {
-        missoes.push(valor);
-        localStorage.setItem("missoes", JSON.stringify(missoes));
-      }
-    });
-  }
-
-  // ===== REGISTRAR PONTO =====
+  // ==========================
+  // REGISTRAR PONTO (MARCAR)
+  // ==========================
   const btnMarcarPonto = document.getElementById("btnMarcarPonto");
   let pontosRegistrados = [];
 
-  // ===== COLETA DOS DADOS DO FORMULÁRIO =====
-function obterDadosFormulario() {
-  return {
-    safra: document.querySelector(".field.safra input")?.value || "",
-    empresa: document.querySelector(".field.empresa input")?.value || "",
-    fazenda: document.querySelectorAll(".field input")[2]?.value || "",
-    talhao: document.querySelectorAll(".field input")[3]?.value || "",
-    missao: document.getElementById("missaoInput")?.value || ""
-  };
-}
-  if (btnMarcarPonto) {
-    btnMarcarPonto.addEventListener("click", const dados = obterDadosFormulario();
+  btnMarcarPonto.addEventListener("click", () => {
 
-if (!dados.missao) {
-  alert("Preencha o campo Missão antes de marcar o ponto.");
-  return;
-}
-() => {
-      if (!navigator.geolocation) {
-        alert("GPS não disponível.");
-        return;
-      }
+    navigator.geolocation.getCurrentPosition((pos) => {
 
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const lat = pos.coords.latitude;
-          const lng = pos.coords.longitude;
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
 
-          const marcador = L.marker([lat, lng]).addTo(map);
+      // dados da missão
+      const ponto = {
+        id: pontosRegistrados.length + 1,
+        missao: document.getElementById("missaoInput").value,
+        latitude: lat,
+        longitude: lng
+      };
 
-          const ponto = {
-  id: pontosRegistrados.length + 1,
-  latitude: lat,
-  longitude: lng,
-  data: new Date().toISOString(),
-  safra: dados.safra,
-  empresa: dados.empresa,
-  fazenda: dados.fazenda,
-  talhao: dados.talhao,
-  missao: dados.missao
-};
-          marcador.bindPopup(
-  `
-  <strong>📍 Ponto ${ponto.id}</strong><br><br>
-  <strong>Missão:</strong> ${ponto.missao}<br>
-  <strong>Safra:</strong> ${ponto.safra || "-"}<br>
-  <strong>Empresa:</strong> ${ponto.empresa || "-"}<br>
-  <strong>Fazenda:</strong> ${ponto.fazenda || "-"}<br>
-  <strong>Talhão:</strong> ${ponto.talhao || "-"}<br><br>
-  <strong>Lat:</strong> ${ponto.latitude.toFixed(6)}<br>
-  <strong>Lng:</strong> ${ponto.longitude.toFixed(6)}
-  `
-);openPopup();
-        },
-        () => alert("Erro ao obter localização."),
-        { enableHighAccuracy: true }
-      );
+      pontosRegistrados.push(ponto);
+
+      const marcador = L.marker([lat, lng]).addTo(map);
+
+      marcador.bindPopup(`
+        <strong>📍 Ponto ${ponto.id}</strong><br>
+        <strong>Missão:</strong> ${ponto.missao || "-"}<br><br>
+        <strong>Lat:</strong> ${lat.toFixed(6)}<br>
+        <strong>Lng:</strong> ${lng.toFixed(6)}
+      `).openPopup();
+
     });
-  }
+
+  });
 
 });
