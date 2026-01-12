@@ -6,13 +6,12 @@
 
   <title>Missionário Verde</title>
 
-  <!-- LEAFLET CSS (OBRIGATÓRIO) -->
+  <!-- LEAFLET CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
 
-  <!-- CSS DO PROJETO -->
   <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -20,26 +19,61 @@
 
   <!-- CABEÇALHO -->
   <header class="header">
-    Missionário Verde
+    <h1>Missionário Agrícola</h1>
   </header>
 
-  <!-- CONTEÚDO -->
   <main class="container">
 
     <h2 class="section-title">Nova Missão</h2>
 
+    <!-- FORMULÁRIO -->
     <div class="form-area">
-      <input type="text" placeholder="Safra" />
-      <input type="text" placeholder="Missão" />
-      <input type="text" placeholder="Fazenda" />
-      <input type="text" placeholder="Talhão" />
+
+      <!-- LINHA 1 -->
+      <div class="form-row">
+        <div class="field safra">
+          <label>Safra</label>
+          <input type="text" placeholder="2024/25" />
+        </div>
+
+        <div class="field empresa">
+          <label>Empresa</label>
+          <input type="text" placeholder="Empresa agrícola" />
+        </div>
+      </div>
+
+      <!-- LINHA 2 -->
+      <div class="form-row">
+        <div class="field">
+          <label>Fazenda</label>
+          <input type="text" placeholder="Nome da fazenda" />
+        </div>
+
+        <div class="field">
+          <label>Talhão</label>
+          <input type="text" placeholder="Talhão" />
+        </div>
+      </div>
+
+      <!-- LINHA 3 -->
+      <div class="form-row">
+        <div class="field">
+          <label>Missão</label>
+          <input type="text" id="missaoInput" placeholder="Ex: Inspeção técnica" />
+        </div>
+      </div>
+
+      <!-- BOTÃO MARCAR (ÚNICO E CORRETO) -->
+      <div class="action-area">
+        <button id="btnMarcarPonto" class="btn-marcar">Marcar</button>
+      </div>
+
     </div>
 
     <!-- MAPA -->
     <div id="map-container">
       <div id="map"></div>
 
-      <!-- BOTÕES SOBRE O MAPA -->
       <div class="map-buttons">
         <button id="btnLayers">🗺</button>
         <button id="btnLocate">🎯</button>
@@ -50,10 +84,7 @@
 
   </main>
 
-  <!-- LEAFLET JS (TEM QUE VIR ANTES DO SEU JS) -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- JS DO PROJETO -->
   <script src="script.js"></script>
 
 </body>
