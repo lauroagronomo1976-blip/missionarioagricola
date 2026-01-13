@@ -120,3 +120,24 @@ document
       { enableHighAccuracy: true }
     );
   });
+/*************************************************
+ * BOTÃO GRAVAR PONTO
+ *************************************************/
+const btnGravarPonto = document.getElementById("btnGravarPonto");
+
+if (btnGravarPonto) {
+  btnGravarPonto.addEventListener("click", () => {
+    alert("✅ Ponto gravado com sucesso (simulação)");
+  });
+}
+
+/*************************************************
+ * BOTÃO FINALIZAR MISSÃO
+ *************************************************/
+const btnFinalizarMissao = document.getElementById("btnFinalizarMissao");
+
+if (btnFinalizarMissao) {
+  btnFinalizarMissao.addEventListener("click", () => {
+    alert("🏁 Missão finalizada (simulação)");
+  });
+}
