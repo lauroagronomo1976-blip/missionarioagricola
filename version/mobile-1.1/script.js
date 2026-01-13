@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
-
+console.log("JS carregado");
+ console.log("Marcar:", document.getElementById("btnMarcarPonto"));
+ console.log("Gravar:", document.getElementById("btnGravarPonto"));
+ console.log("Finalizar:", document.getElementById("btnFinalizarMissao")); 
+ 
   /************** MAPA **************/
   const map = L.map("map").setView([-15.78, -47.93], 5);
 
