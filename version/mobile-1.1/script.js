@@ -1,10 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
-console.log("JS carregado");
- console.log("Marcar:", document.getElementById("btnMarcarPonto"));
- console.log("Gravar:", document.getElementById("btnGravarPonto"));
- console.log("Finalizar:", document.getElementById("btnFinalizarMissao")); 
- 
-  /************** MAPA **************/
+
+  // ==========================
+  // MAPA
+  // ==========================
   const map = L.map("map").setView([-15.78, -47.93], 5);
 
   const rua = L.tileLayer(
@@ -19,116 +17,135 @@ console.log("JS carregado");
 
   rua.addTo(map);
 
-/ ==========================
-// ESTADO DO MAPA
-// ==========================
-let marcadorTemporario = null;
-let pontosRegistrados = [];
- 
- /************** BOTÕES DO MAPA **************/
-  document.getElementById("btnLayers").onclick = () => {
-    if (map.hasLayer(rua)) {
-      map.removeLayer(rua);
-      satelite.addTo(map);
-    } else {
-      map.removeLayer(satelite);
-      rua.addTo(map);
-    }
-  };
+  // ==========================
+  // ESTADO
+  // ==========================
+  let marcadorUsuario = null;
+  let marcadorTemporario = null;
+  let pontosRegistrados = [];
 
-  document.getElementById("btnLocate").addEventListener("click", () => {
-  map.locate({
-    setView: true,
-    maxZoom: 17,
-    enableHighAccuracy: true
+  // ==========================
+  // BOTÃO MIRA (LOCALIZAÇÃO)
+  // ==========================
+  const btnLocate = document.getElementById("btnLocate");
+
+  if (btnLocate) {
+    btnLocate.addEventListener("click", () => {
+      map.locate({
+        setView: true,
+        maxZoom: 17,
+        enableHighAccuracy: true
+      });
+    });
+  }
+
+  map.on("locationfound", (e) => {
+    if (marcadorUsuario) {
+      map.removeLayer(marcadorUsuario);
+    }
+
+    marcadorUsuario = L.circleMarker(e.latlng, {
+      radius: 8,
+      color: "#1e90ff",
+      fillColor: "#1e90ff",
+      fillOpacity: 0.8
+    }).addTo(map);
   });
-});
-  
- // ==========================
-// BOTÃO MARCAR (PONTO TEMPORÁRIO)
-// ==========================
-const btnMarcarPonto = document.getElementById("btnMarcarPonto");
 
-if (btnMarcarPonto) {
-  btnMarcarPonto.addEventListener("click", () => {
-    if (!navigator.geolocation) {
-      alert("GPS não disponível.");
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-
-        // Remove ponto temporário anterior
-        if (marcadorTemporario) {
-          map.removeLayer(marcadorTemporario);
-        }
-
-        // Cria novo ponto temporário
-        marcadorTemporario = L.marker([lat, lng]).addTo(map);
-
-        marcadorTemporario.bindPopup("📍 Ponto marcado (não gravado)");
-      },
-      () => {
-        alert("Erro ao obter localização.");
-      },
-      { enableHighAccuracy: true }
-    );
+  map.on("locationerror", () => {
+    alert("Não foi possível acessar a localização.");
   });
-}
-// ==========================
-// BOTÃO GRAVAR PONTO
-// ==========================
-const btnGravarPonto = document.getElementById("btnGravarPonto");
 
-if (btnGravarPonto) {
-  btnGravarPonto.addEventListener("click", () => {
-    if (!marcadorTemporario) {
-      alert("Marque um ponto antes de gravar.");
-      return;
-    }
+  // ==========================
+  // BOTÃO CAMADAS
+  // ==========================
+  let camadaAtual = "rua";
 
-    const missao = document.getElementById("missaoInput")?.value || "Sem missão";
-    const latlng = marcadorTemporario.getLatLng();
+  const btnLayers = document.getElementById("btnLayers");
 
-    const ponto = {
-      id: pontosRegistrados.length + 1,
-      missao: missao,
-      lat: latlng.lat,
-      lng: latlng.lng,
-      data: new Date().toLocaleString()
-    };
+  if (btnLayers) {
+    btnLayers.addEventListener("click", () => {
+      if (camadaAtual === "rua") {
+        map.removeLayer(rua);
+        satelite.addTo(map);
+        camadaAtual = "satelite";
+      } else {
+        map.removeLayer(satelite);
+        rua.addTo(map);
+        camadaAtual = "rua";
+      }
+    });
+  }
 
-    pontosRegistrados.push(ponto);
+  // ==========================
+  // BOTÃO MARCAR (TEMPORÁRIO)
+  // ==========================
+  const btnMarcarPonto = document.getElementById("btnMarcarPonto");
 
-    marcadorTemporario.bindPopup(
-      `<strong>Ponto ${ponto.id}</strong><br>
-       Missão: ${ponto.missao}<br>
-       Lat: ${ponto.lat.toFixed(6)}<br>
-       Lng: ${ponto.lng.toFixed(6)}`
-    ).openPopup();
+  if (btnMarcarPonto) {
+    btnMarcarPonto.addEventListener("click", () => {
+      if (!navigator.geolocation) {
+        alert("GPS não disponível.");
+        return;
+      }
 
-    marcadorTemporario = null;
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
 
-    alert("Ponto gravado com sucesso!");
-  });
- 
- btnGravar.onclick = () => {
-    if (!ultimoPonto) {
-      alert("Marque um ponto antes.");
-      return;
-    }
+          if (marcadorTemporario) {
+            map.removeLayer(marcadorTemporario);
+          }
 
-    ultimoPonto.bindPopup("📌 Ponto gravado");
-    ultimoPonto = null;
+          marcadorTemporario = L.marker([lat, lng]).addTo(map);
+          marcadorTemporario.bindPopup("📍 Ponto marcado (não gravado)");
+        },
+        () => {
+          alert("Erro ao obter localização.");
+        },
+        { enableHighAccuracy: true }
+      );
+    });
+  }
 
-    alert("Ponto salvo com sucesso!");
-  };
+  // ==========================
+  // BOTÃO GRAVAR PONTO
+  // ==========================
+  const btnGravarPonto = document.getElementById("btnGravarPonto");
 
-  btnFinalizar.onclick = () => {
-    alert("🏁 Missão finalizada");
-  };
+  if (btnGravarPonto) {
+    btnGravarPonto.addEventListener("click", () => {
+      if (!marcadorTemporario) {
+        alert("Marque um ponto antes de gravar.");
+        return;
+      }
+
+      const missaoInput = document.getElementById("missaoInput");
+      const missao = missaoInput ? missaoInput.value : "Sem missão";
+      const latlng = marcadorTemporario.getLatLng();
+
+      const ponto = {
+        id: pontosRegistrados.length + 1,
+        missao: missao,
+        lat: latlng.lat,
+        lng: latlng.lng,
+        data: new Date().toLocaleString()
+      };
+
+      pontosRegistrados.push(ponto);
+
+      marcadorTemporario.bindPopup(
+        `<strong>Ponto ${ponto.id}</strong><br>
+         Missão: ${ponto.missao}<br>
+         Lat: ${ponto.lat.toFixed(6)}<br>
+         Lng: ${ponto.lng.toFixed(6)}`
+      ).openPopup();
+
+      marcadorTemporario = null;
+
+      alert("Ponto gravado com sucesso!");
+    });
+  }
 
 });
