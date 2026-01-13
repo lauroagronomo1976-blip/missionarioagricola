@@ -178,6 +178,36 @@ body {
 .btn-marcar:active {
   opacity: 0.85;
 }
+.action-area {
+  display: flex;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.btn-marcar,
+.btn-gravar,
+.btn-finalizar {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-marcar {
+  background: #dfefff;
+  color: #003366;
+}
+
+.btn-gravar {
+  background: #1f7a1f;
+  color: #fff;
+}
+
+.btn-finalizar {
+  background: #999;
+  color: #fff;
+}
 
 
 
