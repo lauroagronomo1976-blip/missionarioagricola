@@ -4,7 +4,12 @@ document.addEventListener("DOMContentLoaded", function () {
   // MAPA
   // ==========================
   const map = L.map("map").setView([-15.78, -47.93], 5);
-
+let pontoTemporario = null;
+let pontosRegistrados = [];
+let missaoAtiva = true;
+let inicioUltimoPonto = null;
+let marcadorTemporario = null;
+  
   const rua = L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     { maxZoom: 19 }
