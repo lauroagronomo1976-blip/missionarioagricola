@@ -80,7 +80,6 @@ const registro = document.getElementById("registroIndividuos");
 if (registro) {
   registro.style.display = "block";
 }
-📌 Isso faz com que:
   map.on("locationfound", (e) => {
     if (pontoAtual) map.removeLayer(pontoAtual);
 
