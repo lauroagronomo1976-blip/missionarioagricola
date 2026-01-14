@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (pontoAtual) map.removeLayer(pontoAtual);
 
     pontoAtual = L.marker(e.latlng).addTo(map);
-    pontoAtual.bindPopup("📍 Ponto marcado (não gravado)").openPopup();
+    pontoAtual.bindPopup("Ponto marcado (não gravado)").openPopup();
   });
 
   btnGravar.addEventListener("click", () => {
