@@ -1,5 +1,3 @@
-console.log("SCRIPT 1.2 CARREGADO");
-
 document.addEventListener("DOMContentLoaded", () => {
 
   /* =========================
