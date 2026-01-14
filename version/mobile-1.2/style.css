@@ -215,21 +215,18 @@ body {
 }
 
 /* ===== MAPA (OBRIGATÓRIO) ===== */
-
 #map-container {
-  position: relative;
   width: 100%;
-  height: 60vh; /* MOBILE */
+  height: 45vh;   /* controla o tamanho total do mapa */
   margin-top: 12px;
-}
-
-#map {
-  width: 100%;
-  height: 100%h;
   border-radius: 12px;
   overflow: hidden;
 }
 
+#map {
+  width: 100%;
+  height: 100%;
+}
 .registro-area {
   background: #ffffff;
   padding: 12px;
