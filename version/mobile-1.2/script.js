@@ -75,7 +75,12 @@ document.addEventListener("DOMContentLoaded", () => {
   btnMarcar.addEventListener("click", () => {
     map.locate({ enableHighAccuracy: true });
   });
-
+// MOSTRAR ÁREA DE REGISTRO TÉCNICO (1.2)
+const registro = document.getElementById("registroIndividuos");
+if (registro) {
+  registro.style.display = "block";
+}
+📌 Isso faz com que:
   map.on("locationfound", (e) => {
     if (pontoAtual) map.removeLayer(pontoAtual);
 
