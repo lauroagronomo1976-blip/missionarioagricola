@@ -216,11 +216,13 @@ body {
 
 /* ===== MAPA (OBRIGATÓRIO) ===== */
 #map-container {
+  position: relative;   /* 🔴 ESSENCIAL */
   width: 100%;
-  height: 40vh;   /* controla o tamanho total do mapa */
+  height: 45vh;         /* controla o tamanho do mapa */
   margin-top: 12px;
   border-radius: 12px;
   overflow: hidden;
+  background: #eaeaea;  /* fallback elegante */
 }
 
 #map {
