@@ -1,151 +1,112 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
 
-  // ==========================
-  // MAPA
-  // ==========================
-  const map = L.map("map").setView([-15.78, -47.93], 5);
+  /* =========================
+     MAPA
+  ========================== */
+  const map = L.map("map", {
+    zoomControl: true
+  }).setView([-15.78, -47.93], 5);
 
   const rua = L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     { maxZoom: 19 }
-  );
+  ).addTo(map);
 
   const satelite = L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     { maxZoom: 18 }
   );
 
-  rua.addTo(map);
+  let camadaAtual = "rua";
 
-  // ==========================
-  // ESTADO
-  // ==========================
-  let marcadorUsuario = null;
-  let marcadorTemporario = null;
-  let pontosRegistrados = [];
+  /* =========================
+     CAMADAS (🗺)
+  ========================== */
+  const btnLayers = document.getElementById("btnLayers");
 
-  // ==========================
-  // BOTÃO MIRA (LOCALIZAÇÃO)
-  // ==========================
+  btnLayers.addEventListener("click", () => {
+    if (camadaAtual === "rua") {
+      map.removeLayer(rua);
+      satelite.addTo(map);
+      camadaAtual = "satelite";
+    } else {
+      map.removeLayer(satelite);
+      rua.addTo(map);
+      camadaAtual = "rua";
+    }
+  });
+
+  /* =========================
+     LOCALIZAÇÃO (🎯)
+  ========================== */
+  let userLocation;
+
   const btnLocate = document.getElementById("btnLocate");
 
-  if (btnLocate) {
-    btnLocate.addEventListener("click", () => {
-      map.locate({
-        setView: true,
-        maxZoom: 17,
-        enableHighAccuracy: true
-      });
-    });
-  }
+  btnLocate.addEventListener("click", () => {
+    map.locate({ enableHighAccuracy: true, setView: true, maxZoom: 17 });
+  });
 
   map.on("locationfound", (e) => {
-    if (marcadorUsuario) {
-      map.removeLayer(marcadorUsuario);
-    }
+    if (userLocation) map.removeLayer(userLocation);
 
-    marcadorUsuario = L.circleMarker(e.latlng, {
+    userLocation = L.circleMarker(e.latlng, {
       radius: 8,
-      color: "#1e90ff",
       fillColor: "#1e90ff",
+      color: "#1e90ff",
       fillOpacity: 0.8
     }).addTo(map);
   });
 
   map.on("locationerror", () => {
-    alert("Não foi possível acessar a localização.");
+    alert("Não foi possível obter sua localização.");
   });
 
-  // ==========================
-  // BOTÃO CAMADAS
-  // ==========================
-  let camadaAtual = "rua";
+  /* =========================
+     PONTOS
+  ========================== */
+  let pontoAtual = null;
+  let pontosSalvos = [];
 
-  const btnLayers = document.getElementById("btnLayers");
+  const btnMarcar = document.getElementById("btnMarcarPonto");
+  const btnGravar = document.getElementById("btnGravarPonto");
+  const btnFinalizar = document.getElementById("btnFinalizarMissao");
 
-  if (btnLayers) {
-    btnLayers.addEventListener("click", () => {
-      if (camadaAtual === "rua") {
-        map.removeLayer(rua);
-        satelite.addTo(map);
-        camadaAtual = "satelite";
-      } else {
-        map.removeLayer(satelite);
-        rua.addTo(map);
-        camadaAtual = "rua";
-      }
+  btnMarcar.addEventListener("click", () => {
+    map.locate({ enableHighAccuracy: true });
+  });
+
+  map.on("locationfound", (e) => {
+    if (pontoAtual) map.removeLayer(pontoAtual);
+
+    pontoAtual = L.marker(e.latlng).addTo(map);
+    pontoAtual.bindPopup("📍 Ponto marcado (não gravado)").openPopup();
+  });
+
+  btnGravar.addEventListener("click", () => {
+    if (!pontoAtual) {
+      alert("Marque um ponto primeiro.");
+      return;
+    }
+
+    pontosSalvos.push({
+      latlng: pontoAtual.getLatLng(),
+      data: new Date().toISOString()
     });
-  }
 
-  // ==========================
-  // BOTÃO MARCAR (TEMPORÁRIO)
-  // ==========================
-  const btnMarcarPonto = document.getElementById("btnMarcarPonto");
+    pontoAtual.bindPopup(
+      `📍 Ponto ${pontosSalvos.length}<br>
+       ${pontoAtual.getLatLng().lat.toFixed(6)},
+       ${pontoAtual.getLatLng().lng.toFixed(6)}`
+    );
 
-  if (btnMarcarPonto) {
-    btnMarcarPonto.addEventListener("click", () => {
-      if (!navigator.geolocation) {
-        alert("GPS não disponível.");
-        return;
-      }
+    pontoAtual = null;
+    alert("Ponto gravado!");
+  });
 
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const lat = pos.coords.latitude;
-          const lng = pos.coords.longitude;
-
-          if (marcadorTemporario) {
-            map.removeLayer(marcadorTemporario);
-          }
-
-          marcadorTemporario = L.marker([lat, lng]).addTo(map);
-          marcadorTemporario.bindPopup("📍 Ponto marcado (não gravado)");
-        },
-        () => {
-          alert("Erro ao obter localização.");
-        },
-        { enableHighAccuracy: true }
-      );
-    });
-  }
-
-  // ==========================
-  // BOTÃO GRAVAR PONTO
-  // ==========================
-  const btnGravarPonto = document.getElementById("btnGravarPonto");
-
-  if (btnGravarPonto) {
-    btnGravarPonto.addEventListener("click", () => {
-      if (!marcadorTemporario) {
-        alert("Marque um ponto antes de gravar.");
-        return;
-      }
-
-      const missaoInput = document.getElementById("missaoInput");
-      const missao = missaoInput ? missaoInput.value : "Sem missão";
-      const latlng = marcadorTemporario.getLatLng();
-
-      const ponto = {
-        id: pontosRegistrados.length + 1,
-        missao: missao,
-        lat: latlng.lat,
-        lng: latlng.lng,
-        data: new Date().toLocaleString()
-      };
-
-      pontosRegistrados.push(ponto);
-
-      marcadorTemporario.bindPopup(
-        `<strong>Ponto ${ponto.id}</strong><br>
-         Missão: ${ponto.missao}<br>
-         Lat: ${ponto.lat.toFixed(6)}<br>
-         Lng: ${ponto.lng.toFixed(6)}`
-      ).openPopup();
-
-      marcadorTemporario = null;
-
-      alert("Ponto gravado com sucesso!");
-    });
-  }
+  btnFinalizar.addEventListener("click", () => {
+    alert(`Missão finalizada com ${pontosSalvos.length} pontos.`);
+    pontosSalvos = [];
+  });
 
 });
