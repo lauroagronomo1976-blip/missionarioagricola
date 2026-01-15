@@ -132,5 +132,45 @@ document.addEventListener("DOMContentLoaded", () => {
   btnFinalizar.addEventListener("click", () => {
     alert(`Missão finalizada.\nPontos gravados: ${pontosGravados.length}`);
   });
+// ======================
+// REGISTROS TÉCNICOS POR PONTO (1.2.1)
+// ======================
+let registrosTemp = [];
+
+const btnAddRegistro = document.getElementById("btnAddRegistro");
+const listaRegistros = document.getElementById("listaRegistros");
+
+btnAddRegistro.addEventListener("click", () => {
+  const individuo = document.getElementById("individuoInput").value;
+  const especie = document.getElementById("especieInput").value;
+  const fase = document.getElementById("faseSelect").value;
+  const quantidade = document.getElementById("quantidadeInput").value;
+
+  if (!individuo || !quantidade) {
+    alert("Informe ao menos o indivíduo e a quantidade.");
+    return;
+  }
+
+  registrosTemp.push({ individuo, especie, fase, quantidade });
+
+  renderListaRegistros();
+
+  // limpa campos
+  document.getElementById("individuoInput").value = "";
+  document.getElementById("especieInput").value = "";
+  document.getElementById("faseSelect").value = "";
+  document.getElementById("quantidadeInput").value = "";
+});
+
+function renderListaRegistros() {
+  listaRegistros.innerHTML = "<h4>Registros deste ponto</h4>";
+
+  registrosTemp.forEach((r) => {
+    const div = document.createElement("div");
+    div.className = "registro-item";
+    div.innerText = `${r.individuo} – ${r.especie || "-"} – ${r.fase || "-"} – ${r.quantidade}`;
+    listaRegistros.appendChild(div);
+  });
+}
 
 });
