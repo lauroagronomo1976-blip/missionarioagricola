@@ -1,97 +1,136 @@
-console.log("script.js carregado");
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* =========================
-     MAPA
-  ========================== */
-  const map = L.map("map", {
-    zoomControl: true
-  }).setView([-15.78, -47.93], 5);
+  // ======================
+  // MAPA (BLOCO SAGRADO)
+  // ======================
+  const map = L.map("map").setView([-15.78, -47.93], 5);
 
   const rua = L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     { maxZoom: 19 }
-  ).addTo(map);
+  );
 
   const satelite = L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     { maxZoom: 18 }
   );
 
-  let camadaAtual = "rua";
+  rua.addTo(map);
 
-  /* =========================
-     CAMADAS (🗺)
-  ========================== */
-  const btnLayers = document.getElementById("btnLayers");
+  // ======================
+  // CONTROLES DE CAMADA
+  // ======================
+  let menuVisible = false;
+  const menu = document.createElement("div");
+  menu.className = "layer-menu";
+  menu.innerHTML = `
+    <div id="optRua">Rua</div>
+    <div id="optSat">Satélite</div>
+  `;
+  document.getElementById("map-container").appendChild(menu);
 
-  btnLayers.addEventListener("click", () => {
-    if (camadaAtual === "rua") {
-      map.removeLayer(rua);
-      satelite.addTo(map);
-      camadaAtual = "satelite";
-    } else {
-      map.removeLayer(satelite);
-      rua.addTo(map);
-      camadaAtual = "rua";
-    }
+  document.getElementById("btnLayers").addEventListener("click", () => {
+    menuVisible = !menuVisible;
+    menu.style.display = menuVisible ? "block" : "none";
   });
 
-  /* =========================
-     LOCALIZAÇÃO (🎯)
-  ========================== */
-  let userLocation;
+  document.getElementById("optRua").onclick = () => {
+    map.removeLayer(satelite);
+    rua.addTo(map);
+    menu.style.display = "none";
+    menuVisible = false;
+  };
 
-  const btnLocate = document.getElementById("btnLocate");
+  document.getElementById("optSat").onclick = () => {
+    map.removeLayer(rua);
+    satelite.addTo(map);
+    menu.style.display = "none";
+    menuVisible = false;
+  };
 
-  btnLocate.addEventListener("click", () => {
-    map.locate({ enableHighAccuracy: true, setView: true, maxZoom: 17 });
+  // ======================
+  // LOCALIZAÇÃO (🎯)
+  // ======================
+  let userMarker = null;
+
+  document.getElementById("btnLocate").addEventListener("click", () => {
+    map.locate({ setView: true, maxZoom: 17, enableHighAccuracy: true });
   });
 
   map.on("locationfound", (e) => {
-    if (userLocation) map.removeLayer(userLocation);
-
-    userLocation = L.circleMarker(e.latlng, {
+    if (userMarker) map.removeLayer(userMarker);
+    userMarker = L.circleMarker(e.latlng, {
       radius: 8,
-      fillColor: "#1e90ff",
       color: "#1e90ff",
-      fillOpacity: 0.8
+      fillColor: "#1e90ff",
+      fillOpacity: 0.9
     }).addTo(map);
   });
 
   map.on("locationerror", () => {
-    alert("Não foi possível obter sua localização.");
+    alert("Não foi possível acessar o GPS.");
   });
 
-  /* =========================
-     PONTOS
-  ========================== */
-  let pontoAtual = null;
-  let pontosSalvos = [];
+  // ======================
+  // PONTOS (1.2)
+  // ======================
+  let pontoTemp = null;
+  let pontosGravados = [];
 
   const btnMarcar = document.getElementById("btnMarcarPonto");
   const btnGravar = document.getElementById("btnGravarPonto");
   const btnFinalizar = document.getElementById("btnFinalizarMissao");
+  const registroArea = document.getElementById("registroIndividuos");
 
-  btnLocate.addEventListener("click", () => {
-  map.locate({ enableHighAccuracy: true });
-});
+  // MARCAR → cria ponto temporário
+  btnMarcar.addEventListener("click", () => {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      const latlng = [pos.coords.latitude, pos.coords.longitude];
 
-  map.on("locationfound", (e) => {
+      if (pontoTemp) map.removeLayer(pontoTemp);
 
-  // Se NÃO estiver em modo marcar, apenas centraliza
-  if (!modoMarcarPonto) {
-    map.setView(e.latlng, 17);
-    return;
-  }
+      pontoTemp = L.marker(latlng).addTo(map);
+      pontoTemp.bindPopup("📍 Ponto marcado (não gravado)").openPopup();
 
-  // Se estiver em modo marcar
-  if (pontoAtual) {
-    map.removeLayer(pontoAtual);
-  }
+      map.setView(latlng, 17);
 
-  pontoAtual = L.marker(e.latlng).addTo(map);
-  pontoAtual.bindPopup("📍 Ponto marcado (não gravado)").openPopup();
+      registroArea.style.display = "block";
+    },
+    () => alert("Erro ao obter localização."),
+    { enableHighAccuracy: true });
+  });
 
-  modoMarcarPonto = false; // reseta o modo
+  // GRAVAR → transforma ponto temporário em definitivo
+  btnGravar.addEventListener("click", () => {
+    if (!pontoTemp) {
+      alert("Marque um ponto antes de gravar.");
+      return;
+    }
+
+    const missao = document.getElementById("missaoInput").value || "Sem missão";
+
+    const latlng = pontoTemp.getLatLng();
+
+    pontoTemp.bindPopup(
+      `<strong>Missão:</strong> ${missao}<br>
+       Lat: ${latlng.lat.toFixed(6)}<br>
+       Lng: ${latlng.lng.toFixed(6)}`
+    );
+
+    pontosGravados.push({
+      missao,
+      lat: latlng.lat,
+      lng: latlng.lng,
+      data: new Date().toISOString()
+    });
+
+    pontoTemp = null;
+    alert("Ponto gravado com sucesso!");
+  });
+
+  // FINALIZAR
+  btnFinalizar.addEventListener("click", () => {
+    alert(`Missão finalizada.\nPontos gravados: ${pontosGravados.length}`);
+  });
+
 });
