@@ -1,29 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Missionário Verde</title>
+  <title>Missionário Agrícola</title>
 
-  <!-- Leaflet CSS no <head> -->
-<!-- LEAFLET CSS -->
+  <!-- LEAFLET CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
 
+  <!-- CSS DO PROJETO -->
   <link rel="stylesheet" href="style.css" />
 </head>
-  
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<!-- SEU SCRIPT SEMPRE POR ÚLTIMO -->
-<script src="script.js"></script>
-  
-    </head>
 
 <body>
 
@@ -39,7 +30,6 @@
     <!-- FORMULÁRIO -->
     <div class="form-area">
 
-      <!-- LINHA 1 -->
       <div class="form-row">
         <div class="field safra">
           <label>Safra</label>
@@ -52,7 +42,6 @@
         </div>
       </div>
 
-      <!-- LINHA 2 -->
       <div class="form-row">
         <div class="field">
           <label>Fazenda</label>
@@ -65,7 +54,6 @@
         </div>
       </div>
 
-      <!-- LINHA 3 -->
       <div class="form-row">
         <div class="field">
           <label>Missão</label>
@@ -73,72 +61,77 @@
         </div>
       </div>
 
-      <!-- BOTÃO MARCAR (ÚNICO E CORRETO) -->
-<div class="action-area">
-  <button id="btnMarcarPonto" class="btn-marcar">Marcar</button>
-  <button id="btnGravarPonto" class="btn-gravar">Gravar Ponto</button>
-  <button id="btnFinalizarMissao" class="btn-finalizar">Finalizar Missão</button>
-</div>
-    
-      <!-- REGISTRO DE INDIVÍDUOS (VERSÃO 1.2) -->
-<div id="registroIndividuos" class="registro-area" style="display: none;">
+      <!-- BOTÕES -->
+      <div class="action-area">
+        <button id="btnMarcarPonto" class="btn-marcar">Marcar</button>
+        <button id="btnGravarPonto" class="btn-gravar">Gravar Ponto</button>
+        <button id="btnFinalizarMissao" class="btn-finalizar">Finalizar Missão</button>
+      </div>
 
-  <h3>Registro Técnico</h3>
+      <!-- REGISTRO TÉCNICO (1.2) -->
+      <div id="registroIndividuos" class="registro-area" style="display: none;">
+        <h3>Registro Técnico</h3>
 
-  <div class="form-row">
-    <div class="field">
-      <label>Indivíduo / Problema</label>
-      <input type="text" id="individuoInput" placeholder="Ex: Lagarta, Percevejo, Planta Daninha">
+        <div class="form-row">
+          <div class="field">
+            <label>Indivíduo / Problema</label>
+            <input type="text" id="individuoInput">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Espécie</label>
+            <input type="text" id="especieInput">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Fase</label>
+            <select id="faseSelect">
+              <option>Ovo</option>
+              <option>1º Ínstar</option>
+              <option>2º Ínstar</option>
+              <option>3º Ínstar</option>
+              <option>4º Ínstar</option>
+              <option>5º Ínstar</option>
+              <option>Pupa</option>
+              <option>Adulto</option>
+              <option>Ninfa</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Quantidade</label>
+            <input type="number" id="quantidadeInput" min="0">
+          </div>
+        </div>
+      </div>
+
     </div>
-  </div>
 
-  <div class="form-row">
-    <div class="field">
-      <label>Espécie</label>
-      <input type="text" id="especieInput" placeholder="Ex: Spodoptera frugiperda">
+    <!-- MAPA (FORA DO FORMULÁRIO) -->
+    <div id="map-container">
+      <div id="map"></div>
+
+      <div class="map-buttons">
+        <button id="btnLayers">🗺</button>
+        <button id="btnLocate">🎯</button>
+      </div>
     </div>
-  </div>
 
-  <div class="form-row">
-    <div class="field">
-      <label>Fase</label>
-      <select id="faseSelect">
-        <option value="">Selecione</option>
-        <option>Ovo</option>
-        <option>1º Ínstar</option>
-        <option>2º Ínstar</option>
-        <option>3º Ínstar</option>
-        <option>4º Ínstar</option>
-        <option>5º Ínstar</option>
-        <option>Pupa</option>
-        <option>Adulto</option>
-        <option>Ninfa</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="form-row">
-    <div class="field">
-      <label>Quantidade por ponto</label>
-      <input type="number" id="quantidadeInput" min="0" placeholder="Ex: 3">
-    </div>
-  </div>
-
-    <!-- MAPA -->
-<div id="map-container">
-  <div id="map"></div>
-
-  <div class="map-buttons">
-    <button id="btnLayers">🗺</button>
-    <button id="btnLocate">🎯</button>
-</div>
-    
     <h2 class="section-title">Resumo da Missão</h2>
 
   </main>
 
-  <!-- LEAFLET JS PRIMEIRO -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- LEAFLET JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<!-- SEU SCRIPT DEPOIS -->
-<script src="script.js"></script>
+  <!-- SCRIPT DO PROJETO (ÚLTIMO) -->
+  <script src="script.js"></script>
+
+</body>
+</html>
