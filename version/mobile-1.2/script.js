@@ -1,4 +1,4 @@
-let modoMarcarPonto = false;
+console.log("script.js carregado");
 document.addEventListener("DOMContentLoaded", () => {
 
   /* =========================
