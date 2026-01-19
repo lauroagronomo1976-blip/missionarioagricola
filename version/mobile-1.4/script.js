@@ -16,7 +16,9 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   rua.addTo(map);
-
+  
+// ===== CONTROLE DE PONTO ATIVO (v1.4) =====
+let pontoAtivo = null;
   // ======================
   // CONTROLES DE CAMADA
   // ======================
