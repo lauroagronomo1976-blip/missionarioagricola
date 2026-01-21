@@ -26,7 +26,11 @@ const individuoInput = document.getElementById("individuoInput");
 const especieInput = document.getElementById("especieInput");
 const faseSelect = document.getElementById("faseSelect");
 const quantidadeInput = document.getElementById("quantidadeInput");
-
+if (btnAdicionarRegistro) {
+  btnAdicionarRegistro.addEventListener("click", () => {
+    // código
+  });
+}
 // ===============================
 // DADOS
 // ===============================
