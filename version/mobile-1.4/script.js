@@ -1,6 +1,3 @@
-let modoCriarPonto = false;
-let localizadorAtual = null;
-
 document.addEventListener("DOMContentLoaded", () => {
 
   // ===============================
@@ -26,6 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let pontoAtual = null;
   let inicioPonto = null;
   let registros = [];
+  let criandoPonto = false;
+  let localAtual = null;
 
   // ===============================
   // ELEMENTOS
@@ -37,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnLocate = document.getElementById("btnLocate");
 
   const registroArea = document.getElementById("registroIndividuos");
+
   const individuoInput = document.getElementById("individuoInput");
   const especieInput = document.getElementById("especieInput");
   const faseSelect = document.getElementById("faseSelect");
@@ -46,69 +46,28 @@ document.addEventListener("DOMContentLoaded", () => {
   registroArea.appendChild(lista);
 
   // ===============================
-  // MARCAR PONTO
+  // EVENTO DE LOCALIZAÇÃO (ÚNICO)
   // ===============================
-  btnMarcar.addEventListener("click", () => {
-    modoCriarPonto = true;
-    map.locate({ enableHighAccuracy: true });
-  });
+  map.on("locationfound", (e) => {
 
-  // ===============================
-  // MIRA (SÓ CENTRALIZA)
-  // ===============================
-  btnLocate.addEventListener("click", () => {
-    modoCriarPonto = false;
-    map.locate({ enableHighAccuracy: true });
-  });
+    // 🔵 posição atual (bolinha azul)
+    if (localAtual) map.removeLayer(localAtual);
 
-  // ===============================
-  // LOCALIZAÇÃO
-  // ===============================
-map.on("locationfound", (e) => {
+    localAtual = L.circleMarker(e.latlng, {
+      radius: 6,
+      color: "#005eff",
+      fillColor: "#3399ff",
+      fillOpacity: 0.9
+    }).addTo(map);
 
-  // 🔵 bolinha azul (posição atual)
-  if (localizadorAtual) {
-    map.removeLayer(localizadorAtual);
-  }
-
-  localizadorAtual = L.circleMarker(e.latlng, {
-    radius: 6,
-    color: "#005eff",
-    fillColor: "#3399ff",
-    fillOpacity: 0.9
-  }).addTo(map);
-
-  // 👉 só centraliza (modo mira)
-  if (!modoCriarPonto) {
-    map.setView(e.latlng, 17);
-    return;
-  }
-
-  // 👉 cria ponto
-  modoCriarPonto = false;
-
-  if (pontoAtual) map.removeLayer(pontoAtual);
-
-  pontoAtual = L.marker(e.latlng).addTo(map);
-  pontoAtual.bindPopup("📍 Ponto marcado (não gravado)").openPopup();
-
-  map.setView(e.latlng, 17);
-
-  inicioPonto = new Date();
-  registros = [];
-  lista.innerHTML = "";
-
-  registroArea.style.display = "block";
-});
-
-    // Apenas centraliza
-    if (!modoCriarPonto) {
+    // 👉 só centraliza
+    if (!criandoPonto) {
       map.setView(e.latlng, 17);
       return;
     }
 
-    // Criar novo ponto
-    modoCriarPonto = false;
+    // 👉 cria ponto
+    criandoPonto = false;
 
     if (pontoAtual) map.removeLayer(pontoAtual);
 
@@ -122,6 +81,22 @@ map.on("locationfound", (e) => {
     lista.innerHTML = "";
 
     registroArea.style.display = "block";
+  });
+
+  // ===============================
+  // MARCAR PONTO
+  // ===============================
+  btnMarcar.addEventListener("click", () => {
+    criandoPonto = true;
+    map.locate({ enableHighAccuracy: true });
+  });
+
+  // ===============================
+  // MIRA (SÓ LOCALIZA)
+  // ===============================
+  btnLocate.addEventListener("click", () => {
+    criandoPonto = false;
+    map.locate({ enableHighAccuracy: true });
   });
 
   // ===============================
@@ -139,46 +114,43 @@ map.on("locationfound", (e) => {
   });
 
   // ===============================
-  // ADICIONAR REGISTRO
+  // ADICIONAR REGISTRO (EMPILHAR)
   // ===============================
-btnAdicionar.addEventListener("click", () => {
+  btnAdicionar.addEventListener("click", () => {
 
-  const individuo = individuoInput.value.trim();
-  const especie = especieInput.value.trim();
-  const fase = faseSelect.value;
-  const quantidade = quantidadeInput.value.trim();
+    const individuo = individuoInput.value.trim();
+    const especie = especieInput.value.trim();
+    const fase = faseSelect.value;
+    const quantidade = quantidadeInput.value.trim();
 
-  if (!individuo || !especie || !quantidade) {
-    alert("Preencha todos os campos do registro técnico");
-    return;
-  }
+    if (!individuo || !especie || !quantidade) {
+      alert("Preencha todos os campos do registro técnico");
+      return;
+    }
 
-  const registro = { individuo, especie, fase, quantidade };
-  registros.push(registro);
+    const registro = { individuo, especie, fase, quantidade };
+    registros.push(registro);
 
-  const item = document.createElement("div");
-  item.style.borderBottom = "1px solid #ccc";
-  item.style.padding = "6px 0";
+    const item = document.createElement("div");
+    item.style.borderBottom = "1px solid #ccc";
+    item.style.padding = "6px 0";
+    item.innerHTML = `
+      <strong>${individuo}</strong> – ${especie}<br>
+      Fase: ${fase || "-"} | Qtde: ${quantidade}
+    `;
 
-  item.innerHTML = `
-    <strong>${individuo}</strong> – ${especie}<br>
-    Fase: ${fase || "-"} | Qtde: ${quantidade}
-  `;
+    lista.appendChild(item);
 
-  lista.appendChild(item);
-
-  // limpa formulário
-  individuoInput.value = "";
-  especieInput.value = "";
-  quantidadeInput.value = "";
-  faseSelect.selectedIndex = 0;
-});
+    individuoInput.value = "";
+    especieInput.value = "";
+    quantidadeInput.value = "";
+    faseSelect.selectedIndex = 0;
+  });
 
   // ===============================
   // GRAVAR PONTO
   // ===============================
   btnGravar.addEventListener("click", () => {
-
     if (!pontoAtual) {
       alert("Marque um ponto primeiro");
       return;
