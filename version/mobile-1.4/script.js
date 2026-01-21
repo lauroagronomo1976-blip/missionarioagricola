@@ -52,6 +52,31 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   map.on("locationfound", (e) => {
+    map.on("locationfound", (e) => {
+
+  // 👉 SE NÃO ESTIVER EM MODO MARCAR, SÓ CENTRALIZA
+  if (!modoCriarPonto) {
+    map.setView(e.latlng, 17);
+    return;
+  }
+
+  // 👉 A PARTIR DAQUI: CRIA PONTO
+  modoCriarPonto = false;
+
+  if (pontoAtual) map.removeLayer(pontoAtual);
+
+  pontoAtual = L.marker(e.latlng).addTo(map);
+  pontoAtual.bindPopup("📍 Ponto marcado (não gravado)").openPopup();
+
+  map.setView(e.latlng, 17);
+
+  inicioPonto = new Date();
+  registrosDoPontoAtual = [];
+  listaRegistros.innerHTML = "";
+
+  registroArea.style.display = "block";
+});
+
     if (pontoAtual) map.removeLayer(pontoAtual);
 
     pontoAtual = L.marker(e.latlng).addTo(map);
@@ -70,12 +95,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // MIRA (SÓ CENTRALIZA)
   // ===============================
   btnLocate.addEventListener("click", () => {
-    if (pontoAtual) {
-      map.setView(pontoAtual.getLatLng(), 17);
-    } else {
-      map.locate({ enableHighAccuracy: true });
-    }
-  });
+  modoCriarPonto = false;
+  map.locate({ enableHighAccuracy: true });
+});
 
   // ===============================
   // CAMADAS
@@ -95,6 +117,36 @@ document.addEventListener("DOMContentLoaded", () => {
   // ADICIONAR REGISTRO (EMPILHAR)
   // ===============================
   btnAdicionar.addEventListener("click", () => {
+    btnAdicionarRegistro.addEventListener("click", () => {
+
+  const individuo = individuoInput.value.trim();
+  const especie = especieInput.value.trim();
+  const fase = faseSelect.value;
+  const quantidade = quantidadeInput.value.trim();
+
+  if (!individuo || !especie || !quantidade) {
+    alert("Preencha todos os campos do registro técnico");
+    return;
+  }
+
+  const registro = { individuo, especie, fase, quantidade };
+  registrosDoPontoAtual.push(registro);
+
+  const item = document.createElement("div");
+  item.style.borderBottom = "1px solid #ccc";
+  item.style.padding = "6px 0";
+  item.innerHTML = `
+    <strong>${individuo}</strong> – ${especie}<br>
+    Fase: ${fase || "-"} | Qtde: ${quantidade}
+  `;
+
+  listaRegistros.appendChild(item);
+
+  individuoInput.value = "";
+  especieInput.value = "";
+  quantidadeInput.value = "";
+  faseSelect.selectedIndex = 0;
+});
     const individuo = individuoInput.value.trim();
     const especie = especieInput.value.trim();
     const fase = faseSelect.value;
@@ -128,11 +180,21 @@ document.addEventListener("DOMContentLoaded", () => {
   // GRAVAR PONTO
   // ===============================
   btnGravar.addEventListener("click", () => {
-    if (!pontoAtual) {
-      alert("Marque um ponto primeiro");
-      return;
-    }
+  if (!pontoAtual) {
+    alert("Marque um ponto primeiro");
+    return;
+  }
 
+  const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
+
+  pontoAtual.bindPopup(
+    `📍 Ponto gravado<br>
+     Registros: ${registrosDoPontoAtual.length}<br>
+     ⏱ ${tempoMin} min`
+  );
+
+  alert("Ponto gravado com sucesso!");
+});
     const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
 
     pontoAtual.bindPopup(
