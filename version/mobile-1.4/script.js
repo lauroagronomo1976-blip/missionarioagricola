@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   let usandoSatelite = false;
-  let modoCriarPonto = false;
 
   // ===============================
   // ESTADO
@@ -24,13 +23,14 @@ document.addEventListener("DOMContentLoaded", () => {
   let pontoAtual = null;
   let inicioPonto = null;
   let registrosDoPontoAtual = [];
-  let marcadoresSalvos = [];
+  let modoCriarPonto = false;
 
   // ===============================
-  // ELEMENTOS
+  // ELEMENTOS (IDs EXATOS DO SEU HTML)
   // ===============================
   const btnMarcar = document.getElementById("btnMarcarPonto");
   const btnGravar = document.getElementById("btnGravarPonto");
+  const btnFinalizar = document.getElementById("btnFinalizarMissao");
   const btnAdicionar = document.getElementById("btnAddRegistro");
   const btnLayers = document.getElementById("btnLayers");
   const btnLocate = document.getElementById("btnLocate");
@@ -56,22 +56,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===============================
-  // RECONSTRUIR MAPA (C2)
+  // RECARREGAR PONTOS SALVOS
   // ===============================
   function renderizarPontosSalvos() {
     const missao = carregarMissao();
-
-    missao.pontos.forEach((ponto) => {
-      const marcador = L.marker([ponto.lat, ponto.lng]).addTo(map);
-      marcador.bindPopup(
+    missao.pontos.forEach((p) => {
+      const m = L.marker([p.lat, p.lng]).addTo(map);
+      m.bindPopup(
         `📍 Ponto gravado<br>
-         Registros: ${ponto.registros.length}<br>
-         ⏱ ${ponto.tempoMin} min`
+         Registros: ${p.registros.length}<br>
+         ⏱ ${p.tempoMin} min`
       );
-      marcadoresSalvos.push(marcador);
     });
   }
-
   renderizarPontosSalvos();
 
   // ===============================
@@ -88,7 +85,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   map.on("locationfound", (e) => {
-
     if (!modoCriarPonto) {
       map.setView(e.latlng, 17);
       return;
@@ -101,12 +97,12 @@ document.addEventListener("DOMContentLoaded", () => {
     pontoAtual = L.marker(e.latlng).addTo(map);
     pontoAtual.bindPopup("📍 Ponto marcado (não gravado)").openPopup();
 
-    map.setView(e.latlng, 17);
-
     inicioPonto = new Date();
     registrosDoPontoAtual = [];
     listaRegistros.innerHTML = "";
     registroArea.style.display = "block";
+
+    map.setView(e.latlng, 17);
   });
 
   // ===============================
@@ -124,9 +120,14 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ===============================
-  // ADICIONAR REGISTRO
+  // ADICIONAR REGISTRO (AGORA FUNCIONA)
   // ===============================
   btnAdicionar.addEventListener("click", () => {
+    if (!pontoAtual) {
+      alert("Marque um ponto antes de adicionar registros");
+      return;
+    }
+
     const individuo = individuoInput.value.trim();
     const especie = especieInput.value.trim();
     const fase = faseSelect.value;
@@ -137,7 +138,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    registrosDoPontoAtual.push({ individuo, especie, fase, quantidade });
+    const registro = { individuo, especie, fase, quantidade };
+    registrosDoPontoAtual.push(registro);
 
     const item = document.createElement("div");
     item.style.borderBottom = "1px solid #ddd";
@@ -156,11 +158,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ===============================
-  // GRAVAR PONTO (C2)
+  // GRAVAR PONTO
   // ===============================
   btnGravar.addEventListener("click", () => {
     if (!pontoAtual) {
-      alert("Marque um ponto primeiro");
+      alert("Nenhum ponto marcado");
       return;
     }
 
@@ -178,20 +180,26 @@ document.addEventListener("DOMContentLoaded", () => {
     missao.pontos.push(pontoSalvo);
     salvarMissao(missao);
 
-    const marcador = L.marker([pontoSalvo.lat, pontoSalvo.lng]).addTo(map);
-    marcador.bindPopup(
+    pontoAtual.bindPopup(
       `📍 Ponto gravado<br>
        Registros: ${registrosDoPontoAtual.length}<br>
        ⏱ ${tempoMin} min`
     );
-
-    marcadoresSalvos.push(marcador);
 
     pontoAtual = null;
     registrosDoPontoAtual = [];
     registroArea.style.display = "none";
 
     alert("Ponto gravado com sucesso!");
+  });
+
+  // ===============================
+  // FINALIZAR MISSÃO (BASE)
+  // ===============================
+  btnFinalizar.addEventListener("click", () => {
+    const missao = carregarMissao();
+    alert(`Missão finalizada\nPontos registrados: ${missao.pontos.length}`);
+    console.log("MISSÃO:", missao);
   });
 
 });
