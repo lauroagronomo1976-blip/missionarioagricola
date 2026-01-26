@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================
   const btnMarcar = document.getElementById("btnMarcarPonto");
   const btnGravar = document.getElementById("btnGravarPonto");
-  const btnFinalizar = document.getElementById("btnFinalizarMissao");
   const btnAdicionar = document.getElementById("btnAddRegistro");
   const btnLayers = document.getElementById("btnLayers");
   const btnLocate = document.getElementById("btnLocate");
@@ -77,30 +76,23 @@ document.addEventListener("DOMContentLoaded", () => {
           <button data-del="${index}">🗑</button>
         </div>
       `;
-
       listaRegistros.appendChild(item);
     });
   }
 
   // ===============================
-  // BOTÃO MARCAR PONTO
+  // MARCAR PONTO
   // ===============================
   btnMarcar.addEventListener("click", () => {
     modoCriarPonto = true;
     map.locate({ enableHighAccuracy: true });
   });
 
-  // ===============================
-  // BOTÃO MIRA
-  // ===============================
   btnLocate.addEventListener("click", () => {
     modoCriarPonto = false;
     map.locate({ enableHighAccuracy: true });
   });
 
-  // ===============================
-  // LOCALIZAÇÃO
-  // ===============================
   map.on("locationfound", (e) => {
 
     if (!modoCriarPonto) {
@@ -119,8 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
     registrosDoPontoAtual = [];
     indiceEdicao = null;
 
-    renderizarRegistros();
     registroArea.style.display = "block";
+    renderizarRegistros();
 
     map.setView(e.latlng, 17);
   });
@@ -177,9 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ocorrenciaSelect.selectedIndex = 0;
   });
 
-  // ===============================
-  // AÇÕES NA LISTA
-  // ===============================
   listaRegistros.addEventListener("click", (e) => {
 
     if (e.target.dataset.del !== undefined) {
@@ -195,6 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
       faseSelect.value = r.fase;
       quantidadeInput.value = r.quantidade;
       indiceEdicao = e.target.dataset.edit;
+      registroArea.style.display = "block";
     }
   });
 
@@ -216,10 +206,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     salvarMissao(missao);
 
-    pontoAtual.bindPopup(`📍 Ponto gravado<br>Registros: ${registrosDoPontoAtual.length}`);
-    pontoAtual = null;
-    registrosDoPontoAtual = [];
-    registroArea.style.display = "none";
+    pontoAtual.bindPopup(
+      `📍 Ponto gravado<br>⏱ Duração: ${tempoMin} min<br>📋 Registros: ${registrosDoPontoAtual.length}`
+    ).openPopup();
+
+    registroArea.style.display = "block";
+    renderizarRegistros();
 
     alert("Ponto gravado!");
   });
