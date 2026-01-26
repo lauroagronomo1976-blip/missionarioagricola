@@ -225,28 +225,43 @@ document.addEventListener("DOMContentLoaded", () => {
   listaRegistros.innerHTML = "";
   registroArea.style.display = "none";
 
-  alert("Ponto gravado!");
-});
-    const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
-    const missao = carregarMissao();
+// ===============================
+// GRAVAR PONTO
+// ===============================
+btnGravar.addEventListener("click", () => {
+  if (!pontoAtual) return;
 
-    missao.pontos.push({
-      lat: pontoAtual.getLatLng().lat,
-      lng: pontoAtual.getLatLng().lng,
-      tempoMin,
-      registros: registrosDoPontoAtual
-    });
+  const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
+  const missao = carregarMissao();
 
-    salvarMissao(missao);
-
-    pontoAtual.bindPopup(
-      `📍 Ponto gravado<br>⏱ Duração: ${tempoMin} min<br>📋 Registros: ${registrosDoPontoAtual.length}`
-    ).openPopup();
-
-    registroArea.style.display = "block";
-    renderizarRegistros();
-
-    alert("Ponto gravado!");
+  missao.pontos.push({
+    lat: pontoAtual.getLatLng().lat,
+    lng: pontoAtual.getLatLng().lng,
+    tempoMin,
+    registros: registrosDoPontoAtual
   });
 
+  salvarMissao(missao);
+
+  pontoAtual.bindPopup(
+    `📍 Ponto gravado<br>
+     ⏱ Duração: ${tempoMin} min<br>
+     📋 Registros: ${registrosDoPontoAtual.length}`
+  ).openPopup();
+
+  // limpar estado
+  registrosDoPontoAtual = [];
+  indiceEdicao = null;
+
+  individuoInput.value = "";
+  especieInput.value = "";
+  quantidadeInput.value = "";
+  faseSelect.selectedIndex = 0;
+  ocorrenciaSelect.selectedIndex = 0;
+
+  listaRegistros.innerHTML = "";
+  registroArea.style.display = "none";
+
+  alert("Ponto gravado!");
 });
+    
