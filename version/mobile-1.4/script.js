@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
     { maxZoom: 19 }
   );
 
+  let usandoSatelite = false;
+
   // ===============================
   // ESTADO
   // ===============================
@@ -81,14 +83,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===============================
-  // MARCAR PONTO
+  // BOTÃO MARCAR PONTO
   // ===============================
   btnMarcar.addEventListener("click", () => {
     modoCriarPonto = true;
     map.locate({ enableHighAccuracy: true });
   });
 
+  // ===============================
+  // BOTÃO MIRA
+  // ===============================
+  btnLocate.addEventListener("click", () => {
+    modoCriarPonto = false;
+    map.locate({ enableHighAccuracy: true });
+  });
+
+  // ===============================
+  // LOCALIZAÇÃO
+  // ===============================
   map.on("locationfound", (e) => {
+
     if (!modoCriarPonto) {
       map.setView(e.latlng, 17);
       return;
@@ -104,10 +118,25 @@ document.addEventListener("DOMContentLoaded", () => {
     inicioPonto = new Date();
     registrosDoPontoAtual = [];
     indiceEdicao = null;
+
     renderizarRegistros();
     registroArea.style.display = "block";
 
     map.setView(e.latlng, 17);
+  });
+
+  // ===============================
+  // CAMADAS
+  // ===============================
+  btnLayers.addEventListener("click", () => {
+    if (usandoSatelite) {
+      map.removeLayer(camadaSatelite);
+      camadaRua.addTo(map);
+    } else {
+      map.removeLayer(camadaRua);
+      camadaSatelite.addTo(map);
+    }
+    usandoSatelite = !usandoSatelite;
   });
 
   // ===============================
