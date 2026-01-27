@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnMarcar = document.getElementById("btnMarcarPonto");
   const btnAdicionar = document.getElementById("btnAddRegistro");
   const btnExibir = document.getElementById("btnExibirRegistros");
-  const btnSalvar = document.getElementById("btnSalvarPonto");
+  const btnSalvar = document.getElementById("btnGravarPonto");
   const btnLayers = document.getElementById("btnLayers");
   const btnLocate = document.getElementById("btnLocate");
 
@@ -182,21 +182,6 @@ document.addEventListener("DOMContentLoaded", () => {
     faseSelect.selectedIndex = 0;
     ocorrenciaSelect.selectedIndex = 0;
   });
-  
-// ===============================
-// EXIBIR REGISTROS (v1.4.1)
-// ===============================
-const btnExibir = document.getElementById("btnExibirRegistros");
-
-btnExibir.addEventListener("click", () => {
-  if (!registrosDoPontoAtual.length) {
-    alert("Não há registros para exibir neste ponto");
-    return;
-  }
-
-  registroArea.style.display = "block";
-  renderizarRegistros();
-});
 
   // ===============================
   // EDITAR / EXCLUIR DA LISTA
