@@ -86,11 +86,18 @@
 
       <!-- BOTÕES -->
       <div class="action-area">
-        <button id="btnMarcarPonto" class="btn-marcar">Marcar</button>
-        <button id="btnGravarPonto" class="btn-gravar">Gravar Ponto</button>
-        <button id="btnFinalizarMissao" class="btn-finalizar">Finalizar Missão</button>
-      </div>
+  <button id="btnMarcarPonto" class="btn-marcar">
+    Marcar ponto
+  </button>
 
+  <button id="btnSalvarPonto" class="btn-gravar">
+    Salvar ponto
+  </button>
+
+  <button id="btnFinalizarMissao" class="btn-finalizar">
+    Finalizar Missão
+  </button>
+</div>
       <!-- REGISTRO TÉCNICO (1.2) -->
       <div id="registroIndividuos" class="registro-area" style="display: none;">
         <h3>Registro Técnico</h3>
@@ -145,10 +152,16 @@
           </div>
         </div>
       </div>
-<button type="button" id="btnAddRegistro" class="btn-secundario">
-  + Adicionar Registro
-</button>
+    
+<div class="action-area">
+    <button type="button" id="btnAddRegistro" class="btn-secundario">
+    + Adicionar Registro
+  </button>
 
+  <button type="button" id="btnExibirRegistros" class="btn-secundario">
+    Exibir
+  </button>
+</div>
 <div id="listaRegistros" class="lista-registros"></div>
     </div>
 
