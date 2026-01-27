@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let usandoSatelite = false;
 
   // ===============================
-  // ESTADO GLOBAL
+  // ESTADO
   // ===============================
   let pontoAtual = null;
   let inicioPonto = null;
@@ -28,14 +28,16 @@ document.addEventListener("DOMContentLoaded", () => {
   let formularioVisivel = false;
 
   // ===============================
-  // ELEMENTOS
+  // ELEMENTOS (100% alinhados ao HTML)
   // ===============================
   const btnMarcar = document.getElementById("btnMarcarPonto");
+  const btnGravar = document.getElementById("btnGravarPonto");
   const btnAdicionar = document.getElementById("btnAddRegistro");
-  const btnExibir = document.getElementById("btnExibirRegistros");
-  const btnSalvar = document.getElementById("btnGravarPonto");
   const btnLayers = document.getElementById("btnLayers");
   const btnLocate = document.getElementById("btnLocate");
+
+  // ⚠️ botão Exibir só funciona se existir no HTML
+  const btnExibir = document.getElementById("btnExibirRegistros");
 
   const registroArea = document.getElementById("registroIndividuos");
   const listaRegistros = document.getElementById("listaRegistros");
@@ -59,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===============================
-  // VISIBILIDADE FORMULÁRIO
+  // FORMULÁRIO
   // ===============================
   function mostrarFormulario() {
     registroArea.style.display = "block";
@@ -159,10 +161,10 @@ document.addEventListener("DOMContentLoaded", () => {
       individuo: individuoInput.value.trim(),
       especie: especieInput.value.trim(),
       fase: faseSelect.value,
-      quantidade: quantidadeInput.value.trim()
+      quantidade: quantidadeInput.value
     };
 
-    if (!registro.ocorrencia || !registro.individuo || !registro.especie || !registro.quantidade) {
+    if (!registro.ocorrencia || !registro.individuo || !registro.especie || registro.quantidade === "") {
       alert("Preencha todos os campos");
       return;
     }
@@ -184,10 +186,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ===============================
-  // EDITAR / EXCLUIR DA LISTA
+  // EDITAR / EXCLUIR
   // ===============================
   listaRegistros.addEventListener("click", (e) => {
-
     if (e.target.dataset.del !== undefined) {
       registrosDoPontoAtual.splice(e.target.dataset.del, 1);
       renderizarRegistros();
@@ -206,21 +207,23 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ===============================
-  // EXIBIR / OCULTAR REGISTROS
+  // EXIBIR / OCULTAR (se existir botão)
   // ===============================
-  btnExibir.addEventListener("click", () => {
-    if (formularioVisivel) {
-      esconderFormulario();
-    } else {
-      mostrarFormulario();
-      renderizarRegistros();
-    }
-  });
+  if (btnExibir) {
+    btnExibir.addEventListener("click", () => {
+      if (formularioVisivel) {
+        esconderFormulario();
+      } else {
+        mostrarFormulario();
+        renderizarRegistros();
+      }
+    });
+  }
 
   // ===============================
-  // SALVAR PONTO (CONSOLIDA TUDO)
+  // GRAVAR PONTO  ✅ AGORA GRAVA
   // ===============================
-  btnSalvar.addEventListener("click", () => {
+  btnGravar.addEventListener("click", () => {
     if (!pontoAtual) {
       alert("Nenhum ponto marcado");
       return;
@@ -233,7 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
       lat: pontoAtual.getLatLng().lat,
       lng: pontoAtual.getLatLng().lng,
       tempoMin,
-      registros: registrosDoPontoAtual
+      registros: [...registrosDoPontoAtual]
     });
 
     salvarMissao(missao);
@@ -244,10 +247,10 @@ document.addEventListener("DOMContentLoaded", () => {
        📋 Registros: ${registrosDoPontoAtual.length}`
     ).openPopup();
 
-    // reset geral
+    // reset
+    pontoAtual = null;
     registrosDoPontoAtual = [];
     indiceEdicao = null;
-    pontoAtual = null;
     esconderFormulario();
     listaRegistros.innerHTML = "";
 
