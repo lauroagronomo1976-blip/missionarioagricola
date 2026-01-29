@@ -228,9 +228,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 }
-✅ O QUE I
 
-  // ===============================
+// ===============================
   // GRAVAR PONTO  ✅
   // ===============================
   btnGravar.addEventListener("click", () => {
