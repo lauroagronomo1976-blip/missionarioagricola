@@ -211,15 +211,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // EXIBIR / OCULTAR
   // ===============================
   if (btnExibir) {
-    btnExibir.addEventListener("click", () => {
-      if (formularioVisivel) {
-        esconderFormulario();
-      } else {
-        mostrarFormulario();
-        renderizarRegistros();
-      }
-    });
-  }
+  btnExibir.addEventListener("click", () => {
+    if (formularioVisivel) {
+      esconderFormulario();
+    } else {
+      mostrarFormulario();
+
+      // 🔥 força exibir a lista sempre
+      listaRegistros.style.display = "block";
+      renderizarRegistros();
+    }
+  });
+}
+✅ O QUE I
 
   // ===============================
   // GRAVAR PONTO  ✅
