@@ -218,7 +218,10 @@ document.addEventListener("DOMContentLoaded", () => {
       esconderFormulario();
     } else {
       mostrarFormulario();
-
+      renderizarRegistros(); // 👈 força render sempre
+    }
+  });
+}
       // 🔥 força exibir a lista sempre
       listaRegistros.style.display = "block";
       renderizarRegistros();
