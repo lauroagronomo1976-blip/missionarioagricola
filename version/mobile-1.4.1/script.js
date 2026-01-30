@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ELEMENTOS
   // ===============================
   const btnMarcar = document.getElementById("btnMarcarPonto");
-  const btnGravar = document.getElementById("btnGravarPonto");
+  const btnGravar = document.getElementById("btnSalvarPonto");
   const btnAdicionar = document.getElementById("btnAddRegistro");
   const btnLayers = document.getElementById("btnLayers");
   const btnLocate = document.getElementById("btnLocate");
@@ -248,8 +248,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     pontoAtual.bindPopup(
       `📍 Ponto gravado<br>
-       ⏱ ${tempoMin} min<br>
        📋 ${registrosDoPontoAtual.length} registros`
+       ⏱ ${tempoMin} min<br>
     ).openPopup();
 
     pontoAtual = null;
