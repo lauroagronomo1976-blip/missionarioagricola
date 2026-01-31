@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================
   let pontoAtual = null;
   let inicioPonto = null;
-  let registrosDoPontoAtual = [];
   let modoCriarPonto = false;
   let indiceEdicao = null;
   let formularioVisivel = false;
@@ -78,7 +77,7 @@ function esconderFormulario() {
   // RENDER REGISTROS
   // ===============================
   function renderizarRegistros() {
-    listaRegistros.innerHTML = "";
+    
 
     registrosDoPontoAtual.forEach((r, index) => {
       const item = document.createElement("div");
