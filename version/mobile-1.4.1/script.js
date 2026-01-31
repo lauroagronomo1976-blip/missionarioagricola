@@ -63,16 +63,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // FORMULÁRIO
   // ===============================
   function mostrarFormulario() {
-    registroArea.style.display = "block";
-    listaRegistros.style.display = "block";
-    formularioVisivel = true;
-  }
+  registroArea.style.display = "block";
+  listaRegistros.style.display = "block";
+  formularioVisivel = true;
+}
 
-  function esconderFormulario() {
-    registroArea.style.display = "none";
-    listaRegistros.style.display = "none";
-    formularioVisivel = false;
-  }
+function esconderFormulario() {
+  registroArea.style.display = "none";
+  listaRegistros.style.display = "none";
+  formularioVisivel = false;
+}
 
   // ===============================
   // RENDER REGISTROS
