@@ -18,173 +18,145 @@
   
 <body>
 
-  <!-- CABEÇALHO -->
-  <header class="header">
+<header class="header">
   <h1>Missionário Agrícola</h1>
-  <p style="font-size: 12px; opacity: 0.6;">
+  <p style="font-size:12px; opacity:0.6;">
     teste git ativo — v1.4.1 — atualizado às 26/01/2026, 18:26 hs
   </p>
-  </header>
+</header>
 
-  <main class="container">
+<main class="container">
 
-    <h2 class="section-title">Nova Missão</h2>
+<h2 class="section-title">Nova Missão</h2>
 
-    <!-- FORMULÁRIO -->
-    <div class="form-area">
+<div class="form-area">
 
-      <div class="form-row">
-        <div class="field safra">
-          <label>Safra</label>
-          <input type="text" placeholder="2024/25" />
-        </div>
-
-        <div class="field empresa">
-          <label>Empresa</label>
-          <input type="text" placeholder="Empresa agrícola" />
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="field">
-          <label>Fazenda</label>
-          <input type="text" placeholder="Nome da fazenda" />
-        </div>
-
-        <div class="field">
-          <label>Talhão</label>
-          <input type="text" placeholder="Talhão" />
-        </div> 
-      </div>
-      
-      <!-- LINHA NOVA: CULTURA + VARIEDADE -->
-<div class="form-row">
-  <div class="field half">
-    <label>Cultura</label>
-    <input
-      type="text"
-      id="culturaInput"
-      placeholder="Ex: Soja, Milho"
-    />
+  <!-- DADOS DA MISSÃO (inalterado) -->
+  <div class="form-row">
+    <div class="field safra">
+      <label>Safra</label>
+      <input type="text" placeholder="2024/25" />
+    </div>
+    <div class="field empresa">
+      <label>Empresa</label>
+      <input type="text" placeholder="Empresa agrícola" />
+    </div>
   </div>
 
-  <div class="field half">
-    <label>Variedade / Cultivar</label>
-    <input
-      type="text"
-      id="variedadeInput"
-      placeholder="Ex: BRS 1001"
-    />
+  <div class="form-row">
+    <div class="field">
+      <label>Fazenda</label>
+      <input type="text" placeholder="Nome da fazenda" />
+    </div>
+    <div class="field">
+      <label>Talhão</label>
+      <input type="text" placeholder="Talhão" />
+    </div> 
   </div>
-</div>
-      
-        <div class="field">
-          <label>Missão</label>
-          <input type="text" id="missaoInput" placeholder="Ex: Inspeção técnica" />
-        </div>
-      </div>
 
-      <!-- BOTÕES -->
-      <div class="action-area">
-  <button id="btnMarcarPonto" class="btn-marcar">
-    Marcar ponto
-  </button>
+  <div class="form-row">
+    <div class="field half">
+      <label>Cultura</label>
+      <input type="text" id="culturaInput" />
+    </div>
+    <div class="field half">
+      <label>Variedade</label>
+      <input type="text" id="variedadeInput" />
+    </div>
+  </div>
 
-  <button id="btnGravarPonto" class="btn-gravar">
-  Gravar Ponto
-</button>
-        
-  <button id="btnFinalizarMissao" class="btn-finalizar">
-    Finalizar Missão
-  </button>
-</div>
-      <!-- REGISTRO TÉCNICO (1.2) -->
-      <div id="registroIndividuos" class="registro-area" style="display: none;">
-        <h3>Registro Técnico</h3>
-
-        <div class="form-row">
   <div class="field">
-    <label>Ocorrência</label>
-    <select id="ocorrenciaSelect">
-      <option value="">Selecione</option>
-      <option>Pragas</option>
-      <option>Doenças</option>
-      <option>Plantas Daninhas</option>
-      <option>Outros</option>
-    </select>
+    <label>Missão</label>
+    <input type="text" id="missaoInput" />
   </div>
-</div>
-        <div class="form-row">
-          <div class="field">
-            <label>Indivíduo / Problema</label>
-            <input type="text" id="individuoInput">
-          </div>
-        </div>
 
-        <div class="form-row">
-          <div class="field">
-            <label>Espécie</label>
-            <input type="text" id="especieInput">
-          </div>
-        </div>
+  <!-- BOTÕES PRINCIPAIS -->
+  <div class="action-area">
+    <button id="btnMarcarPonto" class="btn-marcar">Marcar ponto</button>
+    <button id="btnGravarPonto" class="btn-gravar">Gravar ponto</button>
+    <button id="btnFinalizarMissao" class="btn-finalizar">Finalizar Missão</button>
+  </div>
 
-        <div class="form-row">
-          <div class="field">
-            <label>Fase</label>
-            <select id="faseSelect">
-              <option>Ovo</option>
-              <option>1º Ínstar</option>
-              <option>2º Ínstar</option>
-              <option>3º Ínstar</option>
-              <option>4º Ínstar</option>
-              <option>5º Ínstar</option>
-              <option>Pupa</option>
-              <option>Adulto</option>
-              <option>Ninfa</option>
-            </select>
-          </div>
-        </div>
+  <!-- 🔥 BLOCO ÚNICO DE REGISTRO -->
+  <div id="blocoRegistroTecnico" style="display:none;">
 
-        <div class="form-row">
-          <div class="field">
-            <label>Quantidade</label>
-            <input type="number" id="quantidadeInput" min="0">
-          </div>
+    <div id="registroIndividuos" class="registro-area">
+      <h3>Registro Técnico</h3>
+
+      <div class="form-row">
+        <div class="field">
+          <label>Ocorrência</label>
+          <select id="ocorrenciaSelect">
+            <option value="">Selecione</option>
+            <option>Pragas</option>
+            <option>Doenças</option>
+            <option>Plantas Daninhas</option>
+            <option>Outros</option>
+          </select>
         </div>
       </div>
-    
-<div class="action-area">
-  <button type="button" id="btnAddRegistro" class="btn-secundario">
-    + Adicionar Registro
-  </button>
 
-  <button type="button" id="btnExibirRegistros" class="btn-secundario">
-    Exibir
-  </button>
-</div>
+      <div class="form-row">
+        <div class="field">
+          <label>Indivíduo</label>
+          <input type="text" id="individuoInput">
+        </div>
+      </div>
 
-<!-- 🔥 A LISTA TEM QUE FICAR AQUI -->
-<div id="listaRegistros" class="lista-registros"></div>
-    
-    <!-- MAPA (FORA DO FORMULÁRIO) -->
-    <div id="map-container">
-      <div id="map"></div>
+      <div class="form-row">
+        <div class="field">
+          <label>Espécie</label>
+          <input type="text" id="especieInput">
+        </div>
+      </div>
 
-      <div class="map-buttons">
-        <button id="btnLayers">🗺</button>
-        <button id="btnLocate">🎯</button>
+      <div class="form-row">
+        <div class="field">
+          <label>Fase</label>
+          <select id="faseSelect">
+            <option>Ovo</option>
+            <option>Adulto</option>
+            <option>Ninfa</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label>Quantidade</label>
+          <input type="number" id="quantidadeInput">
+        </div>
       </div>
     </div>
 
-    <h2 class="section-title">Resumo da Missão</h2>
+    <div class="action-area">
+      <button id="btnAddRegistro" class="btn-secundario">
+        + Adicionar Registro
+      </button>
+      <button id="btnExibirRegistros" class="btn-secundario">
+        Exibir
+      </button>
+    </div>
 
-  </main>
+    <div id="listaRegistros" class="lista-registros"></div>
 
-<!-- Leaflet JS PRIMEIRO -->
+  </div>
+
+</div>
+
+<!-- MAPA -->
+<div id="map-container">
+  <div id="map"></div>
+  <div class="map-buttons">
+    <button id="btnLayers">🗺</button>
+    <button id="btnLocate">🎯</button>
+  </div>
+</div>
+
+</main>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<!-- Seu script SEMPRE por último -->
 <script src="script.js"></script>
-  
+
 </body>
 </html>
