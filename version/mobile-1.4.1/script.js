@@ -100,7 +100,12 @@ function esconderFormulario() {
   // ===============================
   // MARCAR PONTO
   // ===============================
+  if (!btnMarcar) {
+  console.error("❌ Botão Marcar Ponto não encontrado");
+  return;
+}
   btnMarcar.addEventListener("click", () => {
+    console.log("📍 Clique em Marcar Ponto");
     modoCriarPonto = true;
     map.locate({ enableHighAccuracy: true });
   });
