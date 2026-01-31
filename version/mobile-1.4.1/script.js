@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ELEMENTOS
   // ===============================
   const btnMarcar = document.getElementById("btnMarcarPonto");
-  const btnGravar = document.getElementById("btnSalvarPonto");
+  const btnGravar = document.getElementById("btnGravarPonto");
   const btnAdicionar = document.getElementById("btnAddRegistro");
   const btnLayers = document.getElementById("btnLayers");
   const btnLocate = document.getElementById("btnLocate");
