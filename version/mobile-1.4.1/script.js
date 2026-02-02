@@ -230,24 +230,42 @@ btnExibir.addEventListener("click", () => {
   }
 });
   // ===============================
-  // GRAVAR PONTO
-  // ===============================
-  btnGravar.addEventListener("click", () => {
+// GRAVAR PONTO
+// ===============================
+btnGravar.addEventListener("click", () => {
 
-    if (!pontoAtual) {
-      alert("Nenhum ponto marcado");
-      return;
-    }
+  if (!pontoAtual) {
+    alert("Nenhum ponto marcado");
+    return;
+  }
 
-    const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
-    const missao = carregarMissao();
+  const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
+  const missao = carregarMissao();
 
-    missao.pontos.push({
-      lat: pontoAtual.getLatLng().lat,
-      lng: pontoAtual.getLatLng().lng,
-      tempoMin,
-      registros: [...registrosDoPontoAtual]
-    });
+  missao.pontos.push({
+    lat: pontoAtual.getLatLng().lat,
+    lng: pontoAtual.getLatLng().lng,
+    tempoMin,
+    registros: [...registrosDoPontoAtual]
+  });
+
+  salvarMissao(missao);
+
+  pontoAtual.bindPopup(
+    `📍 Ponto gravado<br>
+     📋 ${registrosDoPontoAtual.length} registros<br>
+     ⏱ ${tempoMin} min`
+  ).openPopup();
+
+  pontoAtual = null;
+  registrosDoPontoAtual = [];
+  indiceEdicao = null;
+
+  esconderFormulario();
+  listaRegistros.innerHTML = "";
+
+  alert("Ponto gravado com sucesso!");
+});
 
     salvarMissao(missao);
 
