@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let pontoAtual = null;
   let inicioPonto = null;
   let registrosDoPontoAtual = [];
-  btnLocate.addEventListener("click", () => {
+  
   modoCriarPonto = false;
   map.locate({ setView: true, maxZoom: 17, enableHighAccuracy: true });
 });
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnLayers   = document.getElementById("btnLayers");
   const btnLocate   = document.getElementById("btnLocate");
 
-  const registroArea = document.getElementById("registroIndividuos");
+    const registroArea = document.getElementById("registroIndividuos");
   const listaRegistros = document.getElementById("listaRegistros");
 
   const individuoInput = document.getElementById("individuoInput");
@@ -45,6 +45,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const quantidadeInput = document.getElementById("quantidadeInput");
   const ocorrenciaSelect = document.getElementById("ocorrenciaSelect");
   
+btnLocate.addEventListener("click", () => {
+    modoCriarPonto = false;
+    map.locate({ enableHighAccuracy: true });
+});
+
   /* ================= UI ================= */
   function mostrarFormulario() {
     registroArea.style.display = "block";
