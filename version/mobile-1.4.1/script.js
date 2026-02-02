@@ -283,5 +283,3 @@ renderizarRegistros();
 
     alert("Ponto gravado com sucesso!");
   });
-
-});
