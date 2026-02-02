@@ -155,3 +155,4 @@ document.addEventListener("DOMContentLoaded", () => {
     alert("Ponto gravado com sucesso!");
   });
 
+});
