@@ -214,15 +214,20 @@ document.addEventListener("DOMContentLoaded", () => {
 btnExibir.addEventListener("click", () => {
   formularioVisivel = !formularioVisivel;
 
-  if (formularioVisivel) {
-    registroArea.style.display = "block";
-    listaRegistros.style.display = "block";
-    renderizarRegistros();
-  } else {
-    registroArea.style.display = "none";
-    listaRegistros.style.display = "none";
-  }
-});
+  if (btnExibir && registroArea && listaRegistros) {
+  btnExibir.addEventListener("click", () => {
+    formularioVisivel = !formularioVisivel;
+
+    if (formularioVisivel) {
+      registroArea.style.display = "block";
+      listaRegistros.style.display = "block";
+      renderizarRegistros();
+    } else {
+      registroArea.style.display = "none";
+      listaRegistros.style.display = "none";
+    }
+  });
+}
 
     // garante que a lista apareça sempre junto
     listaRegistros.style.display = "block";
