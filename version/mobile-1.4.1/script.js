@@ -1,4 +1,4 @@
-alert("ESTE É O JS DA VERSÃO 1.4.1");
+console.log("🟢 JS CONFIRMADO – ESTE É O ARQUIVO ATIVO");
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ JS carregado sem erros");
 
