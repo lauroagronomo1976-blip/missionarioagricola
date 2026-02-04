@@ -1,4 +1,14 @@
 console.log("🟢 JS CONFIRMADO – ESTE É O ARQUIVO ATIVO");
+// ===============================
+// STORAGE
+// ===============================
+function carregarMissao() {
+  return JSON.parse(localStorage.getItem("missaoAtiva")) || { pontos: [] };
+}
+
+function salvarMissao(missao) {
+  localStorage.setItem("missaoAtiva", JSON.stringify(missao));
+}
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ JS carregado sem erros");
 
