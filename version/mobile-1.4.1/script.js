@@ -282,10 +282,10 @@ function renderizarPontosSalvos() {
     const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
 
     pontoAtual.bindPopup(
-      `📍 Ponto gravado<br>
-       📋 ${registrosDoPontoAtual.length} registros<br>
-       ⏱ ${tempoMin} min`
-    ).openPopup();
+  `📍 Ponto gravado<br>
+   📋 ${registrosDoPontoAtual.length} registros<br>
+   ⏱ ${tempoMin} min`
+).openPopup();
 
     pontoAtual = null;
     registrosDoPontoAtual = [];
