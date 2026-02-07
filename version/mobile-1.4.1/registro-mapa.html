@@ -1,1 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro de Missão</title>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+
+    #map {
+      height: calc(100vh - 50px);
+    }
+
+    #barra {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #1e1e1e;
+    }
+
+    button {
+      padding: 10px 16px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="barra">
+    <button id="btnMarcarPonto">📍 Marcar ponto</button>
+  </div>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/registro.js"></script>
+</body>
+</html>
 
