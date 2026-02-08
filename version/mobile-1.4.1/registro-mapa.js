@@ -1,124 +1,59 @@
-console.log("🟢 REGISTRO – MAPA PURO ATIVO");
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("🟢 REGISTRO – MAPA PURO ATIVO");
 
-let map; // mapa global e único
+  let map;
+  let modoCriarPonto = false;
 
-// ===============================
-// MAPA
-// ===============================
-if (!map) {
+  /* ========= MAPA ========= */
   map = L.map("map").setView([-15.78, -47.93], 5);
-}
 
-// CAMADA RUA (INICIAL)
-const camadaRua = L.tileLayer(
-  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  { maxZoom: 19 }
-).addTo(map);
+  /* ========= CAMADAS ========= */
+  const street = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap"
+  }).addTo(map);
 
-// CAMADA SATÉLITE (NÃO adiciona ainda)
-const camadaSatelite = L.tileLayer(
-  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-  { maxZoom: 19 }
-);
+  const satelite = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    { attribution: "© Esri" }
+  );
 
-setTimeout(() => {
-  map.invalidateSize();
-  console.log("🛡️ invalidateSize aplicado");
-}, 200);
+  L.control.layers(
+    { "Mapa": street, "Satélite": satelite },
+    {}
+  ).addTo(map);
 
-// CONTROLE
-let usandoSatelite = false;
+  /* ========= BLINDAGEM TAMANHO ========= */
+  setTimeout(() => {
+    map.invalidateSize();
+    console.log("🛡️ invalidateSize aplicado");
+  }, 200);
 
-// ===============================
-// ESTADO
-// ===============================
-let marcadorAtual = null;
+  /* ========= BOTÃO ========= */
+  const btnMarcarPonto = document.getElementById("btnMarcarPonto");
 
-// ===============================
-// BOTÕES
-// ===============================
-const btnMarcar = document.getElementById("btnMarcar");
-const btnLocate = document.getElementById("btnLocate");
-const btnLayers = document.getElementById("btnLayers");
+  btnMarcarPonto.addEventListener("click", () => {
+    if (modoCriarPonto) return;
 
-btnMarcarPonto.addEventListener("click", () => {
-  if (modoCriarPonto) return;
+    modoCriarPonto = true;
+    map.locate({ enableHighAccuracy: true });
 
-  modoCriarPonto = true;
-  map.locate({ enableHighAccuracy: true });
+    console.log("📍 Modo marcar ponto ATIVO");
+  });
 
-  console.log("📍 Modo marcar ponto ATIVO");
-});
+  /* ========= EVENTO LEAFLET ========= */
+  map.on("locationfound", (e) => {
+    if (!modoCriarPonto) return;
 
-// ===============================
-// MARCAR PONTO
-// ===============================
-btnMarcar.addEventListener("click", () => {
-  map.locate({ enableHighAccuracy: true });
-});
+    modoCriarPonto = false;
 
-// ===============================
-// LOCALIZAR
-// ===============================
-btnLocate.addEventListener("click", () => {
-  map.locate({ enableHighAccuracy: true });
-});
+    map.setView(e.latlng, 17);
 
-btnLayers.addEventListener("click", () => {
-  if (usandoSatelite) {
-    map.removeLayer(camadaSatelite);
-    camadaRua.addTo(map);
-    console.log("🗺️ Rua ON");
-  } else {
-    map.removeLayer(camadaRua);
-    camadaSatelite.addTo(map);
-    console.log("🛰️ Satélite ON");
-  }
+    L.marker(e.latlng)
+      .addTo(map)
+      .bindPopup("📍 Ponto marcado")
+      .openPopup();
 
-  usandoSatelite = !usandoSatelite;
-});
+    console.log("✅ Ponto criado");
+  });
 
-// ===============================
-// EVENTO GPS
-// ===============================
-map.on("locationfound", (e) => {
-  map.setView(e.latlng, 17);
-
-  if (marcadorAtual) {
-    map.removeLayer(marcadorAtual);
-  }
-
-  marcadorAtual = L.marker(e.latlng).addTo(map);
-  marcadorAtual.bindPopup("📍 Ponto marcado").openPopup();
-
-  // salva ponto no storage
-  localStorage.setItem("pontoAtual", JSON.stringify({
-    lat: e.latlng.lat,
-    lng: e.latlng.lng,
-    data: new Date().toISOString()
-  }));
-
-  console.log("📍 Ponto salvo:", e.latlng);
-});
-
-// ===============================
-// ERRO GPS
-// ===============================
-map.on("locationerror", () => {
-  alert("Não foi possível obter localização");
-});
-
-map.on("locationfound", (e) => {
-  if (!modoCriarPonto) return;
-
-  modoCriarPonto = false;
-
-  map.setView(e.latlng, 17);
-
-  L.marker(e.latlng)
-    .addTo(map)
-    .bindPopup("📍 Ponto marcado")
-    .openPopup();
-
-  console.log("✅ Ponto criado com sucesso");
 });
