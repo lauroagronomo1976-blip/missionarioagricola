@@ -42,7 +42,31 @@
   </div>
 
   <div id="map"></div>
+<div id="registroArea" style="padding:12px; border-top:1px solid #ccc">
 
+  <h3>📋 Registro do Ponto</h3>
+
+  <label>
+    Praga / Ocorrência:
+    <input type="text" id="campoPraga" />
+  </label>
+
+  <br><br>
+
+  <label>
+    Observações:
+    <textarea id="campoObs"></textarea>
+  </label>
+
+  <br><br>
+
+  <button id="btnAdicionarRegistro">➕ Adicionar registro</button>
+
+  <hr>
+
+  <div id="listaRegistros"></div>
+</div>
+  
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="registro-mapa.js"></script>
 </body>
