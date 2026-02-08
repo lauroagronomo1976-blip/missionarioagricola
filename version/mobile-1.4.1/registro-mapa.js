@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 200);
 
   /* ========= BOTÃO ========= */
-  const btnMarcarPonto = document.getElementById("btnMarcarPonto");
+  const btnMarcarPonto = document.getElementById("btnMarcar");
 
   btnMarcarPonto.addEventListener("click", () => {
     if (modoCriarPonto) return;
