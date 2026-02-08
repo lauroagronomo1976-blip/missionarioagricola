@@ -5,17 +5,19 @@ console.log("🟢 REGISTRO – MAPA PURO ATIVO");
 // ===============================
 const map = L.map("map").setView([-15.78, -47.93], 5);
 
-// Camadas
+// CAMADA RUA (INICIAL)
 const camadaRua = L.tileLayer(
   "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   { maxZoom: 19 }
 ).addTo(map);
 
+// CAMADA SATÉLITE (NÃO adiciona ainda)
 const camadaSatelite = L.tileLayer(
   "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
   { maxZoom: 19 }
 );
 
+// CONTROLE
 let usandoSatelite = false;
 
 // ===============================
@@ -48,10 +50,13 @@ btnLayers.addEventListener("click", () => {
   if (usandoSatelite) {
     map.removeLayer(camadaSatelite);
     camadaRua.addTo(map);
+    console.log("🗺️ Rua ON");
   } else {
     map.removeLayer(camadaRua);
     camadaSatelite.addTo(map);
+    console.log("🛰️ Satélite ON");
   }
+
   usandoSatelite = !usandoSatelite;
 });
 
