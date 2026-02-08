@@ -1,4 +1,4 @@
-body {
+  body {
   background: #f5f7fa;
 }
 
@@ -294,4 +294,34 @@ body, main, .container {
   overflow: visible !important;
 }
 
+#listaRegistros {
+  padding: 12px;
+  background: #f4f6f8;
+}
+
+.registro-item {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  font-size: 14px;
+}
+
+.registro-item strong {
+  color: #2e7d32;
+}
+
+.registro-item button {
+  margin-right: 6px;
+  border: none;
+  background: #eee;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.registro-item button:hover {
+  background: #ddd;
+}
 
