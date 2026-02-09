@@ -1,72 +1,63 @@
-console.log("🟢 REGISTRO – MISSÃO / MAPA ATIVO");
-
-// ===============================
-// STORAGE (MISSÃO = PAI)
-// ===============================
-function carregarMissao() {
-  return JSON.parse(localStorage.getItem("missaoAtiva")) || {
-    inicio: new Date().toISOString(),
-    pontos: []
-  };
-}
-
-function salvarMissao(missao) {
-  localStorage.setItem("missaoAtiva", JSON.stringify(missao));
-}
-
-// ===============================
-// DOM READY
-// ===============================
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("🟢 REGISTRO – MAPA PURO ATIVO");
 
-  // ===============================
-  // ELEMENTOS
-  // ===============================
-  const btnMarcar = document.getElementById("btnMarcar");
-  const btnAddRegistro = document.getElementById("btnAdicionarRegistro");
+  /* =========================
+     ESTADO GLOBAL
+  ========================== */
+  let pontoAtivo = null; // ponto atual
+  let registrosPorPonto = new Map();
 
-  const ocorrenciaSelect = document.getElementById("ocorrenciaSelect");
-  const individuoInput = document.getElementById("individuoInput");
-  const especieInput = document.getElementById("especieInput");
-  const faseSelect = document.getElementById("faseSelect");
-  const quantidadeInput = document.getElementById("quantidadeInput");
-
-  const listaRegistros = document.getElementById("listaRegistros");
-
-  // ===============================
-  // MAPA (NUNCA SOME)
-  // ===============================
+  /* =========================
+     MAPA
+  ========================== */
   const map = L.map("map").setView([-15.78, -47.93], 5);
 
-  const camadaRua = L.tileLayer(
+  const osm = L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    { maxZoom: 19 }
-  ).addTo(map);
-
-  const camadaSat = L.tileLayer(
-    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     { maxZoom: 19 }
   );
 
-  const layers = {
-    "Rua": camadaRua,
-    "Satélite": camadaSat
-  };
+  osm.addTo(map);
 
-  L.control.layers(layers).addTo(map);
+  L.control.layers({ "OSM": osm }).addTo(map);
 
-  setTimeout(() => map.invalidateSize(), 300);
+  setTimeout(() => {
+    map.invalidateSize();
+    console.log("🛡️ invalidateSize aplicado");
+  }, 300);
 
-  // ===============================
-  // ESTADO DO APP
-  // ===============================
-  let pontoAtual = null;
-  let registrosDoPonto = [];
-  let indiceEdicao = null;
+  /* =========================
+     ELEMENTOS UI
+  ========================== */
+  const btnMarcar = document.getElementById("btnMarcar");
+  const btnAddRegistro = document.getElementById("btnAddRegistro");
 
-  // ===============================
-  // MARCAR PONTO (LOCALIZAÇÃO REAL)
-  // ===============================
+  const ocorrenciaSelect = document.getElementById("ocorrenciaSelect");
+  const individuoInput   = document.getElementById("individuoInput");
+  const especieInput     = document.getElementById("especieInput");
+  const faseSelect       = document.getElementById("faseSelect");
+  const quantidadeInput  = document.getElementById("quantidadeInput");
+
+  /* =========================
+     DADOS FIXOS (mock)
+  ========================== */
+  ocorrenciaSelect.innerHTML = `
+    <option value="">Ocorrência</option>
+    <option>Praga</option>
+    <option>Doença</option>
+    <option>Daninha</option>
+  `;
+
+  faseSelect.innerHTML = `
+    <option value="">Fase</option>
+    <option>Inicial</option>
+    <option>Intermediária</option>
+    <option>Avançada</option>
+  `;
+
+  /* =========================
+     MARCAR PONTO (GPS)
+  ========================== */
   btnMarcar.addEventListener("click", () => {
     if (!navigator.geolocation) {
       alert("Geolocalização não suportada");
@@ -75,32 +66,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const latlng = {
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+
+        pontoAtivo = {
+          id: Date.now(),
+          lat,
+          lng,
+          data: new Date().toLocaleString()
         };
 
-        if (pontoAtual) map.removeLayer(pontoAtual);
+        registrosPorPonto.set(pontoAtivo.id, []);
 
-        pontoAtual = L.marker(latlng).addTo(map);
-        map.setView(latlng, 18);
+        const marker = L.marker([lat, lng]).addTo(map);
+        marker.bindPopup(`
+          <strong>Ponto Ativo</strong><br>
+          ${pontoAtivo.data}
+        `).openPopup();
 
-        pontoAtual.bindPopup("📍 Ponto em registro").openPopup();
+        map.setView([lat, lng], 18);
 
-        registrosDoPonto = [];
-        indiceEdicao = null;
-        renderizarRegistros();
+        console.log("📍 PONTO ATIVO:", pontoAtivo);
       },
-      () => alert("Não foi possível obter localização")
+      () => alert("Erro ao obter localização")
     );
   });
 
-  // ===============================
-  // ADICIONAR / EDITAR REGISTRO
-  // ===============================
+  /* =========================
+     ADICIONAR REGISTRO
+  ========================== */
   btnAddRegistro.addEventListener("click", () => {
-    if (!pontoAtual) {
-      alert("Marque um ponto primeiro");
+
+    if (!pontoAtivo) {
+      alert("Marque um ponto antes de adicionar registro");
       return;
     }
 
@@ -109,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
       !individuoInput.value ||
       !especieInput.value ||
       !faseSelect.value ||
-      quantidadeInput.value === ""
+      !quantidadeInput.value
     ) {
       alert("Preencha todos os campos");
       return;
@@ -117,79 +115,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const registro = {
       ocorrencia: ocorrenciaSelect.value,
-      individuo: individuoInput.value.trim(),
-      especie: especieInput.value.trim(),
+      individuo: individuoInput.value,
+      especie: especieInput.value,
       fase: faseSelect.value,
-      quantidade: quantidadeInput.value
+      quantidade: quantidadeInput.value,
+      data: new Date().toLocaleString()
     };
 
-    if (indiceEdicao !== null) {
-      registrosDoPonto[indiceEdicao] = registro;
-      indiceEdicao = null;
-    } else {
-      registrosDoPonto.push(registro);
-    }
+    registrosPorPonto.get(pontoAtivo.id).push(registro);
+
+    console.log("🧾 REGISTRO SALVO:", registro);
+    console.log("📦 REGISTROS DO PONTO:", registrosPorPonto.get(pontoAtivo.id));
 
     limparFormulario();
-    renderizarRegistros();
+    alert("Registro adicionado com sucesso ✔️");
   });
 
-  // ===============================
-  // RENDERIZAR REGISTROS
-  // ===============================
-  function renderizarRegistros() {
-    listaRegistros.innerHTML = "";
-
-    if (!registrosDoPonto.length) {
-      listaRegistros.innerHTML = "<p>Nenhum registro neste ponto.</p>";
-      return;
-    }
-
-    registrosDoPonto.forEach((r, i) => {
-      const div = document.createElement("div");
-      div.className = "registro-item";
-
-      div.innerHTML = `
-        <strong>${r.ocorrencia}</strong><br>
-        ${r.individuo} – ${r.especie}<br>
-        Fase: ${r.fase} | Qtde: ${r.quantidade}
-        <div style="margin-top:6px">
-          <button data-edit="${i}">✏️</button>
-          <button data-del="${i}">🗑</button>
-        </div>
-      `;
-
-      listaRegistros.appendChild(div);
-    });
-  }
-
-  // ===============================
-  // EDITAR / EXCLUIR
-  // ===============================
-  listaRegistros.addEventListener("click", (e) => {
-    if (e.target.dataset.del !== undefined) {
-      registrosDoPonto.splice(e.target.dataset.del, 1);
-      renderizarRegistros();
-    }
-
-    if (e.target.dataset.edit !== undefined) {
-      const r = registrosDoPonto[e.target.dataset.edit];
-
-      ocorrenciaSelect.value = r.ocorrencia;
-      individuoInput.value = r.individuo;
-      especieInput.value = r.especie;
-      faseSelect.value = r.fase;
-      quantidadeInput.value = r.quantidade;
-
-      indiceEdicao = e.target.dataset.edit;
-    }
-  });
-
+  /* =========================
+     UTIL
+  ========================== */
   function limparFormulario() {
-    ocorrenciaSelect.selectedIndex = 0;
+    ocorrenciaSelect.value = "";
     individuoInput.value = "";
     especieInput.value = "";
-    faseSelect.selectedIndex = 0;
+    faseSelect.value = "";
     quantidadeInput.value = "";
   }
 
