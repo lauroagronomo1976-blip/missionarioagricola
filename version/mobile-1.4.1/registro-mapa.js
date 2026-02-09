@@ -1,184 +1,196 @@
-console.log("🟢 REGISTRO – MISSÃO / PONTOS / REGISTROS ATIVO");
+console.log("🟢 REGISTRO – MISSÃO / MAPA ATIVO");
 
-// =======================
-// ESTADO GLOBAL
-// =======================
-let map;
-let missaoAtiva = null;
-let pontoAtivo = null;
-let marcadorAtivo = null;
-
-// =======================
-// MAPA
-// =======================
-map = L.map("map").setView([-15.78, -47.93], 5);
-
-const street = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "© OpenStreetMap"
-});
-
-const satellite = L.tileLayer(
-  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-  { attribution: "© Esri" }
-);
-
-street.addTo(map);
-
-L.control.layers(
-  { "Mapa": street, "Satélite": satellite },
-  null,
-  { position: "topright" }
-).addTo(map);
-
-setTimeout(() => map.invalidateSize(), 300);
-
-// =======================
-// ELEMENTOS
-// =======================
-const btnIniciarMissao = document.getElementById("btnIniciarMissao");
-const btnFinalizarMissao = document.getElementById("btnFinalizarMissao");
-const btnMarcar = document.getElementById("btnMarcar");
-
-const blocoRegistros = document.getElementById("blocoRegistros");
-const lista = document.getElementById("listaRegistros");
-
-const ocorrencia = document.getElementById("ocorrencia");
-const individuo = document.getElementById("individuo");
-const especie = document.getElementById("especie");
-const fase = document.getElementById("fase");
-const quantidade = document.getElementById("quantidade");
-const btnAddRegistro = document.getElementById("btnAddRegistro");
-
-// =======================
-// MISSÃO
-// =======================
-btnIniciarMissao.addEventListener("click", () => {
-  if (missaoAtiva) {
-    alert("Missão já está ativa");
-    return;
-  }
-
-  missaoAtiva = {
-    inicio: new Date(),
+// ===============================
+// STORAGE (MISSÃO = PAI)
+// ===============================
+function carregarMissao() {
+  return JSON.parse(localStorage.getItem("missaoAtiva")) || {
+    inicio: new Date().toISOString(),
     pontos: []
   };
+}
 
-  alert("✅ Missão iniciada");
-});
+function salvarMissao(missao) {
+  localStorage.setItem("missaoAtiva", JSON.stringify(missao));
+}
 
-btnFinalizarMissao.addEventListener("click", () => {
-  if (!missaoAtiva) {
-    alert("Nenhuma missão ativa");
-    return;
-  }
+// ===============================
+// DOM READY
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
 
-  missaoAtiva.fim = new Date();
+  // ===============================
+  // ELEMENTOS
+  // ===============================
+  const btnMarcar = document.getElementById("btnMarcar");
+  const btnAddRegistro = document.getElementById("btnAddRegistro");
 
-  console.log("📦 MISSÃO FINALIZADA:", missaoAtiva);
+  const ocorrenciaSelect = document.getElementById("ocorrenciaSelect");
+  const individuoInput = document.getElementById("individuoInput");
+  const especieInput = document.getElementById("especieInput");
+  const faseSelect = document.getElementById("faseSelect");
+  const quantidadeInput = document.getElementById("quantidadeInput");
 
-  alert(`Missão finalizada com ${missaoAtiva.pontos.length} ponto(s)`);
+  const listaRegistros = document.getElementById("listaRegistros");
 
-  missaoAtiva = null;
-  pontoAtivo = null;
-  lista.innerHTML = "";
-});
+  // ===============================
+  // MAPA (NUNCA SOME)
+  // ===============================
+  const map = L.map("map").setView([-15.78, -47.93], 5);
 
-// =======================
-// MARCAR PONTO (GPS)
-// =======================
-btnMarcar.addEventListener("click", () => {
-  if (!missaoAtiva) {
-    alert("Inicie uma missão primeiro");
-    return;
-  }
+  const camadaRua = L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    { maxZoom: 19 }
+  ).addTo(map);
 
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      const latlng = [pos.coords.latitude, pos.coords.longitude];
-
-      if (marcadorAtivo) map.removeLayer(marcadorAtivo);
-
-      marcadorAtivo = L.marker(latlng).addTo(map);
-      marcadorAtivo.bindPopup("📍 Ponto ativo").openPopup();
-
-      pontoAtivo = {
-        lat: latlng[0],
-        lng: latlng[1],
-        inicio: new Date(),
-        registros: []
-      };
-
-      missaoAtiva.pontos.push(pontoAtivo);
-      map.setView(latlng, 17);
-      renderizarLista();
-    },
-    () => alert("Erro ao obter GPS")
+  const camadaSat = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    { maxZoom: 19 }
   );
-});
 
-// =======================
-// REGISTROS
-// =======================
-btnAddRegistro.addEventListener("click", () => {
-  if (!pontoAtivo) {
-    alert("Marque um ponto primeiro");
-    return;
-  }
+  const layers = {
+    "Rua": camadaRua,
+    "Satélite": camadaSat
+  };
 
-  if (!ocorrencia.value || !individuo.value || !especie.value || !quantidade.value) {
-    alert("Preencha todos os campos");
-    return;
-  }
+  L.control.layers(layers).addTo(map);
 
-  pontoAtivo.registros.push({
-    ocorrencia: ocorrencia.value,
-    individuo: individuo.value,
-    especie: especie.value,
-    fase: fase.value,
-    quantidade: quantidade.value
+  setTimeout(() => map.invalidateSize(), 300);
+
+  // ===============================
+  // ESTADO DO APP
+  // ===============================
+  let pontoAtual = null;
+  let registrosDoPonto = [];
+  let indiceEdicao = null;
+
+  // ===============================
+  // MARCAR PONTO (LOCALIZAÇÃO REAL)
+  // ===============================
+  btnMarcar.addEventListener("click", () => {
+    if (!navigator.geolocation) {
+      alert("Geolocalização não suportada");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const latlng = {
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude
+        };
+
+        if (pontoAtual) map.removeLayer(pontoAtual);
+
+        pontoAtual = L.marker(latlng).addTo(map);
+        map.setView(latlng, 18);
+
+        pontoAtual.bindPopup("📍 Ponto em registro").openPopup();
+
+        registrosDoPonto = [];
+        indiceEdicao = null;
+        renderizarRegistros();
+      },
+      () => alert("Não foi possível obter localização")
+    );
   });
 
-  limparFormulario();
-  renderizarLista();
-});
+  // ===============================
+  // ADICIONAR / EDITAR REGISTRO
+  // ===============================
+  btnAddRegistro.addEventListener("click", () => {
+    if (!pontoAtual) {
+      alert("Marque um ponto primeiro");
+      return;
+    }
 
-function limparFormulario() {
-  ocorrencia.value = "";
-  individuo.value = "";
-  especie.value = "";
-  fase.value = "";
-  quantidade.value = "";
-}
+    if (
+      !ocorrenciaSelect.value ||
+      !individuoInput.value ||
+      !especieInput.value ||
+      !faseSelect.value ||
+      quantidadeInput.value === ""
+    ) {
+      alert("Preencha todos os campos");
+      return;
+    }
 
-// =======================
-// LISTA ABAIXO DO MAPA
-// =======================
-function renderizarLista() {
-  lista.innerHTML = "";
+    const registro = {
+      ocorrencia: ocorrenciaSelect.value,
+      individuo: individuoInput.value.trim(),
+      especie: especieInput.value.trim(),
+      fase: faseSelect.value,
+      quantidade: quantidadeInput.value
+    };
 
-  if (!pontoAtivo || pontoAtivo.registros.length === 0) {
-    lista.innerHTML = "<p>Sem registros neste ponto.</p>";
-    return;
-  }
+    if (indiceEdicao !== null) {
+      registrosDoPonto[indiceEdicao] = registro;
+      indiceEdicao = null;
+    } else {
+      registrosDoPonto.push(registro);
+    }
 
-  pontoAtivo.registros.forEach((r, i) => {
-    const div = document.createElement("div");
-    div.className = "registro-item";
-    div.innerHTML = `
-      <strong>${r.ocorrencia}</strong><br>
-      ${r.individuo} – ${r.especie}<br>
-      Fase: ${r.fase} | Qtde: ${r.quantidade}
-      <div style="margin-top:6px">
-        <button data-del="${i}">🗑</button>
-      </div>
-    `;
-    lista.appendChild(div);
+    limparFormulario();
+    renderizarRegistros();
   });
-}
 
-lista.addEventListener("click", (e) => {
-  if (e.target.dataset.del !== undefined) {
-    pontoAtivo.registros.splice(e.target.dataset.del, 1);
-    renderizarLista();
+  // ===============================
+  // RENDERIZAR REGISTROS
+  // ===============================
+  function renderizarRegistros() {
+    listaRegistros.innerHTML = "";
+
+    if (!registrosDoPonto.length) {
+      listaRegistros.innerHTML = "<p>Nenhum registro neste ponto.</p>";
+      return;
+    }
+
+    registrosDoPonto.forEach((r, i) => {
+      const div = document.createElement("div");
+      div.className = "registro-item";
+
+      div.innerHTML = `
+        <strong>${r.ocorrencia}</strong><br>
+        ${r.individuo} – ${r.especie}<br>
+        Fase: ${r.fase} | Qtde: ${r.quantidade}
+        <div style="margin-top:6px">
+          <button data-edit="${i}">✏️</button>
+          <button data-del="${i}">🗑</button>
+        </div>
+      `;
+
+      listaRegistros.appendChild(div);
+    });
   }
+
+  // ===============================
+  // EDITAR / EXCLUIR
+  // ===============================
+  listaRegistros.addEventListener("click", (e) => {
+    if (e.target.dataset.del !== undefined) {
+      registrosDoPonto.splice(e.target.dataset.del, 1);
+      renderizarRegistros();
+    }
+
+    if (e.target.dataset.edit !== undefined) {
+      const r = registrosDoPonto[e.target.dataset.edit];
+
+      ocorrenciaSelect.value = r.ocorrencia;
+      individuoInput.value = r.individuo;
+      especieInput.value = r.especie;
+      faseSelect.value = r.fase;
+      quantidadeInput.value = r.quantidade;
+
+      indiceEdicao = e.target.dataset.edit;
+    }
+  });
+
+  function limparFormulario() {
+    ocorrenciaSelect.selectedIndex = 0;
+    individuoInput.value = "";
+    especieInput.value = "";
+    faseSelect.selectedIndex = 0;
+    quantidadeInput.value = "";
+  }
+
 });
