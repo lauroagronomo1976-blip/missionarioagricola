@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ELEMENTOS
   // ===============================
   const btnMarcar = document.getElementById("btnMarcar");
-  const btnAdicionarRegistro = document.getElementById("btnAdicionarRegistro");
+  const btnAddRegistro = document.getElementById("btnAdicionarRegistro");
 
   const ocorrenciaSelect = document.getElementById("ocorrenciaSelect");
   const individuoInput = document.getElementById("individuoInput");
