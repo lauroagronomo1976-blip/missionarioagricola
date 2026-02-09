@@ -1,145 +1,198 @@
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("🟢 REGISTRO – MAPA PURO ATIVO");
+console.log("🟢 REGISTRO – MAPA PURO ATIVO");
 
-  /* =========================
-     ESTADO GLOBAL
-  ========================== */
-  let pontoAtivo = null; // ponto atual
-  let registrosPorPonto = new Map();
+// ===============================
+// VARIÁVEIS DE CONTEXTO
+// ===============================
+let mapa;
+let pontoAtual = null; // ponto ativo (lat, lng, data)
+let registrosDoPonto = []; // registros técnicos vinculados ao ponto
+let marcadorAtual = null;
 
-  /* =========================
-     MAPA
-  ========================== */
-  const map = L.map("map").setView([-15.78, -47.93], 5);
+// ===============================
+// INICIALIZA MAPA
+// ===============================
+mapa = L.map("map", {
+  zoomControl: true
+});
 
-  const osm = L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    { maxZoom: 19 }
-  );
+// Camadas base
+const street = L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  { attribution: "© OpenStreetMap" }
+);
 
-  osm.addTo(map);
+const satelite = L.tileLayer(
+  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+  { attribution: "© Esri" }
+);
 
-  L.control.layers({ "OSM": osm }).addTo(map);
+// Ativa camada padrão
+street.addTo(mapa);
 
-  setTimeout(() => {
-    map.invalidateSize();
-    console.log("🛡️ invalidateSize aplicado");
-  }, 300);
+// Controle de camadas
+L.control.layers(
+  {
+    "Rua": street,
+    "Satélite": satelite
+  }
+).addTo(mapa);
 
-  /* =========================
-     ELEMENTOS UI
-  ========================== */
-  const btnMarcar = document.getElementById("btnMarcar");
-  const btnAddRegistro = document.getElementById("btnAddRegistro");
+// Centralização inicial
+mapa.setView([-15.8, -47.9], 5);
 
-  const ocorrenciaSelect = document.getElementById("ocorrenciaSelect");
-  const individuoInput   = document.getElementById("individuoInput");
-  const especieInput     = document.getElementById("especieInput");
-  const faseSelect       = document.getElementById("faseSelect");
-  const quantidadeInput  = document.getElementById("quantidadeInput");
+// Ajuste defensivo
+setTimeout(() => {
+  mapa.invalidateSize();
+  console.log("🛡️ invalidateSize aplicado");
+}, 300);
 
-  /* =========================
-     DADOS FIXOS (mock)
-  ========================== */
-  ocorrenciaSelect.innerHTML = `
-    <option value="">Ocorrência</option>
-    <option>Praga</option>
-    <option>Doença</option>
-    <option>Daninha</option>
-  `;
+// ===============================
+// ELEMENTOS DA INTERFACE
+// ===============================
+const btnMarcar = document.getElementById("btnMarcar");
+const btnAddRegistro = document.getElementById("btnAddRegistro");
 
-  faseSelect.innerHTML = `
-    <option value="">Fase</option>
-    <option>Inicial</option>
-    <option>Intermediária</option>
-    <option>Avançada</option>
-  `;
+// Campos de registro técnico
+const ocorrenciaSelect = document.getElementById("ocorrenciaSelect");
+const individuoInput = document.getElementById("individuoInput");
+const especieInput = document.getElementById("especieInput");
+const faseSelect = document.getElementById("faseSelect");
+const quantidadeInput = document.getElementById("quantidadeInput");
 
-  /* =========================
-     MARCAR PONTO (GPS)
-  ========================== */
-  btnMarcar.addEventListener("click", () => {
-    if (!navigator.geolocation) {
-      alert("Geolocalização não suportada");
-      return;
-    }
+// Área da lista
+const listaContainer = document.getElementById("listaRegistros");
 
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-
-        pontoAtivo = {
-          id: Date.now(),
-          lat,
-          lng,
-          data: new Date().toLocaleString()
-        };
-
-        registrosPorPonto.set(pontoAtivo.id, []);
-
-        const marker = L.marker([lat, lng]).addTo(map);
-        marker.bindPopup(`
-          <strong>Ponto Ativo</strong><br>
-          ${pontoAtivo.data}
-        `).openPopup();
-
-        map.setView([lat, lng], 18);
-
-        console.log("📍 PONTO ATIVO:", pontoAtivo);
-      },
-      () => alert("Erro ao obter localização")
-    );
+// ===============================
+// POPULA CAMPOS FIXOS (EXEMPLO)
+// ===============================
+if (ocorrenciaSelect) {
+  ["Lagarta", "Percevejo", "Doença", "Planta Daninha"].forEach(o => {
+    const opt = document.createElement("option");
+    opt.value = o;
+    opt.textContent = o;
+    ocorrenciaSelect.appendChild(opt);
   });
+}
 
-  /* =========================
-     ADICIONAR REGISTRO
-  ========================== */
-  btnAddRegistro.addEventListener("click", () => {
-
-    if (!pontoAtivo) {
-      alert("Marque um ponto antes de adicionar registro");
-      return;
-    }
-
-    if (
-      !ocorrenciaSelect.value ||
-      !individuoInput.value ||
-      !especieInput.value ||
-      !faseSelect.value ||
-      !quantidadeInput.value
-    ) {
-      alert("Preencha todos os campos");
-      return;
-    }
-
-    const registro = {
-      ocorrencia: ocorrenciaSelect.value,
-      individuo: individuoInput.value,
-      especie: especieInput.value,
-      fase: faseSelect.value,
-      quantidade: quantidadeInput.value,
-      data: new Date().toLocaleString()
-    };
-
-    registrosPorPonto.get(pontoAtivo.id).push(registro);
-
-    console.log("🧾 REGISTRO SALVO:", registro);
-    console.log("📦 REGISTROS DO PONTO:", registrosPorPonto.get(pontoAtivo.id));
-
-    limparFormulario();
-    alert("Registro adicionado com sucesso ✔️");
+if (faseSelect) {
+  ["Inicial", "Intermediária", "Avançada"].forEach(f => {
+    const opt = document.createElement("option");
+    opt.value = f;
+    opt.textContent = f;
+    faseSelect.appendChild(opt);
   });
+}
 
-  /* =========================
-     UTIL
-  ========================== */
-  function limparFormulario() {
-    ocorrenciaSelect.value = "";
-    individuoInput.value = "";
-    especieInput.value = "";
-    faseSelect.value = "";
-    quantidadeInput.value = "";
+// ===============================
+// MARCAR PONTO (GEOLOCALIZAÇÃO)
+// ===============================
+btnMarcar.addEventListener("click", () => {
+  if (!navigator.geolocation) {
+    alert("Geolocalização não suportada.");
+    return;
   }
 
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      pontoAtual = {
+        lat,
+        lng,
+        data: new Date().toISOString()
+      };
+
+      registrosDoPonto = []; // zera registros ao marcar novo ponto
+      renderizarLista();
+
+      if (marcadorAtual) {
+        mapa.removeLayer(marcadorAtual);
+      }
+
+      marcadorAtual = L.marker([lat, lng]).addTo(mapa);
+      mapa.setView([lat, lng], 18);
+
+      marcadorAtual.bindPopup("📍 Ponto Técnico Ativo").openPopup();
+
+      console.log("📍 Ponto marcado:", pontoAtual);
+    },
+    () => alert("Erro ao obter localização.")
+  );
 });
+
+// ===============================
+// ADICIONAR REGISTRO TÉCNICO
+// ===============================
+btnAddRegistro.addEventListener("click", () => {
+  if (!pontoAtual) {
+    alert("Marque um ponto antes de adicionar registros.");
+    return;
+  }
+
+  if (!ocorrenciaSelect.value || !quantidadeInput.value) {
+    alert("Preencha os campos obrigatórios.");
+    return;
+  }
+
+  const registro = {
+    ocorrencia: ocorrenciaSelect.value,
+    individuo: individuoInput.value,
+    especie: especieInput.value,
+    fase: faseSelect.value,
+    quantidade: quantidadeInput.value,
+    data: new Date().toLocaleString()
+  };
+
+  registrosDoPonto.push(registro);
+  renderizarLista();
+
+  limparFormulario();
+
+  console.log("📝 Registro técnico adicionado:", registro);
+});
+
+// ===============================
+// RENDERIZA LISTA
+// ===============================
+function renderizarLista() {
+  if (!listaContainer) return;
+
+  listaContainer.innerHTML = "";
+
+  if (registrosDoPonto.length === 0) {
+    listaContainer.innerHTML = "<em>Nenhum registro técnico ainda.</em>";
+    return;
+  }
+
+  registrosDoPonto.forEach((r, i) => {
+    const div = document.createElement("div");
+    div.className = "registro-item";
+
+    div.innerHTML = `
+      <strong>${r.ocorrencia}</strong> — ${r.quantidade}<br>
+      ${r.especie || "-"} | ${r.fase || "-"}<br>
+      <small>${r.data}</small><br>
+      <button onclick="excluirRegistro(${i})">🗑️ Excluir</button>
+    `;
+
+    listaContainer.appendChild(div);
+  });
+}
+
+// ===============================
+// EXCLUIR REGISTRO
+// ===============================
+window.excluirRegistro = function (index) {
+  registrosDoPonto.splice(index, 1);
+  renderizarLista();
+};
+
+// ===============================
+// LIMPA FORMULÁRIO
+// ===============================
+function limparFormulario() {
+  individuoInput.value = "";
+  especieInput.value = "";
+  quantidadeInput.value = "";
+}
