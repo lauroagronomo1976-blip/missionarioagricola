@@ -169,12 +169,18 @@ function renderizarLista() {
     const div = document.createElement("div");
     div.className = "registro-item";
 
-    div.innerHTML = `
-      <strong>${r.ocorrencia}</strong> — ${r.quantidade}<br>
-      ${r.especie || "-"} | ${r.fase || "-"}<br>
-      <small>${r.data}</small><br>
-      <button onclick="excluirRegistro(${i})">🗑️ Excluir</button>
-    `;
+    window.editarRegistro = function (index) {
+  const r = registrosDoPonto[index];
+
+  ocorrenciaSelect.value = r.ocorrencia;
+  individuoInput.value = r.individuo;
+  especieInput.value = r.especie;
+  faseSelect.value = r.fase;
+  quantidadeInput.value = r.quantidade;
+
+  registrosDoPonto.splice(index, 1);
+  renderizarLista();
+};
 
     listaContainer.appendChild(div);
   });
