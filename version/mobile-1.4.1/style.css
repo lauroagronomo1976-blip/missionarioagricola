@@ -324,4 +324,9 @@ body, main, .container {
 .registro-item button:hover {
   background: #ddd;
 }
+#map {
+  width: 100%;
+  height: 70vh;   /* 70% da altura da tela */
+  min-height: 400px;
+}
 
