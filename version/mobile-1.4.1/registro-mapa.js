@@ -1,5 +1,10 @@
-console.log("🟢 REGISTRO – MAPA PURO ATIVO");
+document.addEventListener("DOMContentLoaded", () => {
 
+  console.log("🟢 REGISTRO – MAPA PURO ATIVO");
+
+  // TODO o seu código fica AQUI dentro
+
+});
 // ===============================
 // VARIÁVEIS DE CONTEXTO
 // ===============================
