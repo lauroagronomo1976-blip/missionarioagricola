@@ -129,11 +129,9 @@ btnMarcar.addEventListener("click", () => {
 // ===============================
 // ADICIONAR REGISTRO TÉCNICO
 // ===============================
-btnAddRegistro.addEventListener("click", () => {
-  if (!pontoAtual) {
-    alert("Marque um ponto antes de adicionar registros.");
-    return;
-  }
+if (btnAddRegistro) {
+  btnAddRegistro.addEventListener("click", adicionarRegistro);
+}
 
   if (!ocorrenciaSelect.value || !quantidadeInput.value) {
     alert("Preencha os campos obrigatórios.");
