@@ -117,21 +117,12 @@ btnMarcar.addEventListener("click", () => {
 
       marcadorAtual = L.marker([lat, lng]).addTo(mapa);
       mapa.setView([lat, lng], 18);
-
-      marcadorAtual.bindPopup("📍 Ponto Técnico Ativo").openPopup();
-
-      console.log("📍 Ponto marcado:", pontoAtual);
-    },
-    () => alert("Erro ao obter localização.")
-  );
-});
-
+      
 // ===============================
 // ADICIONAR REGISTRO TÉCNICO
 // ===============================
-if (btnAddRegistro) {
-  btnAddRegistro.addEventListener("click", adicionarRegistro);
-}
+
+function adicionarRegistro() {
 
   if (!ocorrenciaSelect.value || !quantidadeInput.value) {
     alert("Preencha os campos obrigatórios.");
@@ -149,15 +140,14 @@ if (btnAddRegistro) {
 
   registrosDoPonto.push(registro);
   renderizarLista();
-
   limparFormulario();
 
   console.log("📝 Registro técnico adicionado:", registro);
-});
+}
 
-// ===============================
-// RENDERIZA LISTA
-// ===============================
+if (btnAddRegistro) {
+  btnAddRegistro.addEventListener("click", adicionarRegistro);
+}
 function renderizarLista() {
   if (!listaContainer) return;
 
