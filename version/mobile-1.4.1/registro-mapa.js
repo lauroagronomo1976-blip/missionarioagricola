@@ -2,9 +2,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
   console.log("🟢 REGISTRO – MAPA PURO ATIVO");
 
-  // TODO o seu código fica AQUI dentro
+  // ===============================
+  // VARIÁVEIS DE CONTEXTO
+  // ===============================
+  let mapa;
+  let pontoAtual = null;
+  let registrosDoPonto = [];
+  let marcadorAtual = null;
+
+  // ===============================
+  // INICIALIZA MAPA
+  // ===============================
+  mapa = L.map("map", {
+    zoomControl: true
+  });
+
+  const street = L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    { attribution: "© OpenStreetMap" }
+  );
+
+  const satelite = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    { attribution: "© Esri" }
+  );
+
+  street.addTo(mapa);
+
+  L.control.layers(
+    {
+      "Rua": street,
+      "Satélite": satelite
+    }
+  ).addTo(mapa);
+
+  mapa.setView([-15.8, -47.9], 5);
+
+  setTimeout(() => {
+    mapa.invalidateSize();
+    console.log("🛡️ invalidateSize aplicado");
+  }, 300);
+
+  // ===============================
+  // ELEMENTOS
+  // ===============================
+  const btnMarcar = document.getElementById("btnMarcar");
+  const btnAddRegistro = document.getElementById("btnAddRegistro");
+
+  const ocorrenciaSelect = document.getElementById("ocorrenciaSelect");
+  const individuoInput = document.getElementById("individuoInput");
+  const especieInput = document.getElementById("especieInput");
+  const faseSelect = document.getElementById("faseSelect");
+  const quantidadeInput = document.getElementById("quantidadeInput");
+
+  // ⚠️ TODO O RESTANTE DO SEU CÓDIGO FICA AQUI DENTRO
 
 });
+
 // ===============================
 // VARIÁVEIS DE CONTEXTO
 // ===============================
