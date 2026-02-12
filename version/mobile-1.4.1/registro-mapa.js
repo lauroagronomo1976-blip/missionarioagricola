@@ -205,3 +205,7 @@ function limparFormulario() {
   especieInput.value = "";
   quantidadeInput.value = "";
 }
+document.addEventListener("DOMContentLoaded", () => {
+  const mapDiv = document.getElementById("map");
+  console.log("MAP DIV:", mapDiv);
+});
