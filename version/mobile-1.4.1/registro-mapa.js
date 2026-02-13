@@ -5,23 +5,29 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================
   // VARIÁVEIS
   // ===============================
-  let mapa = L.map("map", { zoomControl: true });
-  let pontoAtual = null;
-  let registrosDoPonto = [];
-  let marcadorAtual = null;
+  let mapa = L.map("map", {
+  zoomControl: true,
+  maxZoom: 19
+});
+
 
   // Camada rua
 const street = L.tileLayer(
   "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  { attribution: "© OpenStreetMap" }
+  {
+    attribution: "© OpenStreetMap",
+    maxZoom: 19
+  }
 );
 
 // Camada satélite
 const satelite = L.tileLayer(
   "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-  { attribution: "© Esri" }
+  {
+    attribution: "© Esri",
+    maxZoom: 21
+  }
 );
-
 // Ativa rua por padrão
 street.addTo(mapa);
 
@@ -132,7 +138,10 @@ mapa.addControl(new ControleLocalizacao());
   // ===============================
   // MARCAR PONTO
   // ===============================
+  if (btnMarcar) {
   btnMarcar.addEventListener("click", () => {
+    });
+}
 
     if (!navigator.geolocation) {
       alert("Geolocalização não suportada.");
