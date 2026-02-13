@@ -34,6 +34,87 @@ L.control.layers(
 ).addTo(mapa);
   mapa.setView([-15.8, -47.9], 5);
 
+  // ===============================
+// CONTROLE PROFISSIONAL DE LOCALIZAÇÃO
+// ===============================
+const ControleLocalizacao = L.Control.extend({
+  options: {
+    position: "topright"
+  },
+
+  onAdd: function () {
+
+    const container = L.DomUtil.create("div", "leaflet-bar");
+    
+    container.style.backgroundColor = "#ffffff";
+    container.style.width = "42px";
+    container.style.height = "42px";
+    container.style.display = "flex";
+    container.style.alignItems = "center";
+    container.style.justifyContent = "center";
+    container.style.cursor = "pointer";
+    container.style.borderRadius = "8px";
+    container.style.boxShadow = "0 2px 6px rgba(0,0,0,0.3)";
+
+    container.innerHTML = `
+      <div style="
+        width:22px;
+        height:22px;
+        border:2px solid #222;
+        border-radius:50%;
+        position:relative;
+      ">
+        <div style="position:absolute;top:-6px;left:9px;width:2px;height:34px;background:#222;"></div>
+        <div style="position:absolute;left:-6px;top:9px;width:34px;height:2px;background:#222;"></div>
+      </div>
+    `;
+
+    L.DomEvent.disableClickPropagation(container);
+
+    container.addEventListener("click", function () {
+
+      if (!navigator.geolocation) {
+        alert("Geolocalização não suportada.");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        function (pos) {
+
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          const accuracy = pos.coords.accuracy;
+
+          mapa.setView([lat, lng], 18, { animate: true });
+
+          if (marcadorAtual) {
+            mapa.removeLayer(marcadorAtual);
+          }
+
+          marcadorAtual = L.marker([lat, lng]).addTo(mapa);
+
+          // círculo azul de precisão
+          L.circle([lat, lng], {
+            radius: accuracy,
+            color: "#136aec",
+            fillColor: "#136aec",
+            fillOpacity: 0.15,
+            weight: 1
+          }).addTo(mapa);
+
+        },
+        function () {
+          alert("Erro ao obter localização.");
+        }
+      );
+
+    });
+
+    return container;
+  }
+});
+
+mapa.addControl(new ControleLocalizacao());
   setTimeout(() => mapa.invalidateSize(), 300);
 
   // ===============================
