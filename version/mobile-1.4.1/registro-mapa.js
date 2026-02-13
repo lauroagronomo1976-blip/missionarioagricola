@@ -10,12 +10,28 @@ document.addEventListener("DOMContentLoaded", () => {
   let registrosDoPonto = [];
   let marcadorAtual = null;
 
-  const street = L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    { attribution: "© OpenStreetMap" }
-  );
+  // Camada rua
+const street = L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  { attribution: "© OpenStreetMap" }
+);
 
-  street.addTo(mapa);
+// Camada satélite
+const satelite = L.tileLayer(
+  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+  { attribution: "© Esri" }
+);
+
+// Ativa rua por padrão
+street.addTo(mapa);
+
+// Controle de camadas
+L.control.layers(
+  {
+    "Rua": street,
+    "Satélite": satelite
+  }
+).addTo(mapa);
   mapa.setView([-15.8, -47.9], 5);
 
   setTimeout(() => mapa.invalidateSize(), 300);
@@ -58,13 +74,74 @@ document.addEventListener("DOMContentLoaded", () => {
 
         marcadorAtual = L.marker([lat, lng]).addTo(mapa);
         mapa.setView([lat, lng], 18);
-
+        L.control.locate = function(opts) {
+        return new L.Control.Locate(opts);
+}
       },
       () => alert("Erro ao obter localização.")
     );
 
   });
+// ===============================
+// BOTÃO MIRA CUSTOM
+// ===============================
+const controleMira = L.control({ position: "topright" });
 
+controleMira.onAdd = function () {
+  const div = L.DomUtil.create("div", "leaflet-bar leaf-control-custom");
+
+  div.innerHTML = `
+  <div style="
+    width:20px;
+    height:20px;
+    border:2px solid black;
+    border-radius:50%;
+    position:relative;
+  ">
+    <div style="position:absolute;top:-6px;left:9px;width:2px;height:32px;background:black;"></div>
+    <div style="position:absolute;left:-6px;top:9px;width:32px;height:2px;background:black;"></div>
+  </div>
+`;
+  div.style.backgroundColor = "white";
+  div.style.width = "40px";
+  div.style.height = "40px";
+  div.style.display = "flex";
+  div.style.alignItems = "center";
+  div.style.justifyContent = "center";
+  div.style.cursor = "pointer";
+  div.style.fontSize = "18px";
+
+  div.onclick = function () {
+
+    if (!navigator.geolocation) {
+      alert("Geolocalização não suportada.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+
+        mapa.setView([lat, lng], 18);
+
+        if (marcadorAtual) {
+          mapa.removeLayer(marcadorAtual);
+        }
+
+        marcadorAtual = L.marker([lat, lng]).addTo(mapa);
+
+      },
+      () => alert("Erro ao obter localização.")
+    );
+
+  };
+
+  return div;
+};
+
+controleMira.addTo(mapa);
   // ===============================
   // ADICIONAR REGISTRO
   // ===============================
