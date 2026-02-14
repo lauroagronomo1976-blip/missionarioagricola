@@ -53,19 +53,12 @@ body {
 }
 
 /* MAPA */
-#map-container {
-  position: relative;
-  height: 400px; /* ou o que quiser */
-  z-index: 1;
-}
-
 #map {
-  height: 100%;
-}
-
-#map {
-  width: 100%;
-  height: 100%;
+  height: 55vh;          /* ocupa 55% da altura da tela */
+  width: 90%;            /* deixa margem lateral */
+  margin: 20px auto;     /* centraliza horizontal */
+  border-radius: 12px;   /* visual mais moderno */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 /* BOTÕES NO MAPA */
