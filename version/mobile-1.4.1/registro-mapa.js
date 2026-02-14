@@ -38,6 +38,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setTimeout(() => mapa.invalidateSize(), 300);
 
+  mapa.scrollWheelZoom.disable();
+  
   // ===============================
   // BOTÃO MIRA PROFISSIONAL
   // ===============================
