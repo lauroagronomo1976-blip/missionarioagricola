@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => mapa.invalidateSize(), 300);
 
   mapa.scrollWheelZoom.disable();
+  mapa.touchZoom.enable();
   
   // ===============================
   // BOTÃO MIRA PROFISSIONAL
