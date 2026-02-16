@@ -48,8 +48,34 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================
   // BOTÃO MIRA PROFISSIONAL
   // ===============================
-  const ControleLocalizacao = L.Control.extend({
-    options: { position: "topright" },
+  document.getElementById("btnMira").addEventListener("click", function() {
+
+  if (!navigator.geolocation) {
+    alert("Geolocalização não suportada.");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(function(position) {
+
+    var lat = position.coords.latitude;
+    var lon = position.coords.longitude;
+
+    map.setView([lat, lon], 17);
+
+    // remove marcador anterior se existir
+    if (marcadorAtual) {
+      map.removeLayer(marcadorAtual);
+    }
+
+    marcadorAtual = L.circleMarker([lat, lon], {
+      radius: 10,
+      color: "#1e88e5",
+      fillColor: "#42a5f5",
+      fillOpacity: 0.9
+    }).addTo(map);
+
+  });
+});
 
     onAdd: function () {
       const container = L.DomUtil.create("div", "leaflet-bar");
