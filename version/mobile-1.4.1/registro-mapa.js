@@ -1,3 +1,4 @@
+var marcadorAtual = null;
 document.addEventListener("DOMContentLoaded", () => {
 
   console.log("🟢 REGISTRO – MAPA ATIVO");
@@ -12,11 +13,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================
   // MAPA
   // ===============================
-  const mapa = L.map("map", {
-    zoomControl: true,
-    maxZoom: 21
-  });
+  var map = L.map('map', {
+  zoomControl: false  // desliga o padrão (superior esquerdo)
+}).setView([-15.0, -47.0], 13); // mantenha suas coords
 
+  L.control.zoom({
+  position: 'bottomright'
+}).addTo(map);
+  
   const street = L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     { attribution: "© OpenStreetMap", maxZoom: 19 }
