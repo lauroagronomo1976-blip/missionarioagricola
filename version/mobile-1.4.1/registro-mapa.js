@@ -77,21 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-    onAdd: function () {
-      const container = L.DomUtil.create("div", "leaflet-bar");
-      container.style.cssText = `
-        background:white;
-        width:42px;
-        height:42px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        cursor:pointer;
-        border-radius:8px;
-        box-shadow:0 2px 6px rgba(0,0,0,0.3);
-      `;
-
-      container.innerHTML = `
+          container.innerHTML = `
         <div style="width:22px;height:22px;border:2px solid #222;border-radius:50%;position:relative;">
           <div style="position:absolute;top:-6px;left:9px;width:2px;height:34px;background:#222;"></div>
           <div style="position:absolute;left:-6px;top:9px;width:34px;height:2px;background:#222;"></div>
@@ -138,9 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  map.addControl(new ControleLocalizacao());
-
-  // ===============================
+    // ===============================
   // ELEMENTOS
   // ===============================
   const btnMarcar = document.getElementById("btnMarcar");
