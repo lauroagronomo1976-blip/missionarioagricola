@@ -1,7 +1,24 @@
  body {
-  margin: 0;
   font-family: Arial, sans-serif;
-  background: #f4f6f8;
+  font-size: 18px;
+}
+
+h3 {
+  font-size: 22px;
+}
+
+input, textarea {
+  font-size: 18px;
+  padding: 14px;
+}
+
+button {
+  font-size: 18px;
+  padding: 16px;
+}
+
+.leaflet-control-zoom a {
+  font-size: 22px !important;
 }
 
 .container {
