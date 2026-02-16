@@ -20,9 +20,9 @@ html, body {
 }
 /* MAPA menor na tela */
 #map {
-  height: 32vh;   /* antes era 45 */
+  height: 30vh;
   width: 85%;
-  margin: 20px auto;
+  margin: 25px auto;
   border-radius: 18px;
 }
 
@@ -62,17 +62,15 @@ button {
 
 /* AUMENTAR controles do mapa */
 .leaflet-control-zoom a {
-  font-size: 28px !important;
-  width: 50px !important;
-  height: 50px !important;
-  line-height: 50px !important;
+  font-size: 36px !important;
+  width: 70px !important;
+  height: 70px !important;
+  line-height: 70px !important;
 }
 
-.leaflet-control-layers-toggle {
-  width: 50px !important;
-  height: 50px !important;
+.leaflet-control-zoom {
+  transform: scale(1.1);
 }
-
 h3 {
   font-size: 22px;
 }
