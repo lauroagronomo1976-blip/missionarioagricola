@@ -483,3 +483,19 @@ body, main, .container {
   min-height: 400px;
   background: #ddd;
 }
+.leaflet-control {
+  font-size: 20px !important;
+}
+
+.leaflet-control-scale-line {
+  font-size: 18px !important;
+  padding: 6px 10px !important;
+}
+.leaflet-control {
+  font-size: 20px !important;
+}
+
+.leaflet-control-scale-line {
+  font-size: 18px !important;
+  padding: 6px 10px !important;
+}
