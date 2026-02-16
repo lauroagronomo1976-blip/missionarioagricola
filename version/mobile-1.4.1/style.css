@@ -54,12 +54,13 @@ body {
 
 /* MAPA */
 #map {
-  height: 40vh;          /* altura proporcional à tela */
-  width: 88%;            /* diminui largura lateral */
-  margin: 20px auto;     /* centraliza */
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  height: 40vh;
+  width: calc(100% - 40px); /* 20px de cada lado */
+  margin: 20px auto;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
 }
+
 #map {
   height: 40vh;
   width: calc(100% - 40px);
