@@ -9,16 +9,15 @@ html, body {
 /* TARJA SUPERIOR */
 #topoApp {
   background: #e0e0e0;
-  padding: 18px 20px;
+  padding: 40px 20px; /* dobro da altura anterior */
   text-align: left;
 }
 
 #topoApp span {
   color: #2e7d32;
-  font-size: 24px;
+  font-size: 32px;
   font-weight: bold;
 }
-
 /* MAPA menor na tela */
 #map {
   height: 32vh;   /* antes era 45 */
