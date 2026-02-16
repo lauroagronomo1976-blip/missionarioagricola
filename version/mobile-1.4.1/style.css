@@ -1,6 +1,77 @@
- body {
+html, body {
+  margin: 0;
+  padding: 0;
   font-family: Arial, sans-serif;
-  font-size: 18px;
+  font-size: 20px; /* fonte geral maior */
+  background: #f4f6f8;
+}
+
+/* TARJA SUPERIOR */
+#topoApp {
+  background: #e0e0e0;
+  padding: 18px 20px;
+  text-align: left;
+}
+
+#topoApp span {
+  color: #2e7d32;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* MAPA menor na tela */
+#map {
+  height: 32vh;   /* antes era 45 */
+  width: 85%;
+  margin: 20px auto;
+  border-radius: 18px;
+}
+
+/* Área de registro */
+#registroArea {
+  width: 85%;
+  margin: 0 auto 50px auto;
+  padding: 20px;
+  border-top: 1px solid #ccc;
+}
+
+/* Campos maiores */
+h3 {
+  font-size: 24px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 18px;
+  font-size: 20px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+}
+
+/* Botões grandes para luva */
+button {
+  width: 100%;
+  padding: 20px;
+  font-size: 22px;
+  border-radius: 16px;
+  border: none;
+  background: #2e7d32;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* AUMENTAR controles do mapa */
+.leaflet-control-zoom a {
+  font-size: 28px !important;
+  width: 50px !important;
+  height: 50px !important;
+  line-height: 50px !important;
+}
+
+.leaflet-control-layers-toggle {
+  width: 50px !important;
+  height: 50px !important;
 }
 
 h3 {
