@@ -1,15 +1,79 @@
-  body {
-  background: #f5f7fa;
-}
-
-* {
-  box-sizing: border-box;
+ body {
+  margin: 0;
   font-family: Arial, sans-serif;
+  background: #f4f6f8;
 }
 
-body {
-  padding-left: 10px;
-  padding-right: 10px;
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding: 10px;
+}
+
+/* MAPA */
+
+.card-mapa {
+  margin-bottom: 20px;
+}
+
+#map {
+  height: 40vh;
+  width: calc(100% - 30px);
+  margin: 10px auto;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+/* REGISTRO */
+
+.card-registro {
+  background: white;
+  padding: 18px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+
+.card-registro h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.card-registro input {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+/* BOTÃO GRANDE (uso com luva) */
+
+.btn-primario {
+  width: 100%;
+  padding: 16px;
+  font-size: 17px;
+  border-radius: 14px;
+  border: none;
+  background: #2e7d32;
+  color: white;
+  font-weight: bold;
+}
+
+.btn-primario:active {
+  transform: scale(0.98);
+}
+
+/* HISTÓRICO */
+
+.card-historico {
+  background: white;
+  padding: 18px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-bottom: 40px;
 }
 
 /* CABEÇALHO */
