@@ -31,19 +31,19 @@ document.addEventListener("DOMContentLoaded", () => {
     { attribution: "© Esri", maxZoom: 21 }
   );
 
-  street.addTo(mapa);
+  street.addTo(map);
 
   L.control.layers({
     "Rua": street,
     "Satélite": satelite
-  }).addTo(mapa);
+  }).addTo(map);
 
-  mapa.setView([-15.8, -47.9], 5);
+  map.setView([-15.8, -47.9], 5);
 
-  setTimeout(() => mapa.invalidateSize(), 300);
+  setTimeout(() => map.invalidateSize(), 300);
 
-  mapa.scrollWheelZoom.disable();
-  mapa.touchZoom.enable();
+  map.scrollWheelZoom.disable();
+  map.touchZoom.enable();
   
   // ===============================
   // BOTÃO MIRA PROFISSIONAL
@@ -114,11 +114,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const lng = pos.coords.longitude;
             const accuracy = pos.coords.accuracy;
 
-            mapa.setView([lat, lng], 19, { animate: true });
+            map.setView([lat, lng], 19, { animate: true });
 
-            if (marcadorAtual) mapa.removeLayer(marcadorAtual);
+            if (marcadorAtual) map.removeLayer(marcadorAtual);
 
-            marcadorAtual = L.marker([lat, lng]).addTo(mapa);
+            marcadorAtual = L.marker([lat, lng]).addTo(map);
 
             L.circle([lat, lng], {
               radius: accuracy,
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
               fillColor: "#136aec",
               fillOpacity: 0.15,
               weight: 1
-            }).addTo(mapa);
+            }).addTo(map);
 
           },
           () => alert("Erro ao obter localização.")
@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  mapa.addControl(new ControleLocalizacao());
+  map.addControl(new ControleLocalizacao());
 
   // ===============================
   // ELEMENTOS
@@ -171,10 +171,10 @@ document.addEventListener("DOMContentLoaded", () => {
           registrosDoPonto = [];
           renderizarLista();
 
-          if (marcadorAtual) mapa.removeLayer(marcadorAtual);
+          if (marcadorAtual) map.removeLayer(marcadorAtual);
 
-          marcadorAtual = L.marker([lat, lng]).addTo(mapa);
-          mapa.setView([lat, lng], 19);
+          marcadorAtual = L.marker([lat, lng]).addTo(map);
+          map.setView([lat, lng], 19);
 
         },
         () => alert("Erro ao obter localização.")
