@@ -33,40 +33,23 @@
     }
   </style>
 </head>
-<body>
-<div id="registroTecnico">
 
-  <h3>Registro Técnico</h3>
+  <body>
 
-   </div>
+  <div class="container">
 
-  <div id="map"></div>
-<div id="registroArea" style="padding:12px; border-top:1px solid #ccc">
+    <div class="card-mapa">
+      <div id="map"></div>
+    </div>
 
-  <h3>📋 Registro do Ponto</h3>
+    <div class="card-registro">
+      <h2>Registro de Campo</h2>
 
-  <label>
-    Praga / Ocorrência:
-    <input type="text" id="campoPraga" />
-  </label>
+      <input type="text" placeholder="Descrição da ocorrência">
 
-  <br><br>
+      <button class="btn-primario">
+        Salvar Registro
+      </button>
 
-  <label>
-    Observações:
-    <textarea id="campoObs"></textarea>
-  </label>
-
-  <br><br>
-
-  <button id="btnAdicionarRegistro">➕ Adicionar registro</button>
-
-  <hr>
-
-  <div id="listaRegistros"></div>
-</div>
-  
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="registro-mapa.js"></script>
-</body>
+    </div>
 </html>
