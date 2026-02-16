@@ -4,52 +4,93 @@
   <meta charset="UTF-8">
   <title>Registro Mapa</title>
 
-  <!-- SEU CSS -->
+  <!-- CSS principal -->
   <link rel="stylesheet" href="style.css">
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-</head>
-  
+
   <style>
     html, body {
-      margin: 40;
-      height: 40%;
-    }
-  
-    <div id="barra">
-  <button id="btnMarcar">📍 Marcar ponto</button>
-</div>
-    
-    button {
-      padding: 8px 14px;
-      font-size: 14px;
-      cursor: pointer;
+      margin: 0;
+      padding: 0;
     }
 
     #map {
-      height: calc(40vh - 50px);
+      height: 40vh;
+      width: 92%;
+      margin: 20px auto;
+      border-radius: 14px;
+    }
+
+    #registroArea {
+      width: 92%;
+      margin: 0 auto 40px auto;
+      padding: 15px;
+      border-top: 1px solid #ccc;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    button {
+      padding: 12px;
+      font-size: 15px;
+      border-radius: 10px;
+      border: none;
+      background: #2e7d32;
+      color: white;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    #listaRegistros {
+      margin-top: 15px;
     }
   </style>
 </head>
 
-  <body>
+<body>
 
-  <div class="container">
+  <div id="map"></div>
 
-    <div class="card-mapa">
-      <div id="map"></div>
-    </div>
+  <div id="registroArea">
 
-    <div class="card-registro">
-      <h2>Registro de Campo</h2>
+    <h3>📋 Registro do Ponto</h3>
 
-      <input type="text" placeholder="Descrição da ocorrência">
+    <label>
+      Praga / Ocorrência:
+      <input type="text" id="campoPraga" />
+    </label>
 
-      <button class="btn-primario">
-        Salvar Registro
-      </button>
+    <br><br>
 
-    </div>
+    <label>
+      Observações:
+      <textarea id="campoObs"></textarea>
+    </label>
+
+    <br><br>
+
+    <button id="btnAdicionarRegistro">
+      ➕ Adicionar registro
+    </button>
+
+    <hr>
+
+    <div id="listaRegistros"></div>
+
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="registro-mapa.js"></script>
+
+</body>
 </html>
