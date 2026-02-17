@@ -1,99 +1,107 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Registro Mapa</title>
+<meta charset="UTF-8">
+<title>Missionário Agrícola</title>
 
-  <!-- CSS principal -->
-  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-    }
+/* ============================= */
+/* BASE */
+/* ============================= */
 
-    #map {
-      height: 40vh;
-      width: 92%;
-      margin: 20px auto;
-      border-radius: 14px;
-    }
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f4f6f8;
+}
 
-    #registroArea {
-      width: 92%;
-      margin: 0 auto 40px auto;
-      padding: 15px;
-      border-top: 1px solid #ccc;
-    }
+#topoApp {
+  background: #1b5e20;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+}
 
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 15px;
-    }
+/* ============================= */
+/* MAPA */
+/* ============================= */
 
-    button {
-      padding: 12px;
-      font-size: 15px;
-      border-radius: 10px;
-      border: none;
-      background: #2e7d32;
-      color: white;
-      cursor: pointer;
-      width: 100%;
-    }
+#map {
+  height: 55vh;
+  width: 94%;
+  margin: 15px auto;
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
 
-    #listaRegistros {
-      margin-top: 15px;
-    }
-  </style>
-</head>
+/* ============================= */
+/* BOTÕES FLUTUANTES */
+/* ============================= */
 
-<body>
-<div id="topoApp">
-  <span>Missionário Agrícola</span>
-</div>
+.botao-flutuante {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  font-size: 24px;
+  color: white;
+  z-index: 1000;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+  cursor: pointer;
+}
 
-  <div id="map"></div>
+#btnMira {
+  bottom: 110px;
+  right: 20px;
+  background: #1e88e5;
+}
 
-  <div id="registroArea">
+#btnMarcar {
+  bottom: 40px;
+  right: 20px;
+  background: #2e7d32;
+}
 
-    <h3>📋 Registro do Ponto</h3>
+/* ============================= */
+/* CONTROLE CAMADAS */
+/* ============================= */
 
-    <label>
-      Praga / Ocorrência:
-      <input type="text" id="campoPraga" />
-    </label>
+.leaflet-control-layers {
+  font-size: 15px;
+  padding: 10px;
+  border-radius: 14px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
 
-    <br><br>
+.leaflet-control-layers-base label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+}
 
-    <label>
-      Observações:
-      <textarea id="campoObs"></textarea>
-    </label>
+.leaflet-control-layers-selector {
+  transform: scale(1.3);
+}
 
-    <br><br>
+/* ============================= */
+/* ÁREA DE REGISTRO */
+/* ============================= */
 
-    <button id="btnAdicionarRegistro">
-      ➕ Adicionar registro
-    </button>
+#registroArea {
+  width: 94%;
+  margin: 0 auto 40px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
 
-    <hr>
-
-    <div id="listaRegistros"></div>
-
-  </div>
-
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="registro-mapa.js"></script>
-
-</body>
-</html>
