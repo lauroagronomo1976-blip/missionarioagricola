@@ -203,11 +203,12 @@ button {
 
 /* MAPA */
 #map {
-  height: 40vh;
-  width: calc(100% - 40px); /* 20px de cada lado */
-  margin: 20px auto;
-  border-radius: 14px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  height: 48vh;   /* era 55vh */
+  width: 94%;
+  margin: 15px auto;
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  position: relative;  /* garanta que exista */
 }
 
 #map {
@@ -498,4 +499,40 @@ body, main, .container {
 .leaflet-control-scale-line {
   font-size: 18px !important;
   padding: 6px 10px !important;
+}
+/* ===============================
+   BOTÕES FLUTUANTES DO MAPA
+   =============================== */
+
+/* Garante que o mapa seja o container base */
+#map {
+  position: relative;
+}
+
+/* Estilo base dos dois botões */
+#btnMira,
+#btnMarcar {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  font-size: 22px;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  z-index: 1000;
+}
+
+/* Posição abaixo do botão de camadas */
+#btnMira {
+  top: 140px;
+  right: 30px;
+  background: #1e88e5;
+}
+
+#btnMarcar {
+  top: 220px;
+  right: 30px;
+  background: #2e7d32;
 }
