@@ -2,48 +2,38 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Missionário Agrícola</title>
 
 <link rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
-
-/* ============================= */
-/* BASE */
-/* ============================= */
-
 html, body {
   margin: 0;
   padding: 0;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: sans-serif;
   background: #f4f6f8;
 }
 
 #topoApp {
   background: #1b5e20;
   color: white;
-  padding: 15px;
+  padding: 20px;
   text-align: center;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: bold;
 }
-
-/* ============================= */
-/* MAPA */
-/* ============================= */
 
 #map {
-  height: 55vh;
+  height: 60vh;
   width: 94%;
   margin: 15px auto;
-  border-radius: 18px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 
-/* ============================= */
-/* BOTÕES FLUTUANTES */
-/* ============================= */
+/* BOTÕES */
 
 .botao-flutuante {
   position: fixed;
@@ -54,8 +44,8 @@ html, body {
   font-size: 24px;
   color: white;
   z-index: 1000;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
   cursor: pointer;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
 }
 
 #btnMira {
@@ -69,39 +59,76 @@ html, body {
   right: 20px;
   background: #2e7d32;
 }
+</style>
+</head>
 
-/* ============================= */
-/* CONTROLE CAMADAS */
-/* ============================= */
+<body>
 
-.leaflet-control-layers {
-  font-size: 15px;
-  padding: 10px;
-  border-radius: 14px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
+<div id="topoApp">Missionário Agrícola</div>
 
-.leaflet-control-layers-base label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 5px 0;
-}
+<div id="map"></div>
 
-.leaflet-control-layers-selector {
-  transform: scale(1.3);
-}
+<button id="btnMira" class="botao-flutuante">🎯</button>
+<button id="btnMarcar" class="botao-flutuante">📍</button>
 
-/* ============================= */
-/* ÁREA DE REGISTRO */
-/* ============================= */
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-#registroArea {
-  width: 94%;
-  margin: 0 auto 40px auto;
-  background: white;
-  padding: 20px;
-  border-radius: 18px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
+  const map = L.map('map').setView([-15.78, -47.93], 5);
+
+  const rua = L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    { attribution: '© OpenStreetMap' }
+  ).addTo(map);
+
+  const satelite = L.tileLayer(
+    'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+    {
+      maxZoom: 20,
+      subdomains:['mt0','mt1','mt2','mt3']
+    }
+  );
+
+  L.control.layers(
+    { "🗺️ Ruas": rua, "🛰️ Satélite": satelite },
+    null,
+    { position: "topright" }
+  ).addTo(map);
+
+  map.zoomControl.setPosition('bottomright');
+
+  let marcadorAtual = null;
+
+  document.getElementById("btnMira").addEventListener("click", () => {
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+
+        map.setView([lat, lng], 17);
+
+        if (marcadorAtual) {
+          map.removeLayer(marcadorAtual);
+        }
+
+        marcadorAtual = L.circleMarker([lat, lng], {
+          radius: 8,
+          color: "#1e88e5",
+          fillColor: "#1e88e5",
+          fillOpacity: 1
+        }).addTo(map);
+
+      });
+    }
+
+  });
+
+});
+</script>
+
+</body>
+</html>
