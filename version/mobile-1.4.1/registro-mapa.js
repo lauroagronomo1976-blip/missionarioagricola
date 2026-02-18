@@ -28,11 +28,10 @@ document.addEventListener("DOMContentLoaded", () => {
     position: 'bottomright'
   }).addTo(map);
 
-  const street = L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    { attribution: "© OpenStreetMap", maxZoom: 19 }
-  );
-
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19
+}).addTo(map);
+    
   const satelite = L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     { attribution: "© Esri", maxZoom: 21 }
