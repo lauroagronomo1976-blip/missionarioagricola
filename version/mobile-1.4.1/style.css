@@ -19,13 +19,29 @@ html, body {
   font-weight: bold;
 }
 /* MAPA menor na tela */
-#map {
-  height: 30vh;
-  width: 85%;
-  margin: 25px auto;
-  border-radius: 18px;
+.painel-controles {
+  position: absolute;
+  top: 85px;
+  right: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
 }
 
+.painel-controles button {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: white;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
+
+#btnMira { background: #1e88e5; }
+#btnMarcar { background: #2e7d32; }
 /* Área de registro */
 #registroArea {
   width: 85%;
