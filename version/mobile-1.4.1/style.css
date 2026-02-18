@@ -19,29 +19,7 @@ html, body {
   font-weight: bold;
 }
 /* MAPA menor na tela */
-.painel-controles {
-  position: absolute;
-  top: 85px;
-  right: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 1000;
-}
 
-.painel-controles button {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  border: none;
-  font-size: 22px;
-  cursor: pointer;
-  color: white;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
-}
-
-#btnMira { background: #1e88e5; }
-#btnMarcar { background: #2e7d32; }
 /* Área de registro */
 #registroArea {
   width: 85%;
@@ -115,14 +93,6 @@ button {
 
 .card-mapa {
   margin-bottom: 20px;
-}
-
-#map {
-  height: 40vh;
-  width: calc(100% - 30px);
-  margin: 10px auto;
-  border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
 }
 
 /* REGISTRO */
@@ -218,20 +188,7 @@ button {
 }
 
 /* MAPA */
-#map {
-  height: 48vh;   /* era 55vh */
-  width: 94%;
-  margin: 15px auto;
-  border-radius: 18px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  position: relative;  /* garanta que exista */
-}
 
-#map {
-  height: 40vh;
-  width: calc(100% - 40px);
-  margin: 20px auto;
-}
 /* BOTÕES NO MAPA */
 .map-buttons {
   position: absolute;
@@ -380,20 +337,7 @@ button {
 }
 
 /* ===== MAPA (OBRIGATÓRIO) ===== */
-#map-container {
-  position: relative;   /* 🔴 ESSENCIAL */
-  width: 100%;
-  height: 45vh;         /* controla o tamanho do mapa */
-  margin-top: 12px;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #eaeaea;  /* fallback elegante */
-}
 
-#map {
-  width: 100%;
-  height: 100%;
-}
 .registro-area,
 .lista-registros {
   position: relative;
@@ -448,10 +392,6 @@ input {
 }
 
 /* garante que o mapa não sobreponha */
-#map {
-  position: relative;
-  z-index: 1;
-}
 
 /* evita que containers escondam conteúdo */
 body, main, .container {
@@ -488,18 +428,6 @@ body, main, .container {
 .registro-item button:hover {
   background: #ddd;
 }
-#map {
-  width: 100%;
-  height: 70vh;   /* 70% da altura da tela */
-  min-height: 400px;
-}
-
-#map {
-  width: 100%;
-  height: 70vh;
-  min-height: 400px;
-  background: #ddd;
-}
 .leaflet-control {
   font-size: 20px !important;
 }
@@ -521,146 +449,62 @@ body, main, .container {
    =============================== */
 
 /* Garante que o mapa seja o container base */
-#map {
-  position: relative;
-}
 
 /* Estilo base dos dois botões */
-#btnMira,
-#btnMarcar {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: none;
-  font-size: 22px;
-  color: white;
-  cursor: pointer;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-  z-index: 1000;
-}
 
 /* Posição abaixo do botão de camadas */
-#btnMira {
-  top: 160px;
-  right: 30px;
-  background: #1e88e5;
-}
 
-#btnMarcar {
-  top: 220px;
-  right: 30px;
-  background: #2e7d32;
-}
 /* Container do mapa */
-#mapContainer {
-  position: relative;
-  width: 94%;
-  margin: 15px auto;
-}
 
 /* Mapa */
-#map {
-  height: 48vh;
-  border-radius: 18px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-}
 
 /* Botões flutuantes */
-#btnMira,
-#btnMarcar {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: none;
-  font-size: 22px;
-  color: white;
-  cursor: pointer;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-  z-index: 1000;
-}
 
-#btnMira {
-  top: 150px;
-  right: 20px;
-  background: #1e88e5;
-}
-
-#btnMarcar {
-  top: 230px;
-  right: 20px;
-  background: #2e7d32;
-}
 /* ===============================
    CONTAINER DO MAPA
    =============================== */
 
-#mapContainer {
-  position: relative;
-  width: 94%;
-  margin: 15px auto;
-}
-
-#map {
-  height: 48vh;
-  border-radius: 18px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-}
 
 /* ===============================
    PAINEL VERTICAL DE CONTROLES
    =============================== */
 
-.painel-controles {
-  position: absolute;
-  top: 85px;
-  right: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 1000;
-}
 
-.painel-controles button {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  border: none;
-  font-size: 22px;
-  cursor: pointer;
-  color: white;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
-}
 
-#btnMira { background: #1e88e5; }
-#btnMarcar { background: #2e7d32; }
-
-#btnMira {
-  background: #1e88e5;
-}
-
-#btnMarcar {
-  background: #2e7d32;
 /* ====================================
    CORREÇÃO E PAINEL DE CONTROLES
    ==================================== */
 
 /* Garante tamanho fixo do container */
+
+/* Força o mapa a ocupar o container */
+
+/* Painel vertical no lado direito */
+
+/* Botões do painel */
+
+/* =====================================
+   MAPA – ESTRUTURA LIMPA E DEFINITIVA
+   ===================================== */
+
 #mapContainer {
   position: relative;
   width: 94%;
-  height: 50vh;
-  margin: 15px auto;
+  height: 55vh;
+  margin: 20px auto;
+  border-radius: 16px;
+  overflow: hidden;
 }
 
-/* Força o mapa a ocupar o container */
 #map {
   width: 100%;
   height: 100%;
 }
 
-/* Painel vertical no lado direito */
+/* =====================================
+   PAINEL LATERAL DE BOTÕES
+   ===================================== */
+
 .painel-controles {
   position: absolute;
   top: 90px;
@@ -671,16 +515,15 @@ body, main, .container {
   z-index: 1000;
 }
 
-/* Botões do painel */
 .painel-controles button {
-  width: 55px;
-  height: 55px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   border: none;
-  font-size: 22px;
+  font-size: 24px;
   cursor: pointer;
-  color: white;
-  box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
 }
 
 #btnMira {
