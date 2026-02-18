@@ -533,3 +533,6 @@ body, main, .container {
 #btnMarcar {
   background: #2e7d32;
 }
+#mapContainer {
+  border: 5px solid red !important;
+}
