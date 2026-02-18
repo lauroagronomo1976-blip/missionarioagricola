@@ -21,7 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
     map.invalidateSize();
   }, 100);
 });
-    
+    map.invalidateSize(true);
+
   // Zoom inferior direito
   L.control.zoom({
     position: 'bottomright'
