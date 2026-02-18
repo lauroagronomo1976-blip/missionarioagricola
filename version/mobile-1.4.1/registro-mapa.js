@@ -16,9 +16,12 @@ document.addEventListener("DOMContentLoaded", () => {
     zoomControl: false
   }).setView([-15.0, -47.0], 5);
   setTimeout(() => {
-  map.invalidateSize();
-}, 300);
-
+  window.addEventListener('load', function () {
+  setTimeout(function () {
+    map.invalidateSize();
+  }, 100);
+});
+    
   // Zoom inferior direito
   L.control.zoom({
     position: 'bottomright'
