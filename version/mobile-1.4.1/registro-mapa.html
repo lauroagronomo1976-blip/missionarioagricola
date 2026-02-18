@@ -72,13 +72,15 @@ html, body {
 
 <div id="topoApp">Missionário Agrícola</div>
 
-div id="mapContainer">
+<div id="mapContainer">
   <div id="map"></div>
 
-  <button id="btnMira">🎯</button>
-  <button id="btnMarcar">📍</button>
-</div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <div class="painel-controles">
+    <button id="btnMira">🎯</button>
+    <button id="btnMarcar">📍</button>
+  </div>
+  
+</div><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
