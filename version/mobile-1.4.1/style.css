@@ -576,3 +576,57 @@ body, main, .container {
   right: 20px;
   background: #2e7d32;
 }
+/* ===============================
+   CONTAINER DO MAPA
+   =============================== */
+
+#mapContainer {
+  position: relative;
+  width: 94%;
+  margin: 15px auto;
+}
+
+#map {
+  height: 48vh;
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* ===============================
+   PAINEL VERTICAL DE CONTROLES
+   =============================== */
+
+.painel-controles {
+  position: absolute;
+  top: 75px;             /* abaixo do botão camadas */
+  right: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(6px);
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  z-index: 1000;
+}
+
+/* Botões dentro do painel */
+
+.painel-controles button {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: white;
+}
+
+#btnMira {
+  background: #1e88e5;
+}
+
+#btnMarcar {
+  background: #2e7d32;
+}
