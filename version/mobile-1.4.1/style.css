@@ -598,20 +598,13 @@ body, main, .container {
 
 .painel-controles {
   position: absolute;
-  top: 75px;             /* abaixo do botão camadas */
+  top: 85px;
   right: 15px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 10px;
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(6px);
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  gap: 10px;
   z-index: 1000;
 }
-
-/* Botões dentro do painel */
 
 .painel-controles button {
   width: 55px;
@@ -621,7 +614,11 @@ body, main, .container {
   font-size: 22px;
   cursor: pointer;
   color: white;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
 }
+
+#btnMira { background: #1e88e5; }
+#btnMarcar { background: #2e7d32; }
 
 #btnMira {
   background: #1e88e5;
