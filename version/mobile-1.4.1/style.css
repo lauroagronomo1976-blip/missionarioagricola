@@ -599,3 +599,9 @@ body, main, .container {
 .painel-controles button:hover {
   background: #f4f4f4;
 }
+
+/* Container pai do mapa */
+#mapContainer {
+  position: relative;
+  width: 94%;
+  margin: 15px
