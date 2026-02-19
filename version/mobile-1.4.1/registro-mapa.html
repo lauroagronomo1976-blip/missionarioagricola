@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
+<html lang="pt-BR"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Missionário Agrícola</title>
@@ -9,16 +8,16 @@
   rel="stylesheet" 
   href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
-  
+
 <style>
+
 html, body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
   background: #f4f6f8;
 }
-   
-</style>
+
 #topoApp {
   background: #1b5e20;
   color: white;
@@ -28,47 +27,44 @@ html, body {
   font-weight: bold;
 }
 
-#map {
-  height: 60vh;
+#mapContainer {
+  position: relative;
   width: 94%;
+  height: 60vh;
   margin: 15px auto;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
   border-radius: 15px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 
-/* BOTÕES */
+/* Painel de botões dentro do mapa */
 
-.botao-flutuante {
+.painel-controles {
   position: absolute;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: none;
-  font-size: 22px;
-  color: white;
+  top: 80px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   z-index: 1000;
+}
+
+.painel-controles button {
+  width: 36px;
+  height: 36px;
+  background: white;
+  border: 2px solid rgba(0,0,0,0.2);
+  border-radius: 4px;
   cursor: pointer;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  font-size: 18px;
 }
 
-/* posicionamento relativo ao mapa */
-
-#btnMira {
-  top: 100px;
-  right: 15px;
-  background: #1e88e5;
-}
-
-#btnMarcar {
-  top: 170px;
-  right: 15px;
-  background: #2e7d32;
-}
-  #map {
-  position: relative;
-}
-  
 </style>
+
 </head>
 
 <body>
