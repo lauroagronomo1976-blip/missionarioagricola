@@ -62,8 +62,37 @@ button {
 
 <div class="container">
   <div class="card">
-    <h2 id="boasVindas"></h2>
 
+    <h2>Nova Missão</h2>
+
+    <input type="text" id="safra" placeholder="Safra (ex: 2024/2025)">
+    <input type="text" id="empresa" placeholder="Empresa">
+    <input type="text" id="fazenda" placeholder="Fazenda">
+    <input type="text" id="gleba" placeholder="Gleba">
+    <input type="text" id="talhao" placeholder="Talhão">
+    <input type="text" id="cultura" placeholder="Cultura">
+    <input type="text" id="variedade" placeholder="Variedade">
+
+    <select id="missao">
+      <option value="">Selecione a Missão</option>
+      <option value="Inspeção Fitossanitária">Inspeção Fitossanitária</option>
+      <option value="Estimativa de Rendimento">Estimativa de Rendimento</option>
+      <option value="Perdas na Colheita">Perdas na Colheita</option>
+      <option value="Abertura/Fechamento de Plantio">Abertura/Fechamento de Plantio</option>
+      <option value="Fechamento de Insumos da Pulverização">Fechamento de Insumos da Pulverização</option>
+      <option value="Fechamento de Insumos do Tratamento de Sementes">Fechamento de Insumos do Tratamento de Sementes</option>
+    </select>
+
+    <button class="btn-iniciar" onclick="avancar()">
+      Avançar
+    </button>
+
+    <button class="btn-logout" onclick="logout()">
+      Sair
+    </button>
+
+  </div>
+</div>
     <button class="btn-iniciar" onclick="iniciarMissao()">
       Iniciar Missão
     </button>
