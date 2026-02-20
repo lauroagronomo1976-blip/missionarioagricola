@@ -1,1 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Missão - Missionário Agrícola</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+}
+
+.header {
+  background: #1b5e20;
+  color: white;
+  padding: 20px;
+  font-size: 18px;
+}
+
+.container {
+  padding: 20px;
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+button {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.btn-iniciar {
+  background: #1b5e20;
+  color: white;
+}
+
+.btn-logout {
+  background: #999;
+  color: white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  Missão Ativa
+</div>
+
+<div class="container">
+  <div class="card">
+    <h2 id="boasVindas"></h2>
+
+    <button class="btn-iniciar" onclick="iniciarMissao()">
+      Iniciar Missão
+    </button>
+
+    <button class="btn-logout" onclick="logout()">
+      Sair
+    </button>
+  </div>
+</div>
+
+<script>
+const usuario = localStorage.getItem("usuarioLogado");
+
+if (!usuario) {
+  window.location.href = "login.html";
+}
+
+document.getElementById("boasVindas").innerText =
+  "Bem-vindo, Técnico " + usuario;
+
+function iniciarMissao() {
+  window.location.href = "registro-mapa.html";
+}
+
+function logout() {
+  localStorage.removeItem("usuarioLogado");
+  window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>
 
