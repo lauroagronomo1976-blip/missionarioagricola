@@ -1,1 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Missionário Agrícola</title>
 
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  background: white;
+  width: 90%;
+  max-width: 380px;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+}
+
+.login-card h2 {
+  text-align: center;
+  color: #1b5e20;
+  margin-bottom: 25px;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  background: #1b5e20;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-card">
+  <h2>Missionário Agrícola</h2>
+
+  <input type="text" id="usuario" placeholder="Usuário">
+  <input type="password" id="senha" placeholder="Senha">
+
+  <button onclick="entrar()">Entrar</button>
+</div>
+
+<script>
+function entrar() {
+
+  const usuario = document.getElementById("usuario").value;
+  const senha = document.getElementById("senha").value;
+
+  if (!usuario || !senha) {
+    alert("Preencha usuário e senha.");
+    return;
+  }
+
+  // Simulação de autenticação
+  if (usuario === "tc" && senha === "123") {
+
+    // salva usuário na sessão
+    localStorage.setItem("usuarioLogado", usuario);
+
+    window.location.href = "missao.html";
+
+  } else {
+    alert("Usuário ou senha incorretos.");
+  }
+
+}
+</script>
+
+</body>
+</html>
