@@ -51,6 +51,16 @@ button {
   background: #999;
   color: white;
 }
+  /* ===== NOVO BLOCO ===== */
+
+input, select {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
   
 </style>
 </head>
@@ -94,10 +104,10 @@ button {
 
   </div>
 </div>
-    <button class="btn-iniciar" onclick="iniciarMissao()">
-      Iniciar Missão
-    </button>
-
+  <button class="btn-iniciar" onclick="avancar()">
+  Avançar
+</button>
+  
     <button class="btn-logout" onclick="logout()">
       Sair
     </button>
@@ -114,10 +124,9 @@ if (!usuario) {
 document.getElementById("boasVindas").innerText =
   "Bem-vindo, Técnico " + usuario;
 
-function iniciarMissao() {
-  window.location.href = "registro-mapa.html";
-}
-
+<button class="btn-iniciar" onclick="avancar()">
+  Avançar
+</button>
 function logout() {
   localStorage.removeItem("usuarioLogado");
   window.location.href = "login.html";
