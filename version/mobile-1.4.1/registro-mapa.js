@@ -1,5 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  document.getElementById("btnMarcarPontoInferior")
+  .addEventListener("click", function() {
+
+    const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
+    
+    if (dadosMissao.missao === "Inspeção Fitossanitária") {
+      alert("Modo Inspeção Fitossanitária ativado.");
+      // aqui futuramente abriremos formulário específico
+    }
+
+});
   console.log("🟢 REGISTRO – MAPA ATIVO");
 
   // ===============================
