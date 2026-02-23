@@ -64,7 +64,28 @@ html, body {
 }
 
 </style>
+#painelInferior {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  padding: 15px;
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: flex-start;
+  z-index: 1000;
+}
 
+#btnMarcarPontoInferior {
+  padding: 14px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #1b5e20;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
 </head>
 
 <body>
@@ -73,12 +94,17 @@ html, body {
 
 <div id="mapContainer">
   <div id="map"></div>
-
+  
+ <div class="painel-controles">
   
   <div id="painelInferior">
   <button id="btnMarcarPontoInferior">Marcar Ponto</button>
-</div>
+</div> <!-- fim mapContainer -->
   
+   <div id="painelInferior">
+  <button id="btnMarcarPontoInferior">Marcar Ponto</button>
+</div>
+   
   <div class="painel-controles">
     <button id="btnMira">🎯</button>
     <button id="btnMarcar">📍</button>
