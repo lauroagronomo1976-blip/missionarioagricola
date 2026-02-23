@@ -161,7 +161,15 @@ document.addEventListener("DOMContentLoaded", function () {
           fillColor: "#1e88e5",
           fillOpacity: 1
         }).addTo(map);
+document.getElementById("btnMarcarPontoInferior")
+  .addEventListener("click", function() {
 
+    const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
+
+    if (dadosMissao && dadosMissao.missao === "Inspeção Fitossanitária") {
+      alert("Modo Inspeção Fitossanitária ativado.");
+    }
+});
       });
     }
 
