@@ -1,3 +1,5 @@
+let map;
+let coordenadaAtual = null;
 document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("btnMarcarPontoInferior")
@@ -26,6 +28,42 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
+function fecharModal() {
+  document.getElementById("modalInspecao").style.display = "none";
+}
+
+function salvarPonto() {
+
+  const praga = document.getElementById("praga").value;
+  const incidencia = document.getElementById("incidencia").value;
+
+  if (!praga || !incidencia) {
+    alert("Preencha todos os campos.");
+    return;
+  }
+
+  const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
+
+  const ponto = {
+    ...dadosMissao,
+    praga,
+    incidencia,
+    latitude: coordenadaAtual.lat,
+    longitude: coordenadaAtual.lng,
+    data: new Date().toISOString()
+  };
+
+  let pontosSalvos = JSON.parse(localStorage.getItem("pontosInspecao")) || [];
+  pontosSalvos.push(ponto);
+
+  localStorage.setItem("pontosInspecao", JSON.stringify(pontosSalvos));
+
+  L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map);
+
+  fecharModal();
+
+  alert("Ponto salvo com sucesso!");
+}
   console.log("🟢 REGISTRO – MAPA ATIVO");
 
   // ===============================
@@ -38,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================
   // MAPA
   // ===============================
-  const map = L.map('map', {
+  map = L.map
     zoomControl: false
   }).setView([-15.0, -47.0], 5);
   setTimeout(() => {
