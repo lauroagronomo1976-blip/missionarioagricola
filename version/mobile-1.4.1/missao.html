@@ -51,7 +51,6 @@ button {
   background: #999;
   color: white;
 }
-  /* ===== NOVO BLOCO ===== */
 
 input, select {
   width: 100%;
@@ -61,7 +60,6 @@ input, select {
   border: 1px solid #ccc;
   font-size: 16px;
 }
-  
 </style>
 </head>
 
@@ -104,29 +102,19 @@ input, select {
 
   </div>
 </div>
-   
-   </div>
-</div>
 
 <script>
+
+// Verifica se está logado
 const usuario = localStorage.getItem("usuarioLogado");
 
 if (!usuario) {
   window.location.href = "login.html";
 }
 
-document.getElementById("boasVindas").innerText =
-  "Bem-vindo, Técnico " + usuario;
-
-<button class="btn-iniciar" onclick="avancar()">
-  Avançar
-</button>
-function logout() {
-  localStorage.removeItem("usuarioLogado");
-  window.location.href = "login.html";
-}
-</script>
+// Função Avançar
 function avancar() {
+
   const missao = document.getElementById("missao").value;
 
   if (!missao) {
@@ -134,13 +122,31 @@ function avancar() {
     return;
   }
 
+  // Salva dados da missão
+  const dadosMissao = {
+    safra: document.getElementById("safra").value,
+    empresa: document.getElementById("empresa").value,
+    fazenda: document.getElementById("fazenda").value,
+    gleba: document.getElementById("gleba").value,
+    talhao: document.getElementById("talhao").value,
+    cultura: document.getElementById("cultura").value,
+    variedade: document.getElementById("variedade").value,
+    missao: missao,
+    inicio: new Date().toISOString()
+  };
+
+  localStorage.setItem("dadosMissao", JSON.stringify(dadosMissao));
+
   window.location.href = "registro-mapa.html";
 }
-  function logout() {
+
+// Função Logout
+function logout() {
   localStorage.removeItem("usuarioLogado");
   window.location.href = "login.html";
 }
-  
+
+</script>
+
 </body>
 </html>
-
