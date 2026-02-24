@@ -4,6 +4,21 @@ document.addEventListener("DOMContentLoaded", () => {
   .addEventListener("click", function() {
 
     const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
+
+    if (!dadosMissao || dadosMissao.missao !== "Inspeção Fitossanitária") {
+      alert("Missão atual não é Inspeção Fitossanitária.");
+      return;
+    }
+
+    if (!coordenadaAtual) {
+      alert("Clique na 🎯 para capturar sua posição primeiro.");
+      return;
+    }
+
+    document.getElementById("modalInspecao").style.display = "flex";
+});
+
+    const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
     
     if (dadosMissao.missao === "Inspeção Fitossanitária") {
       alert("Modo Inspeção Fitossanitária ativado.");
