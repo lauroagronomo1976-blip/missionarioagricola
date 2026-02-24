@@ -104,14 +104,8 @@ input, select {
 
   </div>
 </div>
-  <button class="btn-iniciar" onclick="avancar()">
-  Avançar
-</button>
-  
-    <button class="btn-logout" onclick="logout()">
-      Sair
-    </button>
-  </div>
+   
+   </div>
 </div>
 
 <script>
@@ -132,7 +126,21 @@ function logout() {
   window.location.href = "login.html";
 }
 </script>
+function avancar() {
+  const missao = document.getElementById("missao").value;
 
+  if (!missao) {
+    alert("Selecione uma missão.");
+    return;
+  }
+
+  window.location.href = "registro-mapa.html";
+}
+  function logout() {
+  localStorage.removeItem("usuarioLogado");
+  window.location.href = "login.html";
+}
+  
 </body>
 </html>
 
