@@ -618,3 +618,26 @@ input, select {
   border: 1px solid #ccc;
   font-size: 16px;
 }
+/* ===== BOTÃO INFERIOR ===== */
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  padding: 12px 16px;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.08);
+  display: flex;
+  justify-content: flex-start;
+}
+
+.btn-marcar {
+  background: #1b5e20;
+  color: white;
+  border: none;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
