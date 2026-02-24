@@ -17,8 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // VARIÁVEIS
   // ===============================
   let marcadorAtual = null;
-  let pontoAtual = null;
-  let registrosDoPonto = [];
+  let coordenadaAtual = null;
+  let marcadores = [];
 
   // ===============================
   // MAPA
