@@ -81,13 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnMarcarPontoInferior")
     .addEventListener("click", () => {
 
-      const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
-
-      if (!dadosMissao || dadosMissao.missao !== "Inspeção Fitossanitária") {
-        alert("Missão atual não é Inspeção Fitossanitária.");
-        return;
-      }
-
+      
       if (!coordenadaAtual) {
         alert("Clique na 🎯 para capturar sua posição primeiro.");
         return;
