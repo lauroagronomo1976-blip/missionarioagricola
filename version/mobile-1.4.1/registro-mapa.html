@@ -136,58 +136,147 @@ html, body {
 
 <script>
 
-document.addEventListener("DOMContentLoaded", function () {
+let map;
+let coordenadaAtual = null;
+let marcadorAtual = null;
 
-  const map = L.map('map').setView([-15.78, -47.93], 5);
+document.addEventListener("DOMContentLoaded", function() {
 
-  const rua = L.tileLayer(
+  console.log("🟢 MAPA CARREGANDO");
+
+  /* =========================
+     MAPA
+  ========================== */
+
+  map = L.map('map', {
+    zoomControl: false
+  }).setView([-15.0, -47.0], 5);
+
+  L.control.zoom({
+    position: 'bottomright'
+  }).addTo(map);
+
+  const street = L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    { attribution: '© OpenStreetMap' }
+    { maxZoom: 19 }
   ).addTo(map);
 
   const satelite = L.tileLayer(
-    'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
-    {
-      maxZoom: 20,
-      subdomains:['mt0','mt1','mt2','mt3']
-    }
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    { attribution: "© Esri", maxZoom: 21 }
   );
 
-  L.control.layers(
-    { "🗺️ Ruas": rua, "🛰️ Satélite": satelite },
-    null,
-    { position: "topright" }
-  ).addTo(map);
+  L.control.layers({
+    "Rua": street,
+    "Satélite": satelite
+  }).addTo(map);
 
-  map.zoomControl.setPosition('bottomright');
+  setTimeout(() => map.invalidateSize(), 300);
 
-  let marcadorAtual = null;
+  /* =========================
+     BOTÃO 🎯 MIRA
+  ========================== */
 
-  /* ===== BOTÃO MIRA ===== */
+  document.getElementById("btnMira").addEventListener("click", function() {
 
-  document.getElementById("btnMira").addEventListener("click", () => {
+    if (!navigator.geolocation) {
+      alert("Geolocalização não suportada.");
+      return;
+    }
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((pos) => {
+    navigator.geolocation.getCurrentPosition(function(pos) {
 
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
 
-        map.setView([lat, lng], 17);
+      coordenadaAtual = { lat, lng };
 
-        if (marcadorAtual) {
-          map.removeLayer(marcadorAtual);
-        }
+      map.setView([lat, lng], 17);
 
-        marcadorAtual = L.circleMarker([lat, lng], {
-          radius: 8,
-          color: "#1e88e5",
-          fillColor: "#1e88e5",
-          fillOpacity: 1
-        }).addTo(map);
+      if (marcadorAtual) {
+        map.removeLayer(marcadorAtual);
+      }
 
-      });
+      marcadorAtual = L.circleMarker([lat, lng], {
+        radius: 8,
+        color: "#1e88e5",
+        fillColor: "#1e88e5",
+        fillOpacity: 1
+      }).addTo(map);
 
+    }, function() {
+      alert("Erro ao obter localização.");
+    });
+
+  });
+
+  /* =========================
+     BOTÃO MARCAR PONTO
+  ========================== */
+
+  document.getElementById("btnMarcarPontoInferior")
+    .addEventListener("click", function() {
+
+      const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
+
+      if (!dadosMissao || dadosMissao.missao !== "Inspeção Fitossanitária") {
+        alert("Missão atual não é Inspeção Fitossanitária.");
+        return;
+      }
+
+      if (!coordenadaAtual) {
+        alert("Clique na 🎯 para capturar sua posição primeiro.");
+        return;
+      }
+
+      document.getElementById("modalInspecao").style.display = "flex";
+  });
+
+});
+
+
+function fecharModal() {
+  document.getElementById("modalInspecao").style.display = "none";
+}
+
+function salvarPonto() {
+
+  const praga = document.getElementById("praga").value;
+  const incidencia = document.getElementById("incidencia").value;
+
+  if (!praga || !incidencia) {
+    alert("Preencha todos os campos.");
+    return;
+  }
+
+  const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
+
+  const ponto = {
+    ...dadosMissao,
+    praga,
+    incidencia,
+    latitude: coordenadaAtual.lat,
+    longitude: coordenadaAtual.lng,
+    data: new Date().toISOString()
+  };
+
+  let pontosSalvos = JSON.parse(localStorage.getItem("pontosInspecao")) || [];
+  pontosSalvos.push(ponto);
+
+  localStorage.setItem("pontosInspecao", JSON.stringify(pontosSalvos));
+
+  L.marker([coordenadaAtual.lat, coordenadaAtual.lng])
+    .addTo(map)
+    .bindPopup(
+      "<strong>" + praga + "</strong><br>" +
+      "Incidência: " + incidencia + "%<br>" +
+      new Date().toLocaleString()
+    );
+
+  fecharModal();
+
+  alert("Ponto salvo com sucesso!");
+}
 </script>
 
 </body>
