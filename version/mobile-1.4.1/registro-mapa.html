@@ -130,6 +130,45 @@ html, body {
 <!-- Botão inferior fixo -->
 <div id="painelInferior">
   <button id="btnMarcarPontoInferior">Marcar Ponto</button>
+<div id="formMissaoContainer" style="display:none; padding:15px; background:#ffffff; border-top:1px solid #ddd;">
+
+  <h3 id="tituloMissao"></h3>
+
+  <label>Ocorrência</label>
+  <select id="ocorrenciaSelect">
+    <option value="">Selecione</option>
+    <option value="Praga">Praga</option>
+    <option value="Doença">Doença</option>
+    <option value="Planta Daninha">Planta Daninha</option>
+  </select>
+
+  <label>Espécie</label>
+  <input type="text" id="especieInput">
+
+  <label>Fase</label>
+  <select id="faseSelect">
+    <option value="">Selecione</option>
+    <option value="Ovo">Ovo</option>
+    <option value="Larva">Larva</option>
+    <option value="Ninfa 1">Ninfa 1</option>
+    <option value="Ninfa 2">Ninfa 2</option>
+    <option value="Ninfa 3">Ninfa 3</option>
+    <option value="Ninfa 4">Ninfa 4</option>
+    <option value="Adulto">Adulto</option>
+  </select>
+
+  <label>Nº de Indivíduos</label>
+  <input type="number" id="individuosInput">
+
+  <label>Severidade (%)</label>
+  <input type="number" id="severidadeInput">
+
+  <button id="btnSalvarRegistro">Salvar Registro</button>
+  <button id="btnConcluirPonto">Concluir Ponto</button>
+
+  <div id="listaRegistros"></div>
+
+</div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
