@@ -78,9 +78,42 @@ document.addEventListener("DOMContentLoaded", () => {
      BOTÃO MARCAR PONTO
   ========================== */
 
-  document.getElementById("btnMarcarPontoInferior")
-    .addEventListener("click", () => {
+  let pontoAtual = null;
+  let registrosDoPonto = [];
 
+document.getElementById("btnMarcarPontoInferior")
+  .addEventListener("click", function() {
+
+    const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
+
+    if (!dadosMissao || dadosMissao.missao !== "Inspeção Fitossanitária") {
+      alert("Missão atual não é Inspeção Fitossanitária.");
+      return;
+    }
+
+    if (!coordenadaAtual) {
+      alert("Clique na 🎯 para capturar sua posição primeiro.");
+      return;
+    }
+
+    // cria ponto atual
+    pontoAtual = {
+      ...dadosMissao,
+      latitude: coordenadaAtual.lat,
+      longitude: coordenadaAtual.lng,
+      data: new Date().toISOString()
+    };
+
+    registrosDoPonto = [];
+
+    // marca no mapa
+    L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map);
+
+    // mostra formulário
+    document.getElementById("formMissaoContainer").style.display = "block";
+    document.getElementById("tituloMissao").innerText = dadosMissao.missao;
+
+});
       
       if (!coordenadaAtual) {
         alert("Clique na 🎯 para capturar sua posição primeiro.");
