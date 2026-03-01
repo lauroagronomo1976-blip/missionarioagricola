@@ -122,7 +122,30 @@ document.getElementById("btnMarcarPontoInferior")
 
       document.getElementById("modalInspecao").style.display = "flex";
   });
+document.getElementById("btnSalvarRegistro")
+  .addEventListener("click", function() {
 
+    const ocorrencia = document.getElementById("ocorrenciaSelect").value;
+    const especie = document.getElementById("especieInput").value;
+    const fase = document.getElementById("faseSelect").value;
+    const individuos = document.getElementById("individuosInput").value;
+    const severidade = document.getElementById("severidadeInput").value;
+
+    if (!ocorrencia || !especie) {
+      alert("Preencha os campos obrigatórios.");
+      return;
+    }
+
+    const registro = {
+      ocorrencia,
+      especie,
+      fase,
+      individuos,
+      severidade
+    };
+
+    registrosDoPonto.push(registro);
+    renderizarLista()
 });
 
 
