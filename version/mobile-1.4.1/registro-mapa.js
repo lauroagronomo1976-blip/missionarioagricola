@@ -1,22 +1,19 @@
 let map;
 let coordenadaAtual = null;
 let marcadorAtual = null;
+let pontoAtual = null;
+let registrosDoPonto = [];
 
 document.addEventListener("DOMContentLoaded", () => {
 
   console.log("🟢 REGISTRO – MAPA ATIVO");
 
-  /* =========================
-     MAPA
-  ========================== */
+  /* ================= MAPA ================= */
 
-  map = L.map('map', {
-    zoomControl: false
-  }).setView([-15.0, -47.0], 5);
+  map = L.map('map', { zoomControl: false })
+    .setView([-15.0, -47.0], 5);
 
-  L.control.zoom({
-    position: 'bottomright'
-  }).addTo(map);
+  L.control.zoom({ position: 'bottomright' }).addTo(map);
 
   const street = L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -25,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const satelite = L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    { attribution: "© Esri", maxZoom: 21 }
+    { maxZoom: 21 }
   );
 
   L.control.layers({
@@ -36,9 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => map.invalidateSize(), 300);
 
 
-  /* =========================
-     BOTÃO 🎯 MIRA
-  ========================== */
+  /* ================= 🎯 MIRA ================= */
 
   document.getElementById("btnMira").addEventListener("click", () => {
 
@@ -67,104 +62,100 @@ document.addEventListener("DOMContentLoaded", () => {
         fillOpacity: 1
       }).addTo(map);
 
-    }, () => {
-      alert("Erro ao obter localização.");
     });
 
   });
 
 
-  /* =========================
-     BOTÃO MARCAR PONTO
-  ========================== */
+  /* ================= MARCAR PONTO ================= */
 
-  let pontoAtual = null;
-  let registrosDoPonto = [];
+  document.getElementById("btnMarcarPontoInferior")
+    .addEventListener("click", () => {
 
-document.getElementById("btnMarcarPontoInferior")
-  .addEventListener("click", function() {
+      const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
 
-    const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
-
-    if (!dadosMissao || dadosMissao.missao !== "Inspeção Fitossanitária") {
-      alert("Missão atual não é Inspeção Fitossanitária.");
-      return;
-    }
-
-    if (!coordenadaAtual) {
-      alert("Clique na 🎯 para capturar sua posição primeiro.");
-      return;
-    }
-
-    // cria ponto atual
-    pontoAtual = {
-      ...dadosMissao,
-      latitude: coordenadaAtual.lat,
-      longitude: coordenadaAtual.lng,
-      data: new Date().toISOString()
-    };
-
-    registrosDoPonto = [];
-
-    // marca no mapa
-    L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map);
-
-    // mostra formulário
-    document.getElementById("formMissaoContainer").style.display = "block";
-    document.getElementById("tituloMissao").innerText = dadosMissao.missao;
-
-});
-      document.getElementById("btnConcluirPonto")
-  .addEventListener("click", function() {
-
-    if (!pontoAtual) return;
-
-    pontoAtual.registros = registrosDoPonto;
-
-    let pontos = JSON.parse(localStorage.getItem("pontosInspecao")) || [];
-    pontos.push(pontoAtual);
-
-    localStorage.setItem("pontosInspecao", JSON.stringify(pontos));
-
-    alert("Ponto finalizado com sucesso!");
-
-    document.getElementById("formMissaoContainer").style.display = "none";
-
-});
-      if (!coordenadaAtual) {
-        alert("Clique na 🎯 para capturar sua posição primeiro.");
+      if (!dadosMissao || dadosMissao.missao !== "Inspeção Fitossanitária") {
+        alert("Missão atual não é Inspeção Fitossanitária.");
         return;
       }
 
-      document.getElementById("modalInspecao").style.display = "flex";
+      if (!coordenadaAtual) {
+        alert("Clique na 🎯 primeiro.");
+        return;
+      }
+
+      pontoAtual = {
+        ...dadosMissao,
+        latitude: coordenadaAtual.lat,
+        longitude: coordenadaAtual.lng,
+        data: new Date().toISOString()
+      };
+
+      registrosDoPonto = [];
+
+      L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map);
+
+      document.getElementById("formMissaoContainer").style.display = "block";
+      document.getElementById("tituloMissao").innerText = dadosMissao.missao;
+
   });
-document.getElementById("btnSalvarRegistro")
-  .addEventListener("click", function() {
 
-    const ocorrencia = document.getElementById("ocorrenciaSelect").value;
-    const especie = document.getElementById("especieInput").value;
-    const fase = document.getElementById("faseSelect").value;
-    const individuos = document.getElementById("individuosInput").value;
-    const severidade = document.getElementById("severidadeInput").value;
 
-    if (!ocorrencia || !especie) {
-      alert("Preencha os campos obrigatórios.");
-      return;
-    }
+  /* ================= SALVAR REGISTRO ================= */
 
-    const registro = {
-      ocorrencia,
-      especie,
-      fase,
-      individuos,
-      severidade
-    };
+  document.getElementById("btnSalvarRegistro")
+    .addEventListener("click", () => {
 
-    registrosDoPonto.push(registro);
-    renderizarLista()
+      const ocorrencia = document.getElementById("ocorrenciaSelect").value;
+      const especie = document.getElementById("especieInput").value;
+      const fase = document.getElementById("faseSelect").value;
+      const individuos = document.getElementById("individuosInput").value;
+      const severidade = document.getElementById("severidadeInput").value;
+
+      if (!ocorrencia || !especie) {
+        alert("Preencha os campos obrigatórios.");
+        return;
+      }
+
+      const registro = {
+        ocorrencia,
+        especie,
+        fase,
+        individuos,
+        severidade
+      };
+
+      registrosDoPonto.push(registro);
+      renderizarLista();
+
+  });
+
+
+  /* ================= CONCLUIR PONTO ================= */
+
+  document.getElementById("btnConcluirPonto")
+    .addEventListener("click", () => {
+
+      if (!pontoAtual) return;
+
+      pontoAtual.registros = registrosDoPonto;
+
+      let pontos = JSON.parse(localStorage.getItem("pontosInspecao")) || [];
+      pontos.push(pontoAtual);
+
+      localStorage.setItem("pontosInspecao", JSON.stringify(pontos));
+
+      alert("Ponto finalizado!");
+
+      document.getElementById("formMissaoContainer").style.display = "none";
+
+  });
+
 });
 
-  
+
+/* ================= RENDER LISTA ================= */
+
 function renderizarLista() {
 
   const lista = document.getElementById("listaRegistros");
@@ -172,7 +163,7 @@ function renderizarLista() {
 
   if (registrosDoPonto.length === 0) return;
 
-  registrosDoPonto.forEach((r, i) => {
+  registrosDoPonto.forEach((r) => {
 
     const div = document.createElement("div");
     div.innerHTML = `
@@ -184,50 +175,4 @@ function renderizarLista() {
     lista.appendChild(div);
 
   });
-}
-/* =========================
-   MODAL
-========================== */
-
-function fecharModal() {
-  document.getElementById("modalInspecao").style.display = "none";
-}
-
-function salvarPonto() {
-
-  const praga = document.getElementById("praga").value;
-  const incidencia = document.getElementById("incidencia").value;
-
-  if (!praga || !incidencia) {
-    alert("Preencha todos os campos.");
-    return;
-  }
-
-  const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
-
-  const ponto = {
-    ...dadosMissao,
-    praga,
-    incidencia,
-    latitude: coordenadaAtual.lat,
-    longitude: coordenadaAtual.lng,
-    data: new Date().toISOString()
-  };
-
-  let pontosSalvos = JSON.parse(localStorage.getItem("pontosInspecao")) || [];
-  pontosSalvos.push(ponto);
-
-  localStorage.setItem("pontosInspecao", JSON.stringify(pontosSalvos));
-
-  L.marker([coordenadaAtual.lat, coordenadaAtual.lng])
-    .addTo(map)
-    .bindPopup(`
-      <strong>${praga}</strong><br>
-      Incidência: ${incidencia}%<br>
-      ${new Date().toLocaleString()}
-    `);
-
-  fecharModal();
-
-  alert("Ponto salvo com sucesso!");
 }
