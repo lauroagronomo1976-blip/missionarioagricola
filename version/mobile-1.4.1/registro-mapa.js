@@ -114,7 +114,23 @@ document.getElementById("btnMarcarPontoInferior")
     document.getElementById("tituloMissao").innerText = dadosMissao.missao;
 
 });
-      
+      document.getElementById("btnConcluirPonto")
+  .addEventListener("click", function() {
+
+    if (!pontoAtual) return;
+
+    pontoAtual.registros = registrosDoPonto;
+
+    let pontos = JSON.parse(localStorage.getItem("pontosInspecao")) || [];
+    pontos.push(pontoAtual);
+
+    localStorage.setItem("pontosInspecao", JSON.stringify(pontos));
+
+    alert("Ponto finalizado com sucesso!");
+
+    document.getElementById("formMissaoContainer").style.display = "none";
+
+});
       if (!coordenadaAtual) {
         alert("Clique na 🎯 para capturar sua posição primeiro.");
         return;
@@ -148,7 +164,27 @@ document.getElementById("btnSalvarRegistro")
     renderizarLista()
 });
 
+  
+function renderizarLista() {
 
+  const lista = document.getElementById("listaRegistros");
+  lista.innerHTML = "";
+
+  if (registrosDoPonto.length === 0) return;
+
+  registrosDoPonto.forEach((r, i) => {
+
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <strong>${r.ocorrencia}</strong> - ${r.especie}<br>
+      Fase: ${r.fase} | Ind: ${r.individuos} | Sev: ${r.severidade}%<br>
+      <hr>
+    `;
+
+    lista.appendChild(div);
+
+  });
+}
 /* =========================
    MODAL
 ========================== */
