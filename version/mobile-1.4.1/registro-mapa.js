@@ -78,8 +78,21 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ================= MARCAR PONTO ================= */
 
   document.getElementById("btnMarcarPontoInferior")
-    .addEventListener("click", () => {
+  .addEventListener("click", function() {
 
+    if (!coordenadaAtual) {
+      alert("Clique na 🎯 primeiro.");
+      return;
+    }
+
+    const form = document.getElementById("formMissaoContainer");
+    form.style.maxHeight = "45vh";
+
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 400);
+
+});
       const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
 
       if (!dadosMissao || dadosMissao.missao !== "Inspeção Fitossanitária") {
