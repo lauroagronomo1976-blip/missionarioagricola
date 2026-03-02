@@ -93,6 +93,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 400);
 
 });
+  
+document.getElementById("btnConcluirPonto")
+  .addEventListener("click", function() {
+
+    const form = document.getElementById("formMissaoContainer");
+    form.style.maxHeight = "0";
+
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 400);
+
+});
       const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
 
       if (!dadosMissao || dadosMissao.missao !== "Inspeção Fitossanitária") {
