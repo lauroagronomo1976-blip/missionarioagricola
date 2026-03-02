@@ -641,3 +641,7 @@ input, select {
   font-weight: bold;
   cursor: pointer;
 }
+#formMissaoContainer {
+    border-top: 2px solid #1b5e20;
+    margin-top: 10px;
+}
