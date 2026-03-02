@@ -645,3 +645,6 @@ input, select {
     border-top: 2px solid #1b5e20;
     margin-top: 10px;
 }
+.leaflet-control-layers {
+  z-index: 1100 !important;
+}
