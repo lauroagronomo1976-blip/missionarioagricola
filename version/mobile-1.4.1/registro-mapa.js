@@ -63,7 +63,15 @@ document.addEventListener("DOMContentLoaded", () => {
       }).addTo(map);
 
     });
+    document.getElementById("btnConcluirPonto").addEventListener("click", function(){
 
+    document.getElementById("formMissaoContainer").style.display = "none";
+
+    document.getElementById("mapContainer").style.height = "60vh";
+    map.invalidateSize();
+
+  });
+    
   });
 
 
