@@ -648,3 +648,16 @@ input, select {
 .leaflet-control-layers {
   z-index: 1100 !important;
 }
+.leaflet-control-container {
+  z-index: 500;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 500 !important;
+}
+
+.leaflet-control-layers {
+  display: block !important;
+  opacity: 1 !important;
+}
