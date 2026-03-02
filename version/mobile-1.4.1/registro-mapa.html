@@ -18,7 +18,6 @@ html, body {
 }
 
 /* ===== TOPO ===== */
-
 #topoApp {
   background: #1b5e20;
   color: white;
@@ -29,7 +28,6 @@ html, body {
 }
 
 /* ===== MAPA ===== */
-
 #mapContainer {
   position: relative;
   width: 94%;
@@ -44,8 +42,7 @@ html, body {
   box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 
-/* ===== CONTROLES DO MAPA (🎯 e 📍) ===== */
-
+/* ===== CONTROLES MAPA ===== */
 .painel-controles {
   position: absolute;
   top: 80px;
@@ -66,8 +63,7 @@ html, body {
   font-size: 18px;
 }
 
-/* ===== BOTÃO INFERIOR ===== */
-
+/* ===== PAINEL INFERIOR ===== */
 #painelInferior {
   position: fixed;
   bottom: 0;
@@ -76,8 +72,6 @@ html, body {
   background: white;
   padding: 15px;
   box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
-  display: flex;
-  justify-content: flex-start;
   z-index: 1000;
 }
 
@@ -91,81 +85,102 @@ html, body {
   cursor: pointer;
 }
 
+/* ===== FORMULÁRIO MISSÃO ===== */
+
+#formMissaoContainer {
+  display: none;
+  margin-top: 15px;
+  padding: 15px;
+  border-top: 2px solid #1b5e20;
+}
+
+#formMissaoContainer input,
+#formMissaoContainer select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#formMissaoContainer button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#btnSalvarRegistro {
+  background: #2e7d32;
+  color: white;
+}
+
+#btnConcluirPonto {
+  background: #1565c0;
+  color: white;
+}
+
 </style>
 
 </head>
-  
-    <h3>Inspeção Fitossanitária</h3>
 
-    <input type="text" id="praga" placeholder="Praga / Doença" style="width:100%; margin-bottom:10px;">
-    <input type="number" id="incidencia" placeholder="Incidência (%)" style="width:100%; margin-bottom:10px;">
-
-    <button onclick="salvarPonto()" style="width:100%; background:#1b5e20; color:white; padding:10px; border:none; border-radius:8px;">
-      Salvar Ponto
-    </button>
-
-    <button onclick="fecharModal()" style="width:100%; margin-top:10px;">
-      Cancelar
-    </button>
-
-  </div>
-</div>
-  <body>
+<body>
 
 <div id="topoApp">Missionário Agrícola</div>
 
 <div id="mapContainer">
   <div id="map"></div>
 
-  <!-- Controles dentro do mapa -->
   <div class="painel-controles">
     <button id="btnMira">🎯</button>
-    <button id="btnMarcar">📍</button>
   </div>
 </div>
 
-<!-- Botão inferior fixo -->
 <div id="painelInferior">
   <button id="btnMarcarPontoInferior">Marcar Ponto</button>
-<div id="formMissaoContainer" style="display:none; padding:15px; background:#ffffff; border-top:1px solid #ddd;">
 
-  <h3 id="tituloMissao"></h3>
+  <div id="formMissaoContainer">
 
-  <label>Ocorrência</label>
-  <select id="ocorrenciaSelect">
-    <option value="">Selecione</option>
-    <option value="Praga">Praga</option>
-    <option value="Doença">Doença</option>
-    <option value="Planta Daninha">Planta Daninha</option>
-  </select>
+    <h3 id="tituloMissao"></h3>
 
-  <label>Espécie</label>
-  <input type="text" id="especieInput">
+    <label>Ocorrência</label>
+    <select id="ocorrenciaSelect">
+      <option value="">Selecione</option>
+      <option value="Praga">Praga</option>
+      <option value="Doença">Doença</option>
+      <option value="Planta Daninha">Planta Daninha</option>
+    </select>
 
-  <label>Fase</label>
-  <select id="faseSelect">
-    <option value="">Selecione</option>
-    <option value="Ovo">Ovo</option>
-    <option value="Larva">Larva</option>
-    <option value="Ninfa 1">Ninfa 1</option>
-    <option value="Ninfa 2">Ninfa 2</option>
-    <option value="Ninfa 3">Ninfa 3</option>
-    <option value="Ninfa 4">Ninfa 4</option>
-    <option value="Adulto">Adulto</option>
-  </select>
+    <label>Espécie</label>
+    <input type="text" id="especieInput">
 
-  <label>Nº de Indivíduos</label>
-  <input type="number" id="individuosInput">
+    <label>Fase</label>
+    <select id="faseSelect">
+      <option value="">Selecione</option>
+      <option value="Ovo">Ovo</option>
+      <option value="Larva">Larva</option>
+      <option value="Ninfa 1">Ninfa 1</option>
+      <option value="Ninfa 2">Ninfa 2</option>
+      <option value="Ninfa 3">Ninfa 3</option>
+      <option value="Ninfa 4">Ninfa 4</option>
+      <option value="Adulto">Adulto</option>
+    </select>
 
-  <label>Severidade (%)</label>
-  <input type="number" id="severidadeInput">
+    <label>Nº de Indivíduos</label>
+    <input type="number" id="individuosInput">
 
-  <button id="btnSalvarRegistro">Salvar Registro</button>
-  <button id="btnConcluirPonto">Concluir Ponto</button>
+    <label>Severidade (%)</label>
+    <input type="number" id="severidadeInput">
 
-  <div id="listaRegistros"></div>
+    <button id="btnSalvarRegistro">Salvar Registro</button>
+    <button id="btnConcluirPonto">Concluir Ponto</button>
 
-</div>
+    <div id="listaRegistros"></div>
+
+  </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -175,63 +190,34 @@ html, body {
 let map;
 let coordenadaAtual = null;
 let marcadorAtual = null;
+let pontoAtual = null;
+let registrosDoPonto = [];
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", () => {
 
-  console.log("🟢 MAPA CARREGANDO");
+  map = L.map('map', { zoomControl: false })
+    .setView([-15.0, -47.0], 5);
 
-  /* =========================
-     MAPA
-  ========================== */
-
-  map = L.map('map', {
-    zoomControl: false
-  }).setView([-15.0, -47.0], 5);
-
-  L.control.zoom({
-    position: 'bottomright'
-  }).addTo(map);
+  L.control.zoom({ position: 'bottomright' }).addTo(map);
 
   const street = L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     { maxZoom: 19 }
   ).addTo(map);
 
-  const satelite = L.tileLayer(
-    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    { attribution: "© Esri", maxZoom: 21 }
-  );
-
-  L.control.layers({
-    "Rua": street,
-    "Satélite": satelite
-  }).addTo(map);
-
   setTimeout(() => map.invalidateSize(), 300);
 
-  /* =========================
-     BOTÃO 🎯 MIRA
-  ========================== */
+  document.getElementById("btnMira").addEventListener("click", () => {
 
-  document.getElementById("btnMira").addEventListener("click", function() {
-
-    if (!navigator.geolocation) {
-      alert("Geolocalização não suportada.");
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(function(pos) {
+    navigator.geolocation.getCurrentPosition((pos) => {
 
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
 
       coordenadaAtual = { lat, lng };
-
       map.setView([lat, lng], 17);
 
-      if (marcadorAtual) {
-        map.removeLayer(marcadorAtual);
-      }
+      if (marcadorAtual) map.removeLayer(marcadorAtual);
 
       marcadorAtual = L.circleMarker([lat, lng], {
         radius: 8,
@@ -239,80 +225,36 @@ document.addEventListener("DOMContentLoaded", function() {
         fillColor: "#1e88e5",
         fillOpacity: 1
       }).addTo(map);
-
-    }, function() {
-      alert("Erro ao obter localização.");
     });
 
   });
 
-  /* =========================
-     BOTÃO MARCAR PONTO
-  ========================== */
-
   document.getElementById("btnMarcarPontoInferior")
-    .addEventListener("click", function() {
+    .addEventListener("click", () => {
 
       const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
 
-      if (!dadosMissao || dadosMissao.missao !== "Inspeção Fitossanitária") {
-        alert("Missão atual não é Inspeção Fitossanitária.");
-        return;
-      }
-
       if (!coordenadaAtual) {
-        alert("Clique na 🎯 para capturar sua posição primeiro.");
+        alert("Clique na 🎯 primeiro.");
         return;
       }
 
-      document.getElementById("modalInspecao").style.display = "flex";
+      pontoAtual = {
+        latitude: coordenadaAtual.lat,
+        longitude: coordenadaAtual.lng,
+        data: new Date().toISOString()
+      };
+
+      registrosDoPonto = [];
+
+      L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map);
+
+      document.getElementById("formMissaoContainer").style.display = "block";
+      document.getElementById("tituloMissao").innerText = "Inspeção Fitossanitária";
   });
 
 });
 
-
-function fecharModal() {
-  document.getElementById("modalInspecao").style.display = "none";
-}
-
-function salvarPonto() {
-
-  const praga = document.getElementById("praga").value;
-  const incidencia = document.getElementById("incidencia").value;
-
-  if (!praga || !incidencia) {
-    alert("Preencha todos os campos.");
-    return;
-  }
-
-  const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
-
-  const ponto = {
-    ...dadosMissao,
-    praga,
-    incidencia,
-    latitude: coordenadaAtual.lat,
-    longitude: coordenadaAtual.lng,
-    data: new Date().toISOString()
-  };
-
-  let pontosSalvos = JSON.parse(localStorage.getItem("pontosInspecao")) || [];
-  pontosSalvos.push(ponto);
-
-  localStorage.setItem("pontosInspecao", JSON.stringify(pontosSalvos));
-
-  L.marker([coordenadaAtual.lat, coordenadaAtual.lng])
-    .addTo(map)
-    .bindPopup(
-      "<strong>" + praga + "</strong><br>" +
-      "Incidência: " + incidencia + "%<br>" +
-      new Date().toLocaleString()
-    );
-
-  fecharModal();
-
-  alert("Ponto salvo com sucesso!");
-}
 </script>
 
 </body>
