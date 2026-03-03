@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
   L.control.layers({
     "Rua": street,
     "Satélite": satelite
-  }).addTo(map);
+  }, {}, { position: "topright" }).addTo(map);
 
   setTimeout(() => map.invalidateSize(), 300);
 
@@ -63,48 +63,15 @@ document.addEventListener("DOMContentLoaded", () => {
       }).addTo(map);
 
     });
-    document.getElementById("btnConcluirPonto").addEventListener("click", function(){
 
-    document.getElementById("formMissaoContainer").style.display = "none";
-
-    document.getElementById("mapContainer").style.height = "60vh";
-    map.invalidateSize();
-
-  });
-    
   });
 
 
   /* ================= MARCAR PONTO ================= */
 
   document.getElementById("btnMarcarPontoInferior")
-  .addEventListener("click", function() {
+    .addEventListener("click", function() {
 
-    if (!coordenadaAtual) {
-      alert("Clique na 🎯 primeiro.");
-      return;
-    }
-
-    const form = document.getElementById("formMissaoContainer");
-    form.style.maxHeight = "45vh";
-
-    setTimeout(() => {
-      map.invalidateSize();
-    }, 400);
-
-});
-  
-document.getElementById("btnConcluirPonto")
-  .addEventListener("click", function() {
-
-    const form = document.getElementById("formMissaoContainer");
-    form.style.maxHeight = "0";
-
-    setTimeout(() => {
-      map.invalidateSize();
-    }, 400);
-
-});
       const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
 
       if (!dadosMissao || dadosMissao.missao !== "Inspeção Fitossanitária") {
@@ -128,8 +95,14 @@ document.getElementById("btnConcluirPonto")
 
       L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map);
 
-      document.getElementById("formMissaoContainer").style.display = "block";
+      const form = document.getElementById("formMissaoContainer");
+      form.style.maxHeight = "45vh";
+
       document.getElementById("tituloMissao").innerText = dadosMissao.missao;
+
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 400);
 
   });
 
@@ -180,25 +153,27 @@ document.getElementById("btnConcluirPonto")
 
       alert("Ponto finalizado!");
 
-      document.getElementById("formMissaoContainer").style.display = "none";
+      const form = document.getElementById("formMissaoContainer");
+      form.style.maxHeight = "0";
+
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 400);
 
   });
 
 });
 
 
-/* ================= RENDER LISTA ================= */
-
 function renderizarLista() {
 
   const lista = document.getElementById("listaRegistros");
   lista.innerHTML = "";
 
-  if (registrosDoPonto.length === 0) return;
-
   registrosDoPonto.forEach((r) => {
 
     const div = document.createElement("div");
+
     div.innerHTML = `
       <strong>${r.ocorrencia}</strong> - ${r.especie}<br>
       Fase: ${r.fase} | Ind: ${r.individuos} | Sev: ${r.severidade}%<br>
