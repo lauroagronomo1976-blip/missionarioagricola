@@ -661,8 +661,9 @@ input, select {
   cursor: pointer;
 }
 #formMissaoContainer {
-    border-top: 2px solid #1b5e20;
-    margin-top: 10px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
 }
 .leaflet-control-layers {
   z-index: 1100 !important;
