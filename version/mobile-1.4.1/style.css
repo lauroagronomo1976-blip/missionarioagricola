@@ -1,18 +1,38 @@
 html, body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  font-size: 20px; /* fonte geral maior */
-  background: #f4f6f8;
+  height: 100%;
+}
+
+#appContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 /* TARJA SUPERIOR */
 #topoApp {
-  background: #e0e0e0;
-  padding: 40px 20px; /* dobro da altura anterior */
-  text-align: left;
+  flex: 0 0 auto;
 }
 
+#mapContainer {
+  flex: 1;
+  position: relative;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+}
+
+#painelInferior {
+  background: white;
+  padding: 15px;
+}
+
+#formMissaoContainer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
 #topoApp span {
   color: #2e7d32;
   font-size: 32px;
@@ -638,19 +658,6 @@ input, select {
   font-size: 16px;
 }
 /* ===== BOTÃO INFERIOR ===== */
-
-.bottom-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: white;
-  padding: 12px 16px;
-  box-shadow: 0 -4px 10px rgba(0,0,0,0.08);
-  display: flex;
-  justify-content: flex-start;
-}
-
 .btn-marcar {
   background: #1b5e20;
   color: white;
