@@ -129,17 +129,29 @@ html, body {
 
 <body>
 
-<div id="topoApp">Missionário Agrícola</div>
+<div id="appContainer">
 
-<div id="mapContainer">
-  <div id="map"></div>
+  <div id="topoApp">Missionário Agrícola</div>
 
-  <div class="painel-controles">
-    <button id="btnMira">🎯</button>
-    <button id="btnRastro">📍</button>
+  <div id="mapContainer">
+    <div id="map"></div>
+
+    <div class="painel-controles">
+      <button id="btnMira">🎯</button>
+      <button id="btnRastro">📍</button>
+    </div>
   </div>
-</div>
 
+  <div id="painelInferior">
+    <button id="btnMarcarPontoInferior">Marcar Ponto</button>
+
+    <div id="formMissaoContainer">
+      <h3 id="tituloMissao"></h3>
+      <!-- FORMULÁRIO AQUI -->
+    </div>
+  </div>
+
+</div>
 <div id="painelInferior">
   <button id="btnMarcarPontoInferior">Marcar Ponto</button>
 
