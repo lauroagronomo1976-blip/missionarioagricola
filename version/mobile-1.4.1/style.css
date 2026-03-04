@@ -678,7 +678,6 @@ input, select {
 }
 
 .leaflet-control-layers {
-  display: block !important;
   opacity: 1 !important;
 }
 .btn-map {
