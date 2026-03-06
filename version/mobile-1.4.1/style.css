@@ -652,10 +652,6 @@ body, main, .container {
   width: 94%;
   margin: 15px
 
-body {
-  background: red !important;
-}
-
 input, select {
   width: 100%;
   padding: 14px;
@@ -679,21 +675,10 @@ input, select {
   overflow: hidden;
   transition: max-height 0.4s ease;
 }
-.leaflet-control-layers {
-  z-index: 1100 !important;
-}
 .leaflet-control-container {
   z-index: 2000;
 }
 
-.leaflet-top,
-.leaflet-bottom {
-  z-index: 2000 !important;
-}
-
-.leaflet-control-layers {
-  opacity: 1 !important;
-}
 .btn-map {
   width: 44px;
   height: 44px;
