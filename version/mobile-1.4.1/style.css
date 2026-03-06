@@ -584,6 +584,10 @@ body, main, .container {
 
 #mapContainer {
   position: relative;
+  width: 94%;
+  height: 60vh;
+  margin: 15px auto;
+  transition: height 0.4s ease;
 }
 
 /* ===== PAINEL DE CONTROLES ===== */
