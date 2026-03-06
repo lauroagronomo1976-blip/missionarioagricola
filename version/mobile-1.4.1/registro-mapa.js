@@ -135,6 +135,20 @@ document.getElementById("btnMarcarPontoInferior")
   }, 300);
 
 });
+    document.getElementById("btnConcluirPonto")
+.addEventListener("click", () => {
+
+  const form = document.getElementById("formMissaoContainer");
+  form.style.display = "none";
+
+  const mapContainer = document.getElementById("mapContainer");
+  mapContainer.style.height = "60vh";
+
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 300);
+
+});
   });
 
 
