@@ -109,8 +109,12 @@ L.control.layers({
       L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map);
 
       const form = document.getElementById("formMissaoContainer");
-      form.style.maxHeight = "45vh";
+      document.getElementById("formMissaoContainer").style.maxHeight = "500px";
+      setTimeout(() => map.invalidateSize(), 400);
 
+      document.getElementById("formMissaoContainer").style.maxHeight = "0";
+      setTimeout(() => map.invalidateSize(), 400);
+      
       document.getElementById("tituloMissao").innerText = dadosMissao.missao;
 
       setTimeout(() => {
