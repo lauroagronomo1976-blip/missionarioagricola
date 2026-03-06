@@ -681,12 +681,12 @@ input, select {
   z-index: 1100 !important;
 }
 .leaflet-control-container {
-  z-index: 500;
+  z-index: 2000;
 }
 
 .leaflet-top,
 .leaflet-bottom {
-  z-index: 500 !important;
+  z-index: 2000 !important;
 }
 
 .leaflet-control-layers {
