@@ -15,22 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-  const street = L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    { maxZoom: 19 }
-  ).addTo(map);
-
-  const satelite = L.tileLayer(
-    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    { maxZoom: 21 }
-  );
-
-  L.control.layers({
-    "Rua": street,
-    "Satélite": satelite
-  }, {}, { position: "topright" }).addTo(map);
-
-  setTimeout(() => map.invalidateSize(), 300);
+    setTimeout(() => map.invalidateSize(), 300);
 
 const street = L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
