@@ -18,6 +18,11 @@ html, body {
   position: relative;
 }
 
+#mapContainer {
+  height: 60vh;
+  transition: height 0.4s ease;
+}
+
 #map {
   height: 100%;
   width: 100%;
