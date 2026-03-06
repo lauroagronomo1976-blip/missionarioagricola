@@ -61,7 +61,35 @@ L.control.layers({
       }).addTo(map);
 
     });
+document.getElementById("btnMarcarPontoInferior")
+.addEventListener("click", () => {
 
+  if (!coordenadaAtual) {
+    alert("Clique na 🎯 primeiro.");
+    return;
+  }
+
+  pontoAtual = {
+    latitude: coordenadaAtual.lat,
+    longitude: coordenadaAtual.lng,
+    data: new Date().toISOString()
+  };
+
+  registrosDoPonto = [];
+
+  L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map);
+
+  const form = document.getElementById("formMissaoContainer");
+  form.style.display = "block";
+
+  const mapContainer = document.getElementById("mapContainer");
+  mapContainer.style.height = "35vh";
+
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 300);
+
+});
   });
 
 
