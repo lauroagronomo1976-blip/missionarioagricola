@@ -1,3 +1,7 @@
+/* 
+MISSIONÁRIO AGRÍCOLA
+versão 1.5.1
+*/
 let map;
 let coordenadaAtual = null;
 let marcadorAtual = null;
