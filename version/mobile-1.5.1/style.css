@@ -1,1 +1,691 @@
+html, body {
+  height: 100%;
+}
 
+#appContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* TARJA SUPERIOR */
+#topoApp {
+  flex: 0 0 auto;
+}
+
+#mapContainer {
+  flex: 1;
+  position: relative;
+}
+
+#mapContainer {
+  height: 60vh;
+  transition: height 0.4s ease;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+}
+
+#painelInferior {
+  background: white;
+  padding: 15px;
+}
+
+#formMissaoContainer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+#topoApp span {
+  color: #2e7d32;
+  font-size: 32px;
+  font-weight: bold;
+}
+/* MAPA menor na tela */
+
+/* Área de registro */
+#registroArea {
+  width: 85%;
+  margin: 0 auto 50px auto;
+  padding: 20px;
+  border-top: 1px solid #ccc;
+}
+
+/* Campos maiores */
+h3 {
+  font-size: 24px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 18px;
+  font-size: 20px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+}
+
+/* Botões grandes para luva */
+button {
+  width: 100%;
+  padding: 20px;
+  font-size: 22px;
+  border-radius: 16px;
+  border: none;
+  background: #2e7d32;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* AUMENTAR controles do mapa */
+.leaflet-control-zoom a {
+  font-size: 36px !important;
+  width: 70px !important;
+  height: 70px !important;
+  line-height: 70px !important;
+}
+
+.leaflet-control-zoom {
+  transform: scale(1.1);
+}
+h3 {
+  font-size: 22px;
+}
+
+input, textarea {
+  font-size: 18px;
+  padding: 14px;
+}
+
+button {
+  font-size: 18px;
+  padding: 16px;
+}
+
+.leaflet-control-zoom a {
+  font-size: 22px !important;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding: 10px;
+}
+
+/* MAPA */
+
+.card-mapa {
+  margin-bottom: 20px;
+}
+
+/* REGISTRO */
+
+.card-registro {
+  background: white;
+  padding: 18px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+
+.card-registro h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.card-registro input {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+/* BOTÃO GRANDE (uso com luva) */
+
+.btn-primario {
+  width: 100%;
+  padding: 16px;
+  font-size: 17px;
+  border-radius: 14px;
+  border: none;
+  background: #2e7d32;
+  color: white;
+  font-weight: bold;
+}
+
+.btn-primario:active {
+  transform: scale(0.98);
+}
+
+/* HISTÓRICO */
+
+.card-historico {
+  background: white;
+  padding: 18px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-bottom: 40px;
+}
+
+/* CABEÇALHO */
+.header {
+  background: #e0e0e0;
+  color: #1f7a1f;
+  >font-size: 20px;
+  font-weight: bold;
+  padding: 12px;
+  text-align: left;
+}
+
+/* CONTEÚDO */
+.container {
+  padding: 10px;
+}
+
+/* TÍTULOS */
+.section-title {
+  font-size: 14px;   /* diminui o “Nova Missão” */
+  color: #1f7a1f;
+  font-weight: 600;
+  margin: 10px 0;
+}
+
+/* FORMULÁRIO */
+.form-area {
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.form-area input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* MAPA */
+
+/* BOTÕES NO MAPA */
+.map-buttons {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
+}
+
+
+/* BOTÕES */
+.map-buttons button {
+  background: white;
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 18px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* MENU DE CAMADAS */
+.layer-menu {
+  position: absolute;
+  top: 10px;
+  right: 60px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  overflow: hidden;
+  display: none;
+  z-index: 1001;
+}
+
+.layer-menu div {
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.layer-menu div:last-child {
+  border-bottom: none;
+}
+
+.layer-menu div:hover {
+  background: #f0f0f0;
+}
+/* ==========================
+   FORMULÁRIO – MOBILE 1.1
+========================== */
+
+.form-area {
+  background: #ffffff;
+  padding: 14px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.field label {
+  font-size: 13px;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.field input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+/* Safra menor */
+.field.safra {
+  flex: 0.6;
+}
+
+/* Empresa maior */
+.field.empresa {
+  flex: 1.4;
+}
+
+/* BOTÃO MARCAR PONTO */
+.action-area {
+  margin: 12px 0;
+  text-align: left;
+}
+
+.btn-marcar {
+  background-color: #1f7a1f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-marcar:active {
+  opacity: 0.85;
+}
+.action-area {
+  display: flex;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.btn-marcar,
+.btn-gravar,
+.btn-finalizar {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-marcar {
+  background: #dfefff;
+  color: #003366;
+}
+
+.btn-gravar {
+  background: #1f7a1f;
+  color: #fff;
+}
+
+.btn-finalizar {
+  background: #999;
+  color: #fff;
+}
+
+/* ===== MAPA (OBRIGATÓRIO) ===== */
+
+.registro-area,
+.lista-registros {
+  position: relative;
+  z-index: 2;
+}
+
+.registro-area h3 {
+  color: #1f7a1f;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+.form-area {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.field label {
+  font-weight: 600;
+  color: #2f4f2f;
+}
+
+input {
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 15px;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.field.half {
+  flex: 1;
+}
+
+/* ===============================
+   CORREÇÃO DEFINITIVA – REGISTRO
+   =============================== */
+
+#registroIndividuos,
+#listaRegistros {
+  display: block !important;
+  position: relative !important;
+  z-index: 10000 !important;
+  background: #ffffff !important;
+  padding: 10px;
+  margin: 10px;
+}
+
+/* garante que o mapa não sobreponha */
+
+/* evita que containers escondam conteúdo */
+body, main, .container {
+  overflow: visible !important;
+}
+
+#listaRegistros {
+  padding: 12px;
+  background: #f4f6f8;
+}
+
+.registro-item {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  font-size: 14px;
+}
+
+.registro-item strong {
+  color: #2e7d32;
+}
+
+.registro-item button {
+  margin-right: 6px;
+  border: none;
+  background: #eee;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.registro-item button:hover {
+  background: #ddd;
+}
+.leaflet-control {
+  font-size: 20px !important;
+}
+
+.leaflet-control-scale-line {
+  font-size: 18px !important;
+  padding: 6px 10px !important;
+}
+.leaflet-control {
+  font-size: 20px !important;
+}
+
+.leaflet-control-scale-line {
+  font-size: 18px !important;
+  padding: 6px 10px !important;
+}
+/* ===============================
+   BOTÕES FLUTUANTES DO MAPA
+   =============================== */
+
+/* Garante que o mapa seja o container base */
+
+/* Estilo base dos dois botões */
+
+/* Posição abaixo do botão de camadas */
+
+/* Container do mapa */
+
+/* Mapa */
+
+/* Botões flutuantes */
+
+/* ===============================
+   CONTAINER DO MAPA
+   =============================== */
+
+
+/* ===============================
+   PAINEL VERTICAL DE CONTROLES
+   =============================== */
+
+
+
+/* ====================================
+   CORREÇÃO E PAINEL DE CONTROLES
+   ==================================== */
+
+/* Garante tamanho fixo do container */
+
+/* Força o mapa a ocupar o container */
+
+/* Painel vertical no lado direito */
+
+/* Botões do painel */
+
+/* =====================================
+   MAPA – ESTRUTURA LIMPA E DEFINITIVA
+   ===================================== */
+
+#appContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#mapContainer {
+  flex: 1;
+  transition: flex 0.4s ease;
+  position: relative;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+}
+
+#formMissaoContainer {
+  background: #ffffff;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  box-shadow: 0 -3px 10px rgba(0,0,0,0.2);
+  padding: 0 15px;
+}
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+/* =====================================
+   PAINEL LATERAL DE BOTÕES
+   ===================================== */
+
+.painel-controles {
+  position: absolute;
+  top: 90px;
+  right: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 1000;
+}
+
+.painel-controles button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+}
+
+#btnMira {
+  background: #1e88e5;
+}
+
+#btnMarcar {
+  background: #2e7d32;
+}
+#mapContainer {
+  border: 5px solid red !important;
+}
+/* ===== CONTAINER DO MAPA ===== */
+
+#mapContainer {
+  position: relative;
+  width: 94%;
+  margin: 15px;
+}
+
+/* ===== PAINEL DE CONTROLES ===== */
+
+.painel-controles {
+  position: absolute;
+  top: 85px;          /* abaixo do botão camadas */
+  right: 10px;        /* mesmo alinhamento da camada */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
+/* Botões com mesmo padrão do Leaflet */
+
+.painel-controles button {
+  width: 34px;
+  height: 34px;
+  background: white;
+  border: 2px solid rgba(0,0,0,0.2);
+  border-radius: 4px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.painel-controles button:hover {
+  background: #f4f4f4;
+}
+/* ===============================
+   BOTÕES INTEGRADOS AO LEAFLET
+   =============================== */
+
+#mapContainer {
+  position: relative;
+}
+
+.painel-controles {
+  position: absolute;
+  top: 80px;         /* abaixo do botão camadas */
+  right: 10px;       /* colado à direita */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.painel-controles button {
+  width: 36px;
+  height: 36px;
+  background: white;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 18px;
+}
+.painel-controles button:hover {
+  background: #f4f4f4;
+}
+
+/* Container pai do mapa */
+#mapContainer {
+  position: relative;
+  width: 94%;
+  margin: 15px
+
+input, select {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+/* ===== BOTÃO INFERIOR ===== */
+.btn-marcar {
+  background: #1b5e20;
+  color: white;
+  border: none;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+#formMissaoContainer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.leaflet-control-container {
+  z-index: 2000;
+}
+
+.btn-map {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: white;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+  font-size: 20px;
+  cursor: pointer;
+}
