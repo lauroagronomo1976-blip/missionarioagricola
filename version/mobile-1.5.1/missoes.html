@@ -1,1 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Missão - Missionário Agrícola</title>
 
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+}
+
+.header {
+  background: #1b5e20;
+  color: white;
+  padding: 20px;
+  font-size: 18px;
+}
+
+.container {
+  padding: 20px;
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+button {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.btn-iniciar {
+  background: #1b5e20;
+  color: white;
+}
+
+.btn-logout {
+  background: #999;
+  color: white;
+}
+
+input, select {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  Missão Ativa
+</div>
+
+<div class="container">
+  <div class="card">
+
+    <h2>Nova Missão</h2>
+
+    <input type="text" id="safra" placeholder="Safra (ex: 2024/2025)">
+    <input type="text" id="empresa" placeholder="Empresa">
+    <input type="text" id="fazenda" placeholder="Fazenda">
+    <input type="text" id="gleba" placeholder="Gleba">
+    <input type="text" id="talhao" placeholder="Talhão">
+    <input type="text" id="cultura" placeholder="Cultura">
+    <input type="text" id="variedade" placeholder="Variedade">
+
+    <select id="missao">
+      <option value="">Selecione a Missão</option>
+      <option value="Inspeção Fitossanitária">Inspeção Fitossanitária</option>
+      <option value="Estimativa de Rendimento">Estimativa de Rendimento</option>
+      <option value="Perdas na Colheita">Perdas na Colheita</option>
+      <option value="Abertura/Fechamento de Plantio">Abertura/Fechamento de Plantio</option>
+      <option value="Fechamento de Insumos da Pulverização">Fechamento de Insumos da Pulverização</option>
+      <option value="Fechamento de Insumos do Tratamento de Sementes">Fechamento de Insumos do Tratamento de Sementes</option>
+    </select>
+
+    <button class="btn-iniciar" onclick="avancar()">
+      Avançar
+    </button>
+
+    <button class="btn-logout" onclick="logout()">
+      Sair
+    </button>
+
+  </div>
+</div>
+
+<script>
+
+// Verifica se está logado
+const usuario = localStorage.getItem("usuarioLogado");
+
+if (!usuario) {
+  window.location.href = "login.html";
+}
+
+// Função Avançar
+function avancar() {
+
+  const missao = document.getElementById("missao").value;
+
+  if (!missao) {
+    alert("Selecione uma missão.");
+    return;
+  }
+
+  // Salva dados da missão
+  const dadosMissao = {
+    safra: document.getElementById("safra").value,
+    empresa: document.getElementById("empresa").value,
+    fazenda: document.getElementById("fazenda").value,
+    gleba: document.getElementById("gleba").value,
+    talhao: document.getElementById("talhao").value,
+    cultura: document.getElementById("cultura").value,
+    variedade: document.getElementById("variedade").value,
+    missao: missao,
+    inicio: new Date().toISOString()
+  };
+
+  localStorage.setItem("dadosMissao", JSON.stringify(dadosMissao));
+
+  window.location.href = "registro-mapa.html";
+}
+
+// Função Logout
+function logout() {
+  localStorage.removeItem("usuarioLogado");
+  window.location.href = "login.html";
+}
+
+</script>
+
+</body>
+</html>
