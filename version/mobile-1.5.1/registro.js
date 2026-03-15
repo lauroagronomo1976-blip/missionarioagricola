@@ -183,6 +183,18 @@ document.getElementById("btnMarcarPontoInferior")
         map.invalidateSize();
       }, 400);
 
+      const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
+
+if(dadosMissao){
+
+document.getElementById("infoMissao").innerHTML =
+`
+<b>Missão:</b> ${dadosMissao.missao}<br>
+<b>Fazenda:</b> ${dadosMissao.fazenda}<br>
+<b>Talhão:</b> ${dadosMissao.talhao}
+`;
+
+}
   });
 
 
