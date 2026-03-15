@@ -1,1 +1,415 @@
+Missão: Inspeção Fitossanitária
+Fazenda: Agroterra
+Talhão: T1
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Missionário Agrícola</title>
+<div id="infoMissao"></div>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<style>
+
+/* ======================
+RESET
+====================== */
+
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:#f4f6f8;
+}
+
+/* ======================
+TOPO
+====================== */
+
+#topoApp{
+background:#1b5e20;
+color:white;
+padding:18px;
+text-align:center;
+font-weight:bold;
+font-size:20px;
+}
+
+/* ======================
+MAPA
+====================== */
+
+#mapContainer{
+position:relative;
+width:94%;
+height:60vh;
+margin:15px auto;
+}
+
+#map{
+width:100%;
+height:100%;
+border-radius:14px;
+box-shadow:0 6px 20px rgba(0,0,0,0.25);
+}
+
+/* ======================
+BOTÕES DO MAPA
+====================== */
+
+.painel-controles{
+position:absolute;
+top:70px;
+right:10px;
+display:flex;
+flex-direction:column;
+gap:8px;
+z-index:1000;
+}
+
+.painel-controles button{
+width:38px;
+height:38px;
+background:white;
+border:2px solid rgba(0,0,0,0.2);
+border-radius:4px;
+font-size:18px;
+cursor:pointer;
+}
+
+/* ======================
+PAINEL INFERIOR
+====================== */
+
+#painelInferior{
+width:94%;
+margin:0 auto 40px auto;
+}
+
+#btnMarcarPontoInferior{
+background:#1b5e20;
+color:white;
+border:none;
+padding:14px;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+width:200px;
+}
+
+/* ======================
+FORMULÁRIO
+====================== */
+
+#formMissaoContainer{
+display:none;
+margin-top:15px;
+background:white;
+padding:15px;
+border-radius:12px;
+box-shadow:0 6px 20px rgba(0,0,0,0.15);
+}
+
+#formMissaoContainer input,
+#formMissaoContainer select{
+width:100%;
+padding:10px;
+margin-bottom:10px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+#formMissaoContainer button{
+width:100%;
+padding:10px;
+border:none;
+border-radius:8px;
+margin-top:5px;
+cursor:pointer;
+font-weight:bold;
+}
+
+#btnSalvarRegistro{
+background:#2e7d32;
+color:white;
+}
+
+#btnConcluirPonto{
+background:#1565c0;
+color:white;
+}
+
+/* ======================
+LISTA REGISTROS
+====================== */
+
+.registro-item{
+background:#f4f6f8;
+padding:8px;
+border-radius:6px;
+margin-top:6px;
+font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="topoApp">
+Missionário Agrícola
+</div>
+
+<div id="mapContainer">
+
+<div id="map"></div>
+
+<div class="painel-controles">
+
+<button id="btnMira">🎯</button>
+<button id="btnRastro">📍</button>
+
+</div>
+
+</div>
+
+<div id="painelInferior">
+
+<button id="btnMarcarPontoInferior">
+Marcar Ponto
+</button>
+
+<div id="formMissaoContainer">
+
+<h3 id="tituloMissao">
+Inspeção Fitossanitária
+</h3>
+
+<label>Ocorrência</label>
+<select id="ocorrenciaSelect">
+<option value="">Selecione</option>
+<option>Praga</option>
+<option>Doença</option>
+<option>Planta Daninha</option>
+</select>
+
+<label>Espécie</label>
+<input type="text" id="especieInput">
+
+<label>Fase</label>
+<select id="faseSelect">
+<option value="">Selecione</option>
+<option>Ovo</option>
+<option>Larva</option>
+<option>Ninfa 1</option>
+<option>Ninfa 2</option>
+<option>Ninfa 3</option>
+<option>Ninfa 4</option>
+<option>Adulto</option>
+</select>
+
+<label>Nº indivíduos</label>
+<input type="number" id="individuosInput">
+
+<label>Severidade (%)</label>
+<input type="number" id="severidadeInput">
+
+<button id="btnSalvarRegistro">
+Salvar Registro
+</button>
+
+<button id="btnConcluirPonto">
+Concluir Ponto
+</button>
+
+<div id="listaRegistros"></div>
+
+</div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+let map
+let coordenadaAtual=null
+let marcadorAtual=null
+let pontoAtual=null
+let registrosDoPonto=[]
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+/* =====================
+CRIAR MAPA
+===================== */
+
+map=L.map('map',{zoomControl:false})
+.setView([-15,-47],5)
+
+L.control.zoom({position:'bottomright'}).addTo(map)
+
+const street=L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+{maxZoom:19}
+).addTo(map)
+
+const satelite=L.tileLayer(
+'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+{maxZoom:21}
+)
+
+L.control.layers({
+"Rua":street,
+"Satélite":satelite
+},{},{position:'topright'}).addTo(map)
+
+/* =====================
+BOTÃO MIRA
+===================== */
+
+document.getElementById("btnMira")
+.addEventListener("click",()=>{
+
+navigator.geolocation.getCurrentPosition((pos)=>{
+
+const lat=pos.coords.latitude
+const lng=pos.coords.longitude
+
+coordenadaAtual={lat,lng}
+
+map.setView([lat,lng],17)
+
+if(marcadorAtual) map.removeLayer(marcadorAtual)
+
+marcadorAtual=L.circleMarker([lat,lng],{
+radius:8,
+color:"#1e88e5",
+fillColor:"#1e88e5",
+fillOpacity:1
+}).addTo(map)
+
+})
+
+})
+
+/* =====================
+MARCAR PONTO
+===================== */
+
+document.getElementById("btnMarcarPontoInferior")
+.addEventListener("click",()=>{
+
+if(!coordenadaAtual){
+alert("Clique na 🎯 primeiro.")
+return
+}
+
+L.marker([coordenadaAtual.lat,coordenadaAtual.lng])
+.addTo(map)
+
+pontoAtual={
+lat:coordenadaAtual.lat,
+lng:coordenadaAtual.lng,
+data:new Date().toISOString()
+}
+
+registrosDoPonto=[]
+
+document.getElementById("formMissaoContainer")
+.style.display="block"
+
+})
+
+/* =====================
+SALVAR REGISTRO
+===================== */
+
+document.getElementById("btnSalvarRegistro")
+.addEventListener("click",()=>{
+
+const ocorrencia=document.getElementById("ocorrenciaSelect").value
+const especie=document.getElementById("especieInput").value
+const fase=document.getElementById("faseSelect").value
+const individuos=document.getElementById("individuosInput").value
+const severidade=document.getElementById("severidadeInput").value
+
+if(!ocorrencia||!especie){
+alert("Preencha os campos obrigatórios")
+return
+}
+
+const registro={
+ocorrencia,
+especie,
+fase,
+individuos,
+severidade
+}
+
+registrosDoPonto.push(registro)
+
+renderizarLista()
+
+})
+
+/* =====================
+CONCLUIR PONTO
+===================== */
+
+document.getElementById("btnConcluirPonto")
+.addEventListener("click",()=>{
+
+if(!pontoAtual)return
+
+pontoAtual.registros=registrosDoPonto
+
+let pontos=JSON.parse(localStorage.getItem("pontos"))||[]
+
+pontos.push(pontoAtual)
+
+localStorage.setItem("pontos",JSON.stringify(pontos))
+
+alert("Ponto salvo!")
+
+document.getElementById("formMissaoContainer")
+.style.display="none"
+
+})
+
+})
+
+/* =====================
+LISTA
+===================== */
+
+function renderizarLista(){
+
+const lista=document.getElementById("listaRegistros")
+
+lista.innerHTML=""
+
+registrosDoPonto.forEach(r=>{
+
+const div=document.createElement("div")
+
+div.className="registro-item"
+
+div.innerHTML=`
+<strong>${r.ocorrencia}</strong> - ${r.especie}<br>
+Fase: ${r.fase} | Ind: ${r.individuos} | Sev: ${r.severidade}
+`
+
+lista.appendChild(div)
+
+})
+
+}
+
+</script>
+
+</body>
+</html>
