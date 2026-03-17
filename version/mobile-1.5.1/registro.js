@@ -9,22 +9,7 @@ let pontoAtual = null;
 let registrosDoPonto = [];
 
 document.addEventListener("DOMContentLoaded", () => {
-  /* ================= MISSÃO ATIVA ================= */
-const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
-
-if(dadosMissao){
-
-document.getElementById("infoMissao").innerHTML =
-`
-<b>Missão:</b> ${dadosMissao.missao} |
-<b>Fazenda:</b> ${dadosMissao.fazenda} |
-<b>Talhão:</b> ${dadosMissao.talhao}
-`;
-
-}
-
-  console.log("🟢 REGISTRO – MAPA ATIVO");
-
+  
   /* ================= MAPA ================= */
 
   map = L.map('map', { zoomControl: false })
