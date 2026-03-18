@@ -697,3 +697,7 @@ input, select {
   position: relative;
 }
 
+#infoMissao {
+  font-size: 13px;
+  background: #f5f5f5;
+}
