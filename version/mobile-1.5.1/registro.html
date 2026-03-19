@@ -163,12 +163,9 @@ Missionário Agrícola
     Marcar Ponto
   </button>
 
-  <!-- FORMULÁRIO AQUI -->
-  <div id="formMissaoContainer">
+  <div id="formMissaoContainer" style="display:none;">
 
-    <h3 id="tituloMissao">
-      Inspeção Fitossanitária
-    </h3>
+    <h3 id="tituloMissao"></h3>
 
     <label>Ocorrência</label>
     <select id="ocorrenciaSelect">
@@ -176,6 +173,7 @@ Missionário Agrícola
       <option>Praga</option>
       <option>Doença</option>
       <option>Planta Daninha</option>
+      <option>Outros</option>
     </select>
 
     <label>Espécie</label>
@@ -199,20 +197,15 @@ Missionário Agrícola
     <label>Severidade (%)</label>
     <input type="number" id="severidadeInput">
 
-    <button id="btnSalvarRegistro">
-      Salvar Registro
-    </button>
-
-    <button id="btnConcluirPonto">
-      Concluir Ponto
-    </button>
+    <button id="btnSalvarRegistro">Salvar Registro</button>
+    <button id="btnConcluirPonto">Concluir Ponto</button>
 
     <div id="listaRegistros"></div>
 
   </div>
 
 </div>
-
+  
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
