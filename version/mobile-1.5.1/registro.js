@@ -256,27 +256,11 @@ document.getElementById("infoMissao").innerHTML =
   /* ================= CONCLUIR PONTO ================= */
 
   document.getElementById("btnConcluirPonto")
-    .addEventListener("click", () => {
+.addEventListener("click", function(){
 
-      if (!pontoAtual) return;
+  document.getElementById("formMissaoContainer").style.display = "none";
 
-      pontoAtual.registros = registrosDoPonto;
-
-      let pontos = JSON.parse(localStorage.getItem("pontosInspecao")) || [];
-      pontos.push(pontoAtual);
-
-      localStorage.setItem("pontosInspecao", JSON.stringify(pontos));
-
-      alert("Ponto finalizado!");
-
-      const form = document.getElementById("formMissaoContainer");
-      form.style.maxHeight = "0";
-
-      setTimeout(() => {
-        map.invalidateSize();
-      }, 400);
-
-  });
+});
 
 });
 
