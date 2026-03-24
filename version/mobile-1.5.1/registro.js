@@ -193,6 +193,33 @@ document.getElementById("infoMissao").innerHTML =
 `;
 
 }
+     /* 3º =========== MARCAR PONTO ================= */
+      
+      document.getElementById("btnMarcarPontoInferior")
+.addEventListener("click", function(){
+
+  const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
+
+  if(!dadosMissao){
+    alert("Nenhuma missão ativa.");
+    return;
+  }
+
+  if(!coordenadaAtual){
+    alert("Clique na 🎯 primeiro.");
+    return;
+  }
+
+  // marca ponto no mapa
+  L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map);
+
+  // define título da missão
+  document.getElementById("tituloMissao").innerText = dadosMissao.missao;
+
+  // MOSTRA FORMULÁRIO
+  document.getElementById("formMissaoContainer").style.display = "block";
+
+});
   });
 
 
