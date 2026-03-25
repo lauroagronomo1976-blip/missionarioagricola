@@ -265,7 +265,7 @@ document.getElementById("infoMissao").innerHTML =
 });
 
 
-function renderizarLista() {
+function renderizarLista(){
 
   const lista = document.getElementById("listaRegistros");
   lista.innerHTML = "";
@@ -273,11 +273,11 @@ function renderizarLista() {
   registrosDoPonto.forEach((r) => {
 
     const div = document.createElement("div");
+    div.className = "registro-item";
 
     div.innerHTML = `
       <strong>${r.ocorrencia}</strong> - ${r.especie}<br>
-      Fase: ${r.fase} | Ind: ${r.individuos} | Sev: ${r.severidade}%<br>
-      <hr>
+      Fase: ${r.fase} | Ind: ${r.individuos} | Sev: ${r.severidade}%
     `;
 
     lista.appendChild(div);
