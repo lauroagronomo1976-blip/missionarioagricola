@@ -704,3 +704,97 @@ input, select {
   font-size: 13px;
   background: #f5f5f5;
 }
+
+/* ======================
+FORMULÁRIO PROFISSIONAL
+====================== */
+
+#formMissaoContainer{
+display:none;
+margin-top:15px;
+
+background:#ffffff;
+padding:16px;
+
+border-radius:14px;
+box-shadow:0 8px 25px rgba(0,0,0,0.15);
+
+animation: fadeIn 0.3s ease;
+}
+
+/* Título */
+#formMissaoContainer h3{
+margin-top:0;
+margin-bottom:12px;
+color:#1b5e20;
+}
+
+/* Labels */
+#formMissaoContainer label{
+font-size:13px;
+font-weight:bold;
+color:#333;
+}
+
+/* Inputs */
+#formMissaoContainer input,
+#formMissaoContainer select{
+width:100%;
+padding:10px;
+margin-top:4px;
+margin-bottom:10px;
+
+border-radius:8px;
+border:1px solid #ccc;
+
+font-size:14px;
+}
+
+/* Botões */
+#formMissaoContainer button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+margin-top:6px;
+
+font-weight:bold;
+cursor:pointer;
+}
+
+/* Botão salvar */
+#btnSalvarRegistro{
+background:#2e7d32;
+color:white;
+}
+
+/* Botão concluir */
+#btnConcluirPonto{
+background:#1565c0;
+color:white;
+}
+
+/* Lista de registros */
+#listaRegistros{
+margin-top:10px;
+}
+
+.registro-item{
+background:#f4f6f8;
+padding:10px;
+border-radius:8px;
+margin-top:6px;
+font-size:13px;
+}
+
+/* Animação leve */
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(10px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
