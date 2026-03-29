@@ -857,3 +857,7 @@ opacity:1;
 transform:translateY(0);
 }
 }
+#formMissaoContainer.ativo {
+  max-height: 500px; /* abre o formulário */
+  padding: 15px;
+}
