@@ -162,9 +162,10 @@ Missionário Agrícola
   <button id="btnMarcarPontoInferior">Marcar Ponto</button>
 
     <div id="formMissaoContainer">
-      
-    <h3 id="tituloMissao"></h3>
 
+  <h3 id="tituloMissao">Registro</h3>
+
+  <div class="form-group">
     <label>Ocorrência</label>
     <select id="ocorrenciaSelect">
       <option value="">Selecione</option>
@@ -173,35 +174,41 @@ Missionário Agrícola
       <option>Planta Daninha</option>
       <option>Outros</option>
     </select>
-
-    <label>Espécie</label>
-    <input type="text" id="especieInput">
-
-    <label>Fase</label>
-    <select id="faseSelect">
-      <option value="">Selecione</option>
-      <option>Ovo</option>
-      <option>Larva</option>
-      <option>Ninfa 1</option>
-      <option>Ninfa 2</option>
-      <option>Ninfa 3</option>
-      <option>Ninfa 4</option>
-      <option>Adulto</option>
-    </select>
-
-    <label>Nº indivíduos</label>
-    <input type="number" id="individuosInput">
-
-    <label>Severidade (%)</label>
-    <input type="number" id="severidadeInput">
-
-    <button id="btnSalvarRegistro">Salvar Registro</button>
-    <button id="btnConcluirPonto">Concluir Ponto</button>
-
-    <div id="listaRegistros"></div>
-
   </div>
 
+  <div class="form-group">
+    <label>Espécie</label>
+    <input type="text" id="especieInput">
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>Fase</label>
+      <select id="faseSelect">
+        <option>Ovo</option>
+        <option>Larva</option>
+        <option>Ninfa</option>
+        <option>Adulto</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Nº Indivíduos</label>
+      <input type="number" id="individuosInput">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Severidade (%)</label>
+    <input type="number" id="severidadeInput">
+  </div>
+
+  <button id="btnSalvarRegistro">Salvar Registro</button>
+  <button id="btnConcluirPonto">Concluir Ponto</button>
+
+  <div id="listaRegistros"></div>
+
+</div>
 </div>
   
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
