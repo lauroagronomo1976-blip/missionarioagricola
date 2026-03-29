@@ -1,7 +1,3 @@
-/* 
-MISSIONÁRIO AGRÍCOLA
-versão 1.5.1
-*/
 let map;
 let coordenadaAtual = null;
 let marcadorAtual = null;
@@ -9,263 +5,133 @@ let pontoAtual = null;
 let registrosDoPonto = [];
 
 document.addEventListener("DOMContentLoaded", () => {
-  
-  /* ================= MAPA ================= */
 
+  /* ================= MAPA ================= */
   map = L.map('map', { zoomControl: false })
     .setView([-15.0, -47.0], 5);
 
   L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-    setTimeout(() => map.invalidateSize(), 300);
+  setTimeout(() => map.invalidateSize(), 300);
 
   /* ================= 🎯 MIRA ================= */
-
-  document.getElementById("btnMira").addEventListener("click", () => {
-
-    if (!navigator.geolocation) {
-      alert("Geolocalização não suportada.");
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition((pos) => {
-
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
-
-      coordenadaAtual = { lat, lng };
-
-      map.setView([lat, lng], 17);
-
-      if (marcadorAtual) {
-        map.removeLayer(marcadorAtual);
-      }
-
-      marcadorAtual = L.circleMarker([lat, lng], {
-        radius: 8,
-        color: "#1e88e5",
-        fillColor: "#1e88e5",
-        fillOpacity: 1
-      }).addTo(map);
-
-    });
-document.getElementById("btnMarcarPontoInferior")
-.addEventListener("click", () => {
-
-  if (!coordenadaAtual) {
-    alert("Clique na 🎯 primeiro.");
-    return;
-  }
-
-  pontoAtual = {
-    latitude: coordenadaAtual.lat,
-    longitude: coordenadaAtual.lng,
-    data: new Date().toISOString()
-  };
-
-  registrosDoPonto = [];
-
-  L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map);
-
-  const form = document.getElementById("formMissaoContainer");
-  form.style.display = "block";
-
-  const mapContainer = document.getElementById("mapContainer");
-  mapContainer.style.height = "35vh";
-
-  setTimeout(() => {
-    map.invalidateSize();
-  }, 300);
-
-});
-    document.getElementById("btnConcluirPonto")
-.addEventListener("click", () => {
-
-  const form = document.getElementById("formMissaoContainer");
-  form.style.display = "none";
-
-  const mapContainer = document.getElementById("mapContainer");
-  mapContainer.style.height = "60vh";
-
-  setTimeout(() => {
-    map.invalidateSize();
-  }, 300);
-
-});
-    /* ================= MARCAR PONTO ================= */
-
-document.getElementById("btnMarcarPontoInferior")
-.addEventListener("click", () => {
-
-  if (!coordenadaAtual) {
-    alert("Clique na 🎯 primeiro.");
-    return;
-  }
-
-  pontoAtual = {
-    latitude: coordenadaAtual.lat,
-    longitude: coordenadaAtual.lng,
-    data: new Date().toISOString()
-  };
-
-  registrosDoPonto = [];
-
-  L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map);
-
-  const form = document.getElementById("formMissaoContainer");
-  form.style.display = "block";
-
-  const mapContainer = document.getElementById("mapContainer");
-  mapContainer.style.height = "35vh";
-
-  setTimeout(() => {
-    map.invalidateSize();
-  }, 300);
-
-});
-    document.getElementById("btnConcluirPonto")
-.addEventListener("click", () => {
-
-  const form = document.getElementById("formMissaoContainer");
-  form.style.display = "none";
-
-  const mapContainer = document.getElementById("mapContainer");
-  mapContainer.style.height = "60vh";
-
-  setTimeout(() => {
-    map.invalidateSize();
-  }, 300);
-
-});
-  });
-
+  document.getElementById("btnMira").addEventListener("click", ativarMira);
 
   /* ================= MARCAR PONTO ================= */
-
   document.getElementById("btnMarcarPontoInferior")
-    .addEventListener("click", function() {
+    .addEventListener("click", marcarPonto);
 
-      const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
+  /* ================= SALVAR REGISTRO ================= */
+  document.getElementById("btnSalvarRegistro")
+    .addEventListener("click", salvarRegistro);
 
-      if (!dadosMissao || dadosMissao.missao !== "Inspeção Fitossanitária") {
-        alert("Missão atual não é Inspeção Fitossanitária.");
-        return;
-      }
+  /* ================= CONCLUIR ================= */
+  document.getElementById("btnConcluirPonto")
+    .addEventListener("click", concluirPonto);
+});
 
-      if (!coordenadaAtual) {
-        alert("Clique na 🎯 primeiro.");
-        return;
-      }
 
-      pontoAtual = {
-        ...dadosMissao,
-        latitude: coordenadaAtual.lat,
-        longitude: coordenadaAtual.lng,
-        data: new Date().toISOString()
-      };
+/* ================= FUNÇÕES ================= */
 
-      registrosDoPonto = [];
+function ativarMira() {
+  if (!navigator.geolocation) {
+    alert("Geolocalização não suportada.");
+    return;
+  }
 
-      L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map);
+  navigator.geolocation.getCurrentPosition((pos) => {
 
-      const form = document.getElementById("formMissaoContainer");
-      document.getElementById("formMissaoContainer").style.maxHeight = "500px";
-      setTimeout(() => map.invalidateSize(), 400);
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
 
-      document.getElementById("formMissaoContainer").style.maxHeight = "0";
-      setTimeout(() => map.invalidateSize(), 400);
-      
-      document.getElementById("tituloMissao").innerText = dadosMissao.missao;
+    coordenadaAtual = { lat, lng };
 
-      setTimeout(() => {
-        map.invalidateSize();
-      }, 400);
+    map.setView([lat, lng], 17);
 
-      const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
+    if (marcadorAtual) {
+      map.removeLayer(marcadorAtual);
+    }
 
-if(dadosMissao){
+    marcadorAtual = L.circleMarker([lat, lng], {
+      radius: 8,
+      color: "#1e88e5",
+      fillColor: "#1e88e5",
+      fillOpacity: 1
+    }).addTo(map);
 
-document.getElementById("infoMissao").innerHTML =
-`
-<b>Missão:</b> ${dadosMissao.missao}<br>
-<b>Fazenda:</b> ${dadosMissao.fazenda}<br>
-<b>Talhão:</b> ${dadosMissao.talhao}
-`;
-
+  });
 }
-     /* 3º =========== MARCAR PONTO ================= */
-      
-      document.getElementById("btnMarcarPontoInferior")
-.addEventListener("click", function(){
+
+
+function marcarPonto() {
 
   const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
 
-  if(!dadosMissao){
+  if (!dadosMissao) {
     alert("Nenhuma missão ativa.");
     return;
   }
 
-  if(!coordenadaAtual){
+  if (!coordenadaAtual) {
     alert("Clique na 🎯 primeiro.");
     return;
   }
 
-  // marca ponto no mapa
+  pontoAtual = {
+    ...dadosMissao,
+    latitude: coordenadaAtual.lat,
+    longitude: coordenadaAtual.lng,
+    data: new Date().toISOString()
+  };
+
+  registrosDoPonto = [];
+
   L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map);
 
-  // define título da missão
-  document.getElementById("tituloMissao").innerText = dadosMissao.missao;
-
-  // MOSTRA FORMULÁRIO
   document.getElementById("formMissaoContainer").style.display = "block";
 
-});
-  });
+  document.getElementById("tituloMissao").innerText = dadosMissao.missao;
+
+  document.getElementById("infoMissao").innerHTML = `
+    <b>Missão:</b> ${dadosMissao.missao}<br>
+    <b>Fazenda:</b> ${dadosMissao.fazenda}<br>
+    <b>Talhão:</b> ${dadosMissao.talhao}
+  `;
+}
 
 
-  /* ================= SALVAR REGISTRO ================= */
+function salvarRegistro() {
 
-  document.getElementById("btnSalvarRegistro")
-    .addEventListener("click", () => {
+  const ocorrencia = document.getElementById("ocorrenciaSelect").value;
+  const especie = document.getElementById("especieInput").value;
+  const fase = document.getElementById("faseSelect").value;
+  const individuos = document.getElementById("individuosInput").value;
+  const severidade = document.getElementById("severidadeInput").value;
 
-      const ocorrencia = document.getElementById("ocorrenciaSelect").value;
-      const especie = document.getElementById("especieInput").value;
-      const fase = document.getElementById("faseSelect").value;
-      const individuos = document.getElementById("individuosInput").value;
-      const severidade = document.getElementById("severidadeInput").value;
+  if (!ocorrencia || !especie) {
+    alert("Preencha os campos obrigatórios.");
+    return;
+  }
 
-      if (!ocorrencia || !especie) {
-        alert("Preencha os campos obrigatórios.");
-        return;
-      }
+  const registro = {
+    ocorrencia,
+    especie,
+    fase,
+    individuos,
+    severidade
+  };
 
-      const registro = {
-        ocorrencia,
-        especie,
-        fase,
-        individuos,
-        severidade
-      };
-
-      registrosDoPonto.push(registro);
-      renderizarLista();
-
-  });
+  registrosDoPonto.push(registro);
+  renderizarLista();
+}
 
 
-  /* ================= CONCLUIR PONTO ================= */
-
-  document.getElementById("btnConcluirPonto")
-.addEventListener("click", function(){
-
+function concluirPonto() {
   document.getElementById("formMissaoContainer").style.display = "none";
-
-});
-
-});
+}
 
 
-function renderizarLista(){
+function renderizarLista() {
 
   const lista = document.getElementById("listaRegistros");
   lista.innerHTML = "";
@@ -281,6 +147,5 @@ function renderizarLista(){
     `;
 
     lista.appendChild(div);
-
   });
 }
