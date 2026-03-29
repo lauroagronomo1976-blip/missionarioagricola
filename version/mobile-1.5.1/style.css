@@ -199,22 +199,76 @@ button {
 }
 
 /* FORMULÁRIO */
-.form-area {
-  background: white;
-  padding: 12px;
-  border-radius: 12px;
+/* ===== FORMULÁRIO BONITO ===== */
+
+#formMissaoContainer {
+  display: none;
+  margin-top: 15px;
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+/* grupos */
+.form-group {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 12px;
 }
 
-.form-area input {
+/* linha dupla */
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+/* inputs */
+#formMissaoContainer input,
+#formMissaoContainer select {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
+  padding: 12px;
   border-radius: 10px;
   border: 1px solid #ccc;
   font-size: 14px;
 }
 
+/* labels */
+#formMissaoContainer label {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+/* botões */
+#formMissaoContainer button {
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* cores */
+#btnSalvarRegistro {
+  background: #2e7d32;
+  color: white;
+}
+
+#btnConcluirPonto {
+  background: #1565c0;
+  color: white;
+}
+
+/* lista */
+.registro-item {
+  background: #f4f6f8;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 6px;
+  font-size: 13px;
+}
 /* MAPA */
 
 /* BOTÕES NO MAPA */
