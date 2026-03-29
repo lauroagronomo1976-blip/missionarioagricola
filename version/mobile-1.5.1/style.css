@@ -38,10 +38,9 @@ html, body {
 }
 
 #formMissaoContainer {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease;
+  display: none;
 }
+
 #topoApp span {
   color: #2e7d32;
   font-size: 32px;
