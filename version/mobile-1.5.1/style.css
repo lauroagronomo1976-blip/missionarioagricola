@@ -70,21 +70,9 @@ input, textarea {
 }
 
 /* Botões grandes para luva */
-#formMissaoContainer button {
-  width: 100%;
-  padding: 12px;
-  font-size: 14px;
-}
 button {
-  width: 100%;
-  padding: 20px;
-  font-size: 22px;
-  border-radius: 16px;
-  border: none;
-  background: #2e7d32;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
+  padding: 10px 14px;
+  font-size: 14px;
 }
 
 /* AUMENTAR controles do mapa */
