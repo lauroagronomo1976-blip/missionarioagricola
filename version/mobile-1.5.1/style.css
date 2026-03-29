@@ -207,12 +207,15 @@ button {
 /* ===== FORMULÁRIO BONITO ===== */
 
 #formMissaoContainer {
-  display: none;
-  margin-top: 15px;
+  display: block; /* importante */
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+
   background: #ffffff;
-  padding: 16px;
+  padding: 0 15px;
   border-radius: 14px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  box-shadow: 0 -3px 10px rgba(0,0,0,0.2);
 }
 
 /* grupos */
