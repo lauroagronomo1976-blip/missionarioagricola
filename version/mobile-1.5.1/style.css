@@ -36,11 +36,7 @@ html, body {
   background: white;
   padding: 15px;
 }
-
-#formMissaoContainer {
-  display: none;
-}
-
+  
 #topoApp span {
   color: #2e7d32;
   font-size: 32px;
@@ -858,8 +854,8 @@ transform:translateY(0);
   display: flex;
   gap: 10px;
 }
+
 button {
-  width: 100%;
-  padding: 20px;
-  font-size: 22px;
+  padding: 10px 14px;
+  font-size: 14px;
 }
