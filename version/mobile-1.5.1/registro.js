@@ -130,7 +130,7 @@ function salvarRegistro() {
 
 
 function concluirPonto() {
-  document.getElementById("formMissaoContainer").style.display = "none";
+  document.getElementById("formMissaoContainer").classList.remove("ativo")
 }
 
 
