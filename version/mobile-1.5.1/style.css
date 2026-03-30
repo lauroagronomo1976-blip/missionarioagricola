@@ -194,12 +194,14 @@ button {
 /* FORMULÁRIO */
 /* ===== FORMULÁRIO BONITO ===== */
 
-#formMissaoContainer {
-  display: block; /* importante */
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease;
-
+formMissaoContainer {
+  display: block !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 15px;
+  background: white;
+  margin-top: 15px;
+}
   background: #ffffff;
   padding: 0 15px;
   border-radius: 14px;
