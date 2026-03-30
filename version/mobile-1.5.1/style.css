@@ -846,3 +846,13 @@ transform:translateY(0);
   max-height: 500px; /* abre o formulário */
   padding: 15px;
 }
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
