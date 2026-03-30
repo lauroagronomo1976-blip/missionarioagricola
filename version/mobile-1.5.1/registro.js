@@ -88,8 +88,12 @@ function marcarPonto() {
 
   L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map);
 
-  document.getElementById("formMissaoContainer").style.display = "block";
-
+  const form = document.getElementById("formMissaoContainer");
+form.classList.add("ativo");
+  
+const form = document.getElementById("formMissaoContainer");
+form.classList.add("ativo");
+  
   document.getElementById("tituloMissao").innerText = dadosMissao.missao;
 
   document.getElementById("infoMissao").innerHTML = `
@@ -98,7 +102,6 @@ function marcarPonto() {
     <b>Talhão:</b> ${dadosMissao.talhao}
   `;
 }
-
 
 function salvarRegistro() {
 
