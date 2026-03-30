@@ -858,3 +858,8 @@ transform:translateY(0);
   display: flex;
   gap: 10px;
 }
+button {
+  width: 100%;
+  padding: 20px;
+  font-size: 22px;
+}
