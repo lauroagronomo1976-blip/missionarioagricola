@@ -19,7 +19,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ================= MARCAR PONTO ================= */
   document.getElementById("btnMarcarPontoInferior")
-    .addEventListener("click", marcarPonto);
+.addEventListener("click",()=>{
+
+  if(!coordenadaAtual){
+    alert("Clique na 🎯 primeiro.")
+    return
+  }
+
+  L.marker([coordenadaAtual.lat,coordenadaAtual.lng]).addTo(map)
+
+  pontoAtual={
+    lat:coordenadaAtual.lat,
+    lng:coordenadaAtual.lng,
+    data:new Date().toISOString()
+  }
+
+  registrosDoPonto=[]
+
+  // 👇 MOSTRA O FORMULÁRIO
+  document.getElementById("formMissaoContainer").style.display="block"
+
+})
 
   /* ================= SALVAR REGISTRO ================= */
   document.getElementById("btnSalvarRegistro")
