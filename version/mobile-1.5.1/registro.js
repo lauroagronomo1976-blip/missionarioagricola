@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
   registrosDoPonto=[]
 
   // 👇 MOSTRA O FORMULÁRIO
-  document.getElementById("formMissaoContainer").style.display="block"
+  document.getElementById("formMissaoContainer").style.display = "none";
 
 })
 
