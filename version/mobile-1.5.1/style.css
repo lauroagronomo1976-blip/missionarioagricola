@@ -580,14 +580,14 @@ body, main, .container {
   width: 100%;
 }
 
-#formMissaoContainer {
-  background: #ffffff;
-  transition: max-height 0.4s ease;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-  box-shadow: 0 -3px 10px rgba(0,0,0,0.2);
-  padding: 0 15px;
+#formMissaoContainer{
+  display: none;
+  margin-top:15px;
+  background:white;
+  padding:15px;
+  border-radius:12px;
 }
+
 #map {
   width: 100%;
   height: 100%;
