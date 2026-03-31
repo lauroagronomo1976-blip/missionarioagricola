@@ -47,9 +47,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ================= CONCLUIR ================= */
   document.getElementById("btnConcluirPonto")
-    .addEventListener("click", concluirPonto);
-});
+.addEventListener("click",()=>{
 
+  if(!pontoAtual)return
+
+  pontoAtual.registros=registrosDoPonto
+
+  let pontos=JSON.parse(localStorage.getItem("pontos"))||[]
+
+  pontos.push(pontoAtual)
+
+  localStorage.setItem("pontos",JSON.stringify(pontos))
+
+  alert("Ponto salvo!")
+
+  // 👇 ESCONDE O FORMULÁRIO
+  document.getElementById("formMissaoContainer").style.display="none"
+
+})
 
 /* ================= FUNÇÕES ================= */
 
