@@ -583,8 +583,6 @@ body, main, .container {
 
 #formMissaoContainer {
   background: #ffffff;
-  max-height: 0;
-  overflow: hidden;
   transition: max-height 0.4s ease;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
