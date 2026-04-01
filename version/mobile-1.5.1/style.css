@@ -894,3 +894,29 @@ button {
   line-height: 30px !important;
   font-size: 16px !important;
 }
+
+/* BOTÃO DE CAMADAS MENOR E LIMPO */
+.leaflet-control-layers-toggle {
+  width: 30px !important;
+  height: 30px !important;
+}
+
+/* MENU (Rua / Satélite) */
+.leaflet-control-layers {
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+}
+
+/* Remove quebra estranha */
+.leaflet-control-layers label {
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+/* Remove espaço bugado */
+.leaflet-control-layers span {
+  margin: 0 !important;
+  padding: 0 !important;
+}
