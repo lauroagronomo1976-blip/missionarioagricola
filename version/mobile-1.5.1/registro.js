@@ -6,6 +6,11 @@ let registrosDoPonto = [];
 
 document.addEventListener("DOMContentLoaded", () => {
 
+    // 👇 MOSTRA O FORMULÁRIO
+  document.getElementById("formMissaoContainer").style.display = "none";
+
+})
+
   /* ================= MAPA ================= */
   map = L.map('map', { zoomControl: false })
     .setView([-15.0, -47.0], 5);
@@ -35,11 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   registrosDoPonto=[]
-
-  // 👇 MOSTRA O FORMULÁRIO
-  document.getElementById("formMissaoContainer").style.display = "none";
-
-})
 
   /* ================= SALVAR REGISTRO ================= */
   document.getElementById("btnSalvarRegistro")
