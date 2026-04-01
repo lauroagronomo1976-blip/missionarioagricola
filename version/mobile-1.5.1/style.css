@@ -195,7 +195,6 @@ button {
 /* ===== FORMULÁRIO BONITO ===== */
 
 formMissaoContainer {
-  display: block !important;
   max-height: none !important;
   overflow: visible !important;
   padding: 15px;
@@ -462,7 +461,6 @@ input {
 
 #registroIndividuos,
 #listaRegistros {
-  display: block !important;
   position: relative !important;
   z-index: 10000 !important;
   background: #ffffff !important;
