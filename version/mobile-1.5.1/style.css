@@ -862,50 +862,15 @@ button {
 }
 
 /* CORREÇÃO FINAL BOTÕES */
-button {
-  width: auto !important;
-  padding: 8px 12px !important;
-  font-size: 14px !important;
-}
-
-/* botão principal */
-#btnMarcarPontoInferior {
-  width: auto;
-  padding: 10px 16px;
-}
-
-/* botões do mapa */
-.painel-controles button {
-  width: 38px !important;
-  height: 38px !important;
-  padding: 0 !important;
-}
-/* diminuir zoom pela metade */
-.leaflet-control-zoom a {
-  transform: scale(0.5);
-  transform-origin: center;
-}
-
-.leaflet-control-zoom a {
-  width: 30px !important;
-  height: 30px !important;
-  line-height: 30px !important;
-  font-size: 16px !important;
-}
-
-/* BOTÃO DE CAMADAS MENOR E LIMPO */
-.leaflet-control-layers-toggle {
-  width: 30px !important;
-  height: 30px !important;
-}
-
-/* MENU (Rua / Satélite) */
+/* CONTAINER DO MENU */
 .leaflet-control-layers {
-  font-size: 12px !important;
-  line-height: 1.2 !important;
+  font-size: 13px !important;
+  padding: 6px 8px !important;
+  width: auto !important;
+  min-width: 120px;
 }
 
-/* Remove quebra estranha */
+/* LINHAS */
 .leaflet-control-layers label {
   display: flex !important;
   align-items: center;
@@ -913,8 +878,14 @@ button {
   white-space: nowrap;
 }
 
-/* Remove espaço bugado */
+/* TEXTO */
 .leaflet-control-layers span {
-  margin: 0 !important;
-  padding: 0 !important;
+  display: inline-block;
+  width: auto !important;
+}
+
+/* BOTÃO (ícone) */
+.leaflet-control-layers-toggle {
+  width: 32px !important;
+  height: 32px !important;
 }
