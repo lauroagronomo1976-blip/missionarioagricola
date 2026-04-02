@@ -879,4 +879,6 @@ button {
   height: 32px !important;
 }
 
-👉 Resultado:
+#formMissaoContainer:not(.ativo){
+  display: none !important;
+}
