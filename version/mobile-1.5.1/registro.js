@@ -5,7 +5,12 @@ let pontoAtual = null;
 let registrosDoPonto = [];
 
 document.addEventListener("DOMContentLoaded", () => {
+    
+const form = document.getElementById("formMissaoContainer")
 
+// força esconder SEM depender do CSS
+form.style.setProperty("display", "none", "important")
+    
     // 👇 MOSTRA O FORMULÁRIO
   document.getElementById("formMissaoContainer").style.display = "none";
 
@@ -23,8 +28,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnMira").addEventListener("click", ativarMira);
 
   /* ================= MARCAR PONTO ================= */
-  document.getElementById("btnMarcarPontoInferior")
-.addEventListener("click",()=>{
+    form.style.setProperty("display", "block", "important")
+
+    document.getElementById("btnMarcarPontoInferior")
+    .addEventListener("click",()=>{
 
   if(!coordenadaAtual){
     alert("Clique na 🎯 primeiro.")
@@ -46,8 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
     .addEventListener("click", salvarRegistro);
 
   /* ================= CONCLUIR ================= */
-  document.getElementById("btnConcluirPonto")
-.addEventListener("click",()=>{
+  form.style.setProperty("display", "none", "important")
+        
+    document.getElementById("btnConcluirPonto")
+    .addEventListener("click",()=>{
 
   if(!pontoAtual)return
 
