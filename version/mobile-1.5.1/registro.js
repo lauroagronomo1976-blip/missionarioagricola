@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
 const form = document.getElementById("formMissaoContainer")
 
+// trava escondido ao carregar
+form.style.setProperty("display", "none", "important")    
+
 // força esconder SEM depender do CSS
 form.style.setProperty("display", "none", "important")
     
