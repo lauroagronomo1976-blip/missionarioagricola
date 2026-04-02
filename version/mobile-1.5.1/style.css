@@ -890,3 +890,21 @@ button {
 .leaflet-control-layers span {
   font-size: 12px !important;
 }
+
+/* RESET COMPLETO DO CONTROLE DE CAMADAS */
+.leaflet-control-layers {
+  font: 12px/1.2 Arial, sans-serif !important;
+}
+
+.leaflet-control-layers label {
+  font: 12px Arial, sans-serif !important;
+}
+
+.leaflet-control-layers span {
+  font: 12px Arial, sans-serif !important;
+}
+
+/* checkbox alinhado */
+.leaflet-control-layers input {
+  margin-right: 4px;
+}
