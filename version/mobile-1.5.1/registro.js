@@ -31,7 +31,7 @@ form.style.setProperty("display", "none", "important")
   document.getElementById("btnMira").addEventListener("click", ativarMira);
 
   /* ================= MARCAR PONTO ================= */
-    form.style.setProperty("display", "block", "important")
+    form.style.setProperty("display", "none", "important")
 
     document.getElementById("btnMarcarPontoInferior")
     .addEventListener("click",()=>{
