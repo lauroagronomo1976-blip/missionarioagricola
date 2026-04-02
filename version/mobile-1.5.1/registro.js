@@ -74,7 +74,7 @@ form.style.setProperty("display", "none", "important")
   alert("Ponto salvo!")
 
   // 👇 ESCONDE O FORMULÁRIO
-  document.getElementById("formMissaoContainer").style.display="none"
+  document.getElementById("formMissaoContainer").hidden = false;
 
 })
 
@@ -135,10 +135,7 @@ function marcarPonto() {
 
   L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map);
 
-  const form = document.getElementById("formMissaoContainer");
-form.classList.add("ativo");
-  
-const form = document.getElementById("formMissaoContainer");
+ document.getElementById("formMissaoContainer").hidden = true;
 form.classList.add("ativo");
   
   document.getElementById("tituloMissao").innerText = dadosMissao.missao;
