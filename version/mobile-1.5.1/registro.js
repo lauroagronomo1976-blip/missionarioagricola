@@ -132,6 +132,7 @@ function ativarMira() {
       fillOpacity: 1
     }).addTo(map);
 
+      carregarPontosDoBanco()
   });
 }
 
