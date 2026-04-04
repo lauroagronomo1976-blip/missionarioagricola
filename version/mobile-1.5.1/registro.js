@@ -55,6 +55,14 @@ form.style.setProperty("display", "none", "important")
   document.getElementById("btnSalvarRegistro")
     .addEventListener("click", salvarRegistro);
 
+        db.collection("registros").add(registro)
+.then(()=>{
+  console.log("Salvo no banco 🚀")
+})
+.catch((e)=>{
+  console.error("Erro:", e)
+})
+        
   /* ================= CONCLUIR ================= */
   form.style.setProperty("display", "none", "important")
         
@@ -194,5 +202,15 @@ function renderizarLista() {
     `;
 
     lista.appendChild(div);
+      
+const firebaseConfig = {
+  apiKey: "SUA_KEY",
+  authDomain: "SEU_APP.firebaseapp.com",
+  projectId: "SEU_APP"
+}
+
+firebase.initializeApp(firebaseConfig)
+
+const db = firebase.firestore()      
   });
 }
