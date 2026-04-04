@@ -232,3 +232,32 @@ firebase.initializeApp(firebaseConfig)
 const db = firebase.firestore()      
   });
 }
+
+function carregarPontosDoBanco(){
+
+  db.collection("registros").get()
+  .then((snapshot)=>{
+
+    snapshot.forEach((doc)=>{
+
+      const r = doc.data()
+
+      // cria marcador
+      const marker = L.marker([r.lat, r.lng]).addTo(map)
+
+      // popup bonito
+      marker.bindPopup(`
+        <b>${r.ocorrencia}</b><br>
+        ${r.especie}<br>
+        Fase: ${r.fase}<br>
+        Sev: ${r.severidade}%
+      `)
+
+    })
+
+  })
+  .catch((e)=>{
+    console.error("Erro ao carregar pontos:", e)
+  })
+
+}
