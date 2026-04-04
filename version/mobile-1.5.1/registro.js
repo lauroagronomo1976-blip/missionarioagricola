@@ -52,15 +52,33 @@ form.style.setProperty("display", "none", "important")
   registrosDoPonto=[]
 
   /* ================= SALVAR REGISTRO ================= */
-  document.getElementById("btnSalvarRegistro")
-    .addEventListener("click", salvarRegistro);
+  }
 
-        db.collection("registros").add(registro)
-.then(()=>{
-  console.log("Salvo no banco 🚀")
-})
-.catch((e)=>{
-  console.error("Erro:", e)
+const registro = {
+  ocorrencia,
+  especie,
+  fase,
+  individuos: Number(individuos),
+  severidade: Number(severidade),
+  dataHora: new Date().toISOString(),
+  lat: coordenadaAtual.lat,
+  lng: coordenadaAtual.lng
+}
+
+try{
+
+  await db.collection("registros").add(registro)
+
+  console.log("🔥 Salvo no Firebase")
+
+  registrosDoPonto.push(registro)
+  renderizarLista()
+
+}catch(e){
+  console.error("Erro ao salvar:", e)
+  alert("Erro ao salvar no banco")
+}
+
 })
         
   /* ================= CONCLUIR ================= */
