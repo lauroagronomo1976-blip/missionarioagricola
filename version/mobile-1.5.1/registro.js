@@ -236,29 +236,28 @@ const db = firebase.firestore()
 
 function carregarPontosDoBanco(){
 
-  db.collection("registros").get()
-  .then((snapshot)=>{
+  db.collection("registros")
+  .onSnapshot((snapshot)=>{
 
-    snapshot.forEach((doc)=>{
+    snapshot.docChanges().forEach((change)=>{
 
-      const r = doc.data()
+      if(change.type === "added"){
 
-      // cria marcador
-      const marker = L.marker([r.lat, r.lng]).addTo(map)
+        const r = change.doc.data()
 
-      // popup bonito
-      marker.bindPopup(`
-        <b>${r.ocorrencia}</b><br>
-        ${r.especie}<br>
-        Fase: ${r.fase}<br>
-        Sev: ${r.severidade}%
-      `)
+        const marker = L.marker([r.lat, r.lng]).addTo(map)
+
+        marker.bindPopup(`
+          <b>${r.ocorrencia}</b><br>
+          ${r.especie}<br>
+          Fase: ${r.fase}<br>
+          Sev: ${r.severidade}%
+        `)
+
+      }
 
     })
 
-  })
-  .catch((e)=>{
-    console.error("Erro ao carregar pontos:", e)
   })
 
 }
