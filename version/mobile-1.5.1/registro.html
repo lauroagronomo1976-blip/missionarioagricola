@@ -1,409 +1,335 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Missionário Agrícola</title>
 
-<link rel="stylesheet" href="style.css">
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-</head>
-
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Missionário Agrícola</title>
+<!-- Leaflet CSS -->
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
-
-/* ======================
-RESET
-====================== */
-
 body{
-margin:0;
-font-family:Arial, sans-serif;
-background:#f4f6f8;
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#f4f6f8;
 }
 
-/* ======================
-TOPO
-====================== */
 #topoApp{
-background:#1b5e20;
-color:white;
-padding:18px;
-text-align:center;
-font-weight:bold;
-font-size:20px;
+  background:#1b5e20;
+  color:white;
+  padding:18px;
+  text-align:center;
+  font-weight:bold;
+  font-size:20px;
 }
-
-/* ======================
-MAPA
-====================== */
 
 #mapContainer{
-position:relative;
-width:94%;
-height:60vh;
-margin:15px auto;
+  position:relative;
+  width:94%;
+  height:60vh;
+  margin:15px auto;
 }
 
 #map{
-width:100%;
-height:100%;
-border-radius:14px;
-box-shadow:0 6px 20px rgba(0,0,0,0.25);
+  width:100%;
+  height:100%;
+  border-radius:14px;
 }
 
-/* ======================
-BOTÕES DO MAPA
-====================== */
-
 .painel-controles{
-position:absolute;
-top:70px;
-right:10px;
-display:flex;
-flex-direction:column;
-gap:8px;
-z-index:900; /* 👈 IMPORTANTE */
+  position:absolute;
+  top:70px;
+  right:10px;
+  z-index:900;
 }
 
 .painel-controles button{
-width:38px;
-height:38px;
-background:white;
-border:2px solid rgba(0,0,0,0.2);
-border-radius:4px;
-font-size:18px;
-cursor:pointer;
+  width:38px;
+  height:38px;
+  background:white;
+  border:2px solid rgba(0,0,0,0.2);
+  border-radius:4px;
+  font-size:18px;
+  cursor:pointer;
 }
 
-/* ======================
-PAINEL INFERIOR
-====================== */
-
 #painelInferior{
-width:94%;
-margin:0 auto 40px auto;
+  width:94%;
+  margin:0 auto 40px auto;
 }
 
 #btnMarcarPontoInferior{
-background:#1b5e20;
-color:white;
-border:none;
-padding:14px;
-border-radius:10px;
-font-weight:bold;
-cursor:pointer;
-width:200px;
+  background:#1b5e20;
+  color:white;
+  border:none;
+  padding:14px;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
 }
 
-/* ======================
-FORMULÁRIO
-====================== */
-
 #formMissaoContainer{
-  display: block !important;
-  position: relative !important;
-  z-index: 9999 !important;
-
+  display:none;
   margin-top:15px;
   background:white;
   padding:15px;
   border-radius:12px;
 }
 
-/* ======================
-FIX BOTÃO CAMADAS
-====================== */
-
-.leaflet-control-layers{
-z-index: 1000 !important;
+.form-group{
+  margin-bottom:10px;
 }
 
+.form-row{
+  display:flex;
+  gap:10px;
+}
+
+.form-row .form-group{
+  flex:1;
+}
+
+.leaflet-control-layers{
+  font-size:12px !important;
+}
 </style>
+
 </head>
 
 <body>
 
-<div id="topoApp">
-Missionário Agrícola
-</div>
+<div id="topoApp">Missionário Agrícola</div>
 
 <div id="mapContainer">
+  <div id="map"></div>
 
-<div id="map"></div>
-
-<div class="painel-controles">
-
-<button id="btnMira">🎯</button>
-<button id="btnRastro">📍</button>
-
-</div>
-
+  <div class="painel-controles">
+    <button id="btnMira">🎯</button>
+  </div>
 </div>
 
 <div id="painelInferior">
 
-  <button id="btnMarcarPontoInferior">Marcar Ponto</button>
+<button id="btnMarcarPontoInferior">Marcar Ponto</button>
 
-    <div id="formMissaoContainer" hidden>
-      
-  <h3 id="tituloMissao">Registro</h3>
+<div id="formMissaoContainer">
 
-  <div class="form-group">
-    <label>Ocorrência</label>
-    <select id="ocorrenciaSelect">
-      <option value="">Selecione</option>
-      <option>Praga</option>
-      <option>Doença</option>
-      <option>Planta Daninha</option>
-      <option>Outros</option>
-    </select>
-  </div>
+<h3>Registro</h3>
 
-  <div class="form-group">
-    <label>Espécie</label>
-    <input type="text" id="especieInput">
-  </div>
+<div class="form-group">
+<label>Ocorrência</label>
+<select id="ocorrenciaSelect">
+<option value="">Selecione</option>
+<option>Praga</option>
+<option>Doença</option>
+<option>Planta Daninha</option>
+<option>Outros</option>
+</select>
+</div>
 
-  <div class="form-row">
-    <div class="form-group">
-      <label>Fase</label>
-      <select id="faseSelect">
-        <option>Ovo</option>
-        <option>Larva</option>
-        <option>Ninfa</option>
-        <option>Adulto</option>
-      </select>
-    </div>
+<div class="form-group">
+<label>Espécie</label>
+<input type="text" id="especieInput">
+</div>
 
-    <div class="form-group">
-      <label>Nº Indivíduos</label>
-      <input type="number" id="individuosInput">
-    </div>
-  </div>
+<div class="form-row">
+<div class="form-group">
+<label>Fase</label>
+<select id="faseSelect">
+<option>Ovo</option>
+<option>Larva</option>
+<option>Ninfa</option>
+<option>Adulto</option>
+</select>
+</div>
 
-  <div class="form-group">
-    <label>Severidade (%)</label>
-    <input type="number" id="severidadeInput">
-  </div>
+<div class="form-group">
+<label>Nº Indivíduos</label>
+<input type="number" id="individuosInput">
+</div>
+</div>
 
-  <button id="btnSalvarRegistro">Salvar Registro</button>
-  <button id="btnConcluirPonto">Concluir Ponto</button>
+<div class="form-group">
+<label>Severidade (%)</label>
+<input type="number" id="severidadeInput">
+</div>
 
-  <div id="listaRegistros"></div>
+<button id="btnSalvarRegistro">Salvar Registro</button> <button id="btnConcluirPonto">Concluir Ponto</button>
+
+<div id="listaRegistros"></div>
 
 </div>
 </div>
-  
+
+<!-- Leaflet JS -->
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Firebase -->
+
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
-  <script>
+<script>
 
-let map
-let coordenadaAtual=null
-let marcadorAtual=null
-let pontoAtual=null
-let registrosDoPonto=[]
-
-document.addEventListener("DOMContentLoaded",()=>{
-
-/* =====================
-CRIAR MAPA
-===================== */
-
-map=L.map('map',{zoomControl:false})
-.setView([-15,-47],5)
-
-L.control.zoom({position:'bottomright'}).addTo(map)
-
-const street=L.tileLayer(
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-{maxZoom:19}
-).addTo(map)
-
-const satelite=L.tileLayer(
-'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-{maxZoom:21}
-)
-
-L.control.layers({
-"Rua":street,
-"Satélite":satelite
-},{},{position:'topright'}).addTo(map)
-
-/* =====================
-BOTÃO MIRA
-===================== */
-
-document.getElementById("btnMira")
-.addEventListener("click",()=>{
-
-navigator.geolocation.getCurrentPosition((pos)=>{
-
-const lat=pos.coords.latitude
-const lng=pos.coords.longitude
-
-coordenadaAtual={lat,lng}
-
-map.setView([lat,lng],17)
-
-if(marcadorAtual) map.removeLayer(marcadorAtual)
-
-marcadorAtual=L.circleMarker([lat,lng],{
-radius:8,
-color:"#1e88e5",
-fillColor:"#1e88e5",
-fillOpacity:1
-}).addTo(map)
-
-})
-
-})
-
-/* =====================
-MARCAR PONTO
-===================== */
-
-document.getElementById("btnMarcarPontoInferior")
-  
-.addEventListener("click",()=>{
-
-if(!coordenadaAtual){
-alert("Clique na 🎯 primeiro.")
-return
-}
-
-L.marker([coordenadaAtual.lat,coordenadaAtual.lng])
-.addTo(map)
-
-pontoAtual={
-lat:coordenadaAtual.lat,
-lng:coordenadaAtual.lng,
-data:new Date().toISOString()
-}
-
-registrosDoPonto=[]
-
-document.getElementById("formMissaoContainer")
-.style.display="block"
-
-})
-
-/* =====================
-SALVAR REGISTRO
-===================== */
-
-document.getElementById("btnSalvarRegistro")
-.addEventListener("click",()=>{
-
-const ocorrencia=document.getElementById("ocorrenciaSelect").value
-const especie=document.getElementById("especieInput").value
-const fase=document.getElementById("faseSelect").value
-const individuos=document.getElementById("individuosInput").value
-const severidade=document.getElementById("severidadeInput").value
-
-if(!ocorrencia||!especie){
-alert("Preencha os campos obrigatórios")
-return
-}
-
-const registro={
-ocorrencia,
-especie,
-fase,
-individuos,
-severidade
-}
-
-registrosDoPonto.push(registro)
-
-renderizarLista()
-
-})
-
-/* =====================
-CONCLUIR PONTO
-===================== */
-
-document.getElementById("btnConcluirPonto")
-.addEventListener("click",()=>{
-
-if(!pontoAtual)return
-
-pontoAtual.registros=registrosDoPonto
-
-let pontos=JSON.parse(localStorage.getItem("pontos"))||[]
-
-pontos.push(pontoAtual)
-
-localStorage.setItem("pontos",JSON.stringify(pontos))
-
-alert("Ponto salvo!")
-
-document.getElementById("formMissaoContainer")
-.style.display="none"
-
-})
-
-})
-
-/* =====================
-LISTA
-===================== */
-
-function renderizarLista(){
-
-const lista=document.getElementById("listaRegistros")
-
-lista.innerHTML=""
-
-registrosDoPonto.forEach(r=>{
-
-const div=document.createElement("div")
-
-div.className="registro-item"
-
-div.innerHTML=`
-<strong>${r.ocorrencia}</strong> - ${r.especie}<br>
-Fase: ${r.fase} | Ind: ${r.individuos} | Sev: ${r.severidade}
-`
-
-lista.appendChild(div)
-
-})
-
-}
-
-  const firebaseConfig = {
+// CONFIG FIREBASE
+const firebaseConfig = {
   apiKey: "SUA_API_KEY",
   authDomain: "SEU_PROJETO.firebaseapp.com",
-  projectId: "SEU_PROJETO",
+  projectId: "SEU_PROJETO"
 }
+
 firebase.initializeApp(firebaseConfig)
 const db = firebase.firestore()
 
-    <!-- Firebase -->
-<script src="firebase-app-compat.js"></script>
-<script src="firebase-firestore-compat.js"></script>
+let map
+let coordenadaAtual = null
+let marcadorAtual = null
+let marcadorPonto = null
+let registrosDoPonto = []
 
-<!-- Leaflet -->
-<script src="leaflet.js"></script>
+document.addEventListener("DOMContentLoaded",()=>{
 
-<!-- SEU SCRIPT (onde está seu código) -->
+map = L.map('map',{zoomControl:false}).setView([-15,-47],5)
 
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+L.control.zoom({position:'bottomright'}).addTo(map)
+
+const street = L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+).addTo(map)
+
+const satelite = L.tileLayer(
+'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+)
+
+L.control.layers({
+"Rua": street,
+"Satélite": satelite
+}).addTo(map)
+
+// MIRA
+document.getElementById("btnMira").onclick = ()=>{
+navigator.geolocation.getCurrentPosition((pos)=>{
+  const lat = pos.coords.latitude
+  const lng = pos.coords.longitude
+
+  coordenadaAtual = {lat,lng}
+  map.setView([lat,lng],17)
+
+  if(marcadorAtual) map.removeLayer(marcadorAtual)
+
+  marcadorAtual = L.circleMarker([lat,lng],{
+    radius:8,
+    color:"#1e88e5",
+    fillColor:"#1e88e5",
+    fillOpacity:1
+  }).addTo(map)
+})
+}
+
+// MARCAR PONTO
+document.getElementById("btnMarcarPontoInferior").onclick = ()=>{
+
+if(!coordenadaAtual){
+  alert("Clique na 🎯 primeiro.")
+  return
+}
+
+if(marcadorPonto) map.removeLayer(marcadorPonto)
+
+marcadorPonto = L.marker([coordenadaAtual.lat,coordenadaAtual.lng]).addTo(map)
+marcadorPonto.bindPopup("📍 Ponto em registro...")
+
+registrosDoPonto = []
+
+document.getElementById("formMissaoContainer").style.display = "block"
+
+}
+
+// SALVAR
+document.getElementById("btnSalvarRegistro").onclick = async ()=>{
+
+const ocorrencia = document.getElementById("ocorrenciaSelect").value
+const especie = document.getElementById("especieInput").value
+const fase = document.getElementById("faseSelect").value
+const individuos = document.getElementById("individuosInput").value
+const severidade = document.getElementById("severidadeInput").value
+
+if(!ocorrencia || !especie){
+  alert("Preencha os campos obrigatórios")
+  return
+}
+
+const registro = {
+  ocorrencia,
+  especie,
+  fase,
+  individuos,
+  severidade,
+  lat: coordenadaAtual.lat,
+  lng: coordenadaAtual.lng,
+  data: new Date().toISOString()
+}
+
+try{
+  await db.collection("registros").add(registro)
+  console.log("Salvo no Firebase")
+}catch(e){
+  console.error(e)
+}
+
+registrosDoPonto.push(registro)
+renderizarLista()
+
+document.getElementById("ocorrenciaSelect").value = ""
+document.getElementById("especieInput").value = ""
+document.getElementById("individuosInput").value = ""
+document.getElementById("severidadeInput").value = ""
+
+}
+
+// CONCLUIR
+document.getElementById("btnConcluirPonto").onclick = ()=>{
+
+let resumo = ""
+
+registrosDoPonto.forEach(r=>{
+  resumo += `
+  <b>${r.ocorrencia}</b> - ${r.especie}<br>
+  Fase: ${r.fase} | Ind: ${r.individuos} | Sev: ${r.severidade}%<br><br>
+  `
+})
+
+if(marcadorPonto){
+  marcadorPonto.bindPopup(resumo).openPopup()
+}
+
+document.getElementById("formMissaoContainer").style.display = "none"
+
+}
+
+})
+
+// LISTA
+function renderizarLista(){
+const lista = document.getElementById("listaRegistros")
+lista.innerHTML = ""
+
+registrosDoPonto.forEach(r=>{
+  const div = document.createElement("div")
+  div.innerHTML = `
+  <strong>${r.ocorrencia}</strong> - ${r.especie}<br>
+  Fase: ${r.fase} | Ind: ${r.individuos} | Sev: ${r.severidade}
+  `
+  lista.appendChild(div)
+})
+}
 
 </script>
-
 
 </body>
 </html>
