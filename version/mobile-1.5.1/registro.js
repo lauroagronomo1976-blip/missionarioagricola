@@ -32,25 +32,28 @@ form.style.setProperty("display", "none", "important")
   document.getElementById("btnMira").addEventListener("click", ativarMira);
 
   /* ================= MARCAR PONTO ================= */
-    form.style.setProperty("display", "none", "important")
+    if(!coordenadaAtual){
+  alert("Clique na 🎯 primeiro.")
+  return
+}
 
-    document.getElementById("btnMarcarPontoInferior")
-    .addEventListener("click",()=>{
+if(marcadorPonto){
+  map.removeLayer(marcadorPonto)
+}
 
-  if(!coordenadaAtual){
-    alert("Clique na 🎯 primeiro.")
-    return
-  }
+marcadorPonto = L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map)
 
-  L.marker([coordenadaAtual.lat,coordenadaAtual.lng]).addTo(map)
+marcadorPonto.bindPopup("📍 Ponto em registro...")
 
-  pontoAtual={
-    lat:coordenadaAtual.lat,
-    lng:coordenadaAtual.lng,
-    data:new Date().toISOString()
-  }
+pontoAtual = {
+  lat: coordenadaAtual.lat,
+  lng: coordenadaAtual.lng,
+  data: new Date().toISOString()
+}
 
-  registrosDoPonto=[]
+registrosDoPonto = []
+
+document.getElementById("formMissaoContainer").hidden = false
 
   /* ================= SALVAR REGISTRO ================= */
   }
@@ -90,41 +93,31 @@ try{
 
 console.log("Enviando para Firebase:", registro)
 
+document.getElementById("ocorrenciaSelect").value = ""
+document.getElementById("especieInput").value = ""
+document.getElementById("individuosInput").value = ""
+document.getElementById("severidadeInput").value = ""
 })
         
   /* ================= CONCLUIR ================= */
-  form.style.setProperty("display", "none", "important")
-        
-    document.getElementById("btnConcluirPonto")
-    .addEventListener("click",()=>{
+  if(!pontoAtual) return
 
-        let resumo = ""
+pontoAtual.registros = registrosDoPonto
+
+let resumo = ""
 
 registrosDoPonto.forEach(r=>{
   resumo += `
     <b>${r.ocorrencia}</b> - ${r.especie}<br>
-    Fase: ${r.fase} | Sev: ${r.severidade}%<br><br>
+    Fase: ${r.fase} | Ind: ${r.individuos} | Sev: ${r.severidade}%<br><br>
   `
 })
 
-marcadorPonto.bindPopup(resumo)
-        
-  if(!pontoAtual)return
+if(marcadorPonto){
+  marcadorPonto.bindPopup(resumo).openPopup()
+}
 
-  pontoAtual.registros=registrosDoPonto
-
-  let pontos=JSON.parse(localStorage.getItem("pontos"))||[]
-
-  pontos.push(pontoAtual)
-
-  localStorage.setItem("pontos",JSON.stringify(pontos))
-
-  alert("Ponto salvo!")
-
-  // 👇 ESCONDE O FORMULÁRIO
-  document.getElementById("formMissaoContainer").hidden = false;
-
-})
+document.getElementById("formMissaoContainer").hidden = true
 
 /* ================= FUNÇÕES ================= */
 
