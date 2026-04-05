@@ -68,6 +68,14 @@ const registro = {
 
 try{
 
+  const docRef = await db.collection("registros").add(registro)
+
+  console.log("🔥 ID salvo:", docRef.id)
+
+}catch(e){
+  console.error("Erro ao salvar:", e)
+}
+
   await db.collection("registros").add(registro)
 
   console.log("🔥 Salvo no Firebase")
@@ -79,6 +87,8 @@ try{
   console.error("Erro ao salvar:", e)
   alert("Erro ao salvar no banco")
 }
+
+console.log("Enviando para Firebase:", registro)
 
 })
         
