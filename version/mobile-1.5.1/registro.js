@@ -1,3 +1,4 @@
+let marcadorPonto = null
 let map;
 let coordenadaAtual = null;
 let marcadorAtual = null;
@@ -87,6 +88,17 @@ try{
     document.getElementById("btnConcluirPonto")
     .addEventListener("click",()=>{
 
+        let resumo = ""
+
+registrosDoPonto.forEach(r=>{
+  resumo += `
+    <b>${r.ocorrencia}</b> - ${r.especie}<br>
+    Fase: ${r.fase} | Sev: ${r.severidade}%<br><br>
+  `
+})
+
+marcadorPonto.bindPopup(resumo)
+        
   if(!pontoAtual)return
 
   pontoAtual.registros=registrosDoPonto
@@ -121,10 +133,13 @@ function ativarMira() {
 
     map.setView([lat, lng], 17);
 
-    if (marcadorAtual) {
-      map.removeLayer(marcadorAtual);
-    }
+    if(marcadorPonto) map.removeLayer(marcadorPonto)
 
+marcadorPonto = L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map)
+
+marcadorPonto.bindPopup("📍 Ponto em registro...")
+
+      
     marcadorAtual = L.circleMarker([lat, lng], {
       radius: 8,
       color: "#1e88e5",
@@ -245,9 +260,10 @@ function carregarPontosDoBanco(){
 
         const r = change.doc.data()
 
-        const marker = L.marker([r.lat, r.lng]).addTo(map)
+        const marker = L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map)
 
-        marker.bindPopup(`
+        marker.bindPopup("📍 Ponto em registro...")
+
           <b>${r.ocorrencia}</b><br>
           ${r.especie}<br>
           Fase: ${r.fase}<br>
