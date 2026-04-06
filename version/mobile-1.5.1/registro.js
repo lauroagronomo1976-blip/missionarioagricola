@@ -269,35 +269,31 @@ function concluirPonto() {
 }
 
 
-function renderizarLista() {
+function renderizarLista(){
 
-  const lista = document.getElementById("listaRegistros");
-  lista.innerHTML = "";
+const lista = document.getElementById("listaRegistros")
+lista.innerHTML = "<h4>Registros do ponto:</h4>"
 
-  registrosDoPonto.forEach((r) => {
+registrosDoPonto.forEach(r=>{
 
-    const div = document.createElement("div");
-    div.className = "registro-item";
+  const div = document.createElement("div")
 
-    div.innerHTML = `
-      <strong>${r.ocorrencia}</strong> - ${r.especie}<br>
-      Fase: ${r.fase} | Ind: ${r.individuos} | Sev: ${r.severidade}%
-    `;
+  div.style.border = "1px solid #ddd"
+  div.style.padding = "8px"
+  div.style.marginBottom = "6px"
+  div.style.borderRadius = "6px"
+  div.style.background = "#fafafa"
 
-    lista.appendChild(div);
-      
-const firebaseConfig = {
-  apiKey: "SUA_KEY",
-  authDomain: "SEU_APP.firebaseapp.com",
-  projectId: "SEU_APP"
+  div.innerHTML = `
+  <strong>${r.ocorrencia}</strong> - ${r.especie}<br>
+  Fase: ${r.fase} | Ind: ${r.individuos || 0} | Sev: ${r.severidade || 0}%
+  `
+
+  lista.appendChild(div)
+
+})
+
 }
-
-firebase.initializeApp(firebaseConfig)
-
-const db = firebase.firestore()      
-  });
-}
-
 function carregarPontosDoBanco(){
 
   db.collection("registros")
