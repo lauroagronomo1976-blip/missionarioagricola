@@ -4,6 +4,9 @@ let coordenadaAtual = null;
 let marcadorAtual = null;
 let pontoAtual = null;
 let registrosDoPonto = [];
+let rastroAtivo = false
+let linhaRastro = null
+let pontosRastro = []
 
 document.addEventListener("DOMContentLoaded", () => {
     
@@ -29,7 +32,37 @@ form.style.setProperty("display", "none", "important")
   setTimeout(() => map.invalidateSize(), 300);
 
   /* ================= 🎯 MIRA ================= */
-  document.getElementById("btnMira").addEventListener("click", ativarMira);
+  document.getElementById("btnMira").onclick = ()=>{
+navigator.geolocation.getCurrentPosition((pos)=>{
+
+  const lat = pos.coords.latitude
+  const lng = pos.coords.longitude
+
+  coordenadaAtual = {lat,lng}
+  map.setView([lat,lng],17)
+
+  if(marcadorAtual) map.removeLayer(marcadorAtual)
+
+  marcadorAtual = L.circleMarker([lat,lng],{
+    radius:8,
+    color:"#1e88e5",
+    fillColor:"#1e88e5",
+    fillOpacity:1
+  }).addTo(map)
+
+  // 🔥 RASTRO
+  if(rastroAtivo){
+    pontosRastro.push([lat,lng])
+
+    if(linhaRastro) map.removeLayer(linhaRastro)
+
+    linhaRastro = L.polyline(pontosRastro,{
+      color:"red"
+    }).addTo(map)
+  }
+
+})
+}
 
   /* ================= MARCAR PONTO ================= */
     if(!coordenadaAtual){
@@ -190,6 +223,19 @@ form.classList.add("ativo");
     <b>Fazenda:</b> ${dadosMissao.fazenda}<br>
     <b>Talhão:</b> ${dadosMissao.talhao}
   `;
+    document.getElementById("btnRastro").onclick = ()=>{
+
+  rastroAtivo = !rastroAtivo
+
+  if(rastroAtivo){
+    pontosRastro = []
+    if(linhaRastro) map.removeLayer(linhaRastro)
+    alert("Rastro ativado")
+  }else{
+    alert("Rastro pausado")
+  }
+
+}
 }
 
 function salvarRegistro() {
