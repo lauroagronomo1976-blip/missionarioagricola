@@ -246,16 +246,14 @@ form.classList.add("ativo");
     <b>Fazenda:</b> ${dadosMissao.fazenda}<br>
     <b>Talhão:</b> ${dadosMissao.talhao}
   `;
-    document.getElementById("btnRastro").onclick = ()=>{
+ document.getElementById("btnRastro").onclick = ()=>{
 
-  rastroAtivo = !rastroAtivo
-
-  if(rastroAtivo){
-    pontosRastro = []
-    if(linhaRastro) map.removeLayer(linhaRastro)
-    alert("Rastro ativado")
+  if(!rastroAtivo){
+    iniciarRastro()
+  }else if(!rastroPausado){
+    pausarRastro()
   }else{
-    alert("Rastro pausado")
+    continuarRastro()
   }
 
 }
