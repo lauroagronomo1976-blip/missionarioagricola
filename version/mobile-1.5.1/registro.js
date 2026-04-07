@@ -1,3 +1,13 @@
+/* ================= VARIÁVEIS ================= */
+
+let map
+let coordenadaAtual = null
+let marcadorAtual = null
+let marcadorPonto = null
+
+let registrosDoPonto = []
+
+// RASTRO
 let rastroAtivo = false
 let rastroPausado = false
 let watchId = null
@@ -7,288 +17,129 @@ let distanciaTotal = 0
 let ultimoPonto = null
 let inicioTempo = null
 
-let marcadorPonto = null
-let map;
-let coordenadaAtual = null;
-let marcadorAtual = null;
-let pontoAtual = null;
-let registrosDoPonto = [];
-let rastroAtivo = false
-let linhaRastro = null
-let pontosRastro = []
+/* ================= INIT ================= */
 
 document.addEventListener("DOMContentLoaded", () => {
-    
-const form = document.getElementById("formMissaoContainer")
 
-// trava escondido ao carregar
-form.style.setProperty("display", "none", "important")    
+// MAPA
+map = L.map('map', { zoomControl:false }).setView([-15,-47],5)
 
-// força esconder SEM depender do CSS
-form.style.setProperty("display", "none", "important")
-    
-    // 👇 MOSTRA O FORMULÁRIO
-  document.getElementById("formMissaoContainer").style.display = "none";
+L.control.zoom({ position:'bottomright' }).addTo(map)
+
+const street = L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+).addTo(map)
+
+const satelite = L.tileLayer(
+'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+)
+
+L.control.layers(
+{"Rua":street,"Satélite":satelite},
+{},
+{position:'topright'}
+).addTo(map)
+
+// ESCONDE FORM
+document.getElementById("formMissaoContainer").style.display = "none"
+
+// EVENTOS
+document.getElementById("btnMira").onclick = ativarMira
+document.getElementById("btnMarcarPontoInferior").onclick = marcarPonto
+document.getElementById("btnSalvarRegistro").onclick = salvarRegistro
+document.getElementById("btnConcluirPonto").onclick = concluirPonto
+document.getElementById("btnRastro").onclick = controlarRastro
 
 })
 
-  /* ================= MAPA ================= */
-  map = L.map('map', { zoomControl: false })
-    .setView([-15.0, -47.0], 5);
+/* ================= 🎯 MIRA ================= */
 
-  L.control.zoom({ position: 'bottomright' }).addTo(map);
+function ativarMira(){
 
-  setTimeout(() => map.invalidateSize(), 300);
-
-  /* ================= 🎯 MIRA ================= */
-  document.getElementById("btnMira").onclick = ()=>{
 navigator.geolocation.getCurrentPosition((pos)=>{
 
-  const lat = pos.coords.latitude
-  const lng = pos.coords.longitude
+```
+const lat = pos.coords.latitude
+const lng = pos.coords.longitude
 
-  coordenadaAtual = {lat,lng}
-  map.setView([lat,lng],17)
+coordenadaAtual = {lat,lng}
 
-  if(marcadorAtual) map.removeLayer(marcadorAtual)
+map.setView([lat,lng],17)
 
-  marcadorAtual = L.circleMarker([lat,lng],{
-    radius:8,
-    color:"#1e88e5",
-    fillColor:"#1e88e5",
-    fillOpacity:1
-  }).addTo(map)
+if(marcadorAtual) map.removeLayer(marcadorAtual)
 
-  // 🔥 RASTRO
-  if(rastroAtivo){
-    pontosRastro.push([lat,lng])
-
-    if(linhaRastro) map.removeLayer(linhaRastro)
-
-    linhaRastro = L.polyline(pontosRastro,{
-      color:"red"
-    }).addTo(map)
-  }
+marcadorAtual = L.circleMarker([lat,lng],{
+  radius:8,
+  color:"#1e88e5",
+  fillColor:"#1e88e5",
+  fillOpacity:1
+}).addTo(map)
+```
 
 })
+
 }
 
-  /* ================= MARCAR PONTO ================= */
-    if(!coordenadaAtual){
-  alert("Clique na 🎯 primeiro.")
-  return
+/* ================= 📍 MARCAR PONTO ================= */
+
+function marcarPonto(){
+
+if(!coordenadaAtual){
+alert("Clique na 🎯 primeiro.")
+return
 }
 
-if(marcadorPonto){
-  map.removeLayer(marcadorPonto)
-}
+if(marcadorPonto) map.removeLayer(marcadorPonto)
 
 marcadorPonto = L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map)
 
 marcadorPonto.bindPopup("📍 Ponto em registro...")
-
-pontoAtual = {
-  lat: coordenadaAtual.lat,
-  lng: coordenadaAtual.lng,
-  data: new Date().toISOString()
-}
 
 registrosDoPonto = []
 
-document.getElementById("formMissaoContainer").hidden = false
+document.getElementById("formMissaoContainer").style.display = "block"
 
-  /* ================= SALVAR REGISTRO ================= */
-  }
+}
+
+/* ================= 💾 SALVAR ================= */
+
+async function salvarRegistro(){
+
+const ocorrencia = document.getElementById("ocorrenciaSelect").value
+const especie = document.getElementById("especieInput").value
+const fase = document.getElementById("faseSelect").value
+const individuos = document.getElementById("individuosInput").value
+const severidade = document.getElementById("severidadeInput").value
+
+if(!ocorrencia || !especie){
+alert("Preencha os campos obrigatórios")
+return
+}
 
 const registro = {
-  ocorrencia,
-  especie,
-  fase,
-  individuos: Number(individuos),
-  severidade: Number(severidade),
-  dataHora: new Date().toISOString(),
-  lat: coordenadaAtual.lat,
-  lng: coordenadaAtual.lng
+ocorrencia,
+especie,
+fase,
+individuos,
+severidade,
+lat: coordenadaAtual.lat,
+lng: coordenadaAtual.lng,
+data: new Date().toISOString()
 }
 
 try{
-
-  const docRef = await db.collection("registros").add(registro)
-
-  console.log("🔥 ID salvo:", docRef.id)
-
+await db.collection("registros").add(registro)
+console.log("Salvo no Firebase")
 }catch(e){
-  console.error("Erro ao salvar:", e)
+console.error(e)
 }
 
-  await db.collection("registros").add(registro)
-
-  console.log("🔥 Salvo no Firebase")
-
-  registrosDoPonto.push(registro)
-  renderizarLista()
-
-}catch(e){
-  console.error("Erro ao salvar:", e)
-  alert("Erro ao salvar no banco")
-}
-
-console.log("Enviando para Firebase:", registro)
-
-document.getElementById("ocorrenciaSelect").value = ""
-document.getElementById("especieInput").value = ""
-document.getElementById("individuosInput").value = ""
-document.getElementById("severidadeInput").value = ""
-})
-        
-  /* ================= CONCLUIR ================= */
-  if(!pontoAtual) return
-
-pontoAtual.registros = registrosDoPonto
-
-let resumo = ""
-
-registrosDoPonto.forEach(r=>{
-  resumo += `
-    <b>${r.ocorrencia}</b> - ${r.especie}<br>
-    Fase: ${r.fase} | Ind: ${r.individuos} | Sev: ${r.severidade}%<br><br>
-  `
-})
-
-if(marcadorPonto){
-  marcadorPonto.bindPopup(resumo).openPopup()
-}
-
-document.getElementById("formMissaoContainer").hidden = true
-
-/* ================= FUNÇÕES ================= */
-
-function ativarMira() {
-  if (!navigator.geolocation) {
-    alert("Geolocalização não suportada.");
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition((pos) => {
-
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
-
-    coordenadaAtual = { lat, lng };
-
-    map.setView([lat, lng], 17);
-
-    if(marcadorPonto) map.removeLayer(marcadorPonto)
-
-marcadorPonto = L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map)
-
-marcadorPonto.bindPopup("📍 Ponto em registro...")
-
-      
-    marcadorAtual = L.circleMarker([lat, lng], {
-      radius: 8,
-      color: "#1e88e5",
-      fillColor: "#1e88e5",
-      fillOpacity: 1
-    }).addTo(map);
-
-      carregarPontosDoBanco()
-  });
-}
-
-function calcularDistancia(lat1, lon1, lat2, lon2) {
-  const R = 6371
-  const dLat = (lat2-lat1) * Math.PI/180
-  const dLon = (lon2-lon1) * Math.PI/180
-
-  const a =
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1 * Math.PI/180) *
-    Math.cos(lat2 * Math.PI/180) *
-    Math.sin(dLon/2) * Math.sin(dLon/2)
-
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
-  return R * c
-}
-
-function marcarPonto() {
-
-  const dadosMissao = JSON.parse(localStorage.getItem("dadosMissao"));
-
-  if (!dadosMissao) {
-    alert("Nenhuma missão ativa.");
-    return;
-  }
-
-  if (!coordenadaAtual) {
-    alert("Clique na 🎯 primeiro.");
-    return;
-  }
-
-  pontoAtual = {
-    ...dadosMissao,
-    latitude: coordenadaAtual.lat,
-    longitude: coordenadaAtual.lng,
-    data: new Date().toISOString()
-  };
-
-  registrosDoPonto = [];
-
-  L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map);
-
- document.getElementById("formMissaoContainer").hidden = true;
-form.classList.add("ativo");
-  
-  document.getElementById("tituloMissao").innerText = dadosMissao.missao;
-
-  document.getElementById("infoMissao").innerHTML = `
-    <b>Missão:</b> ${dadosMissao.missao}<br>
-    <b>Fazenda:</b> ${dadosMissao.fazenda}<br>
-    <b>Talhão:</b> ${dadosMissao.talhao}
-  `;
- document.getElementById("btnRastro").onclick = ()=>{
-
-  if(!rastroAtivo){
-    iniciarRastro()
-  }else if(!rastroPausado){
-    pausarRastro()
-  }else{
-    continuarRastro()
-  }
+registrosDoPonto.push(registro)
+renderizarLista()
 
 }
-}
 
-function salvarRegistro() {
-
-  const ocorrencia = document.getElementById("ocorrenciaSelect").value;
-  const especie = document.getElementById("especieInput").value;
-  const fase = document.getElementById("faseSelect").value;
-  const individuos = document.getElementById("individuosInput").value;
-  const severidade = document.getElementById("severidadeInput").value;
-
-  if (!ocorrencia || !especie) {
-    alert("Preencha os campos obrigatórios.");
-    return;
-  }
-
-  const registro = {
-    ocorrencia,
-    especie,
-    fase,
-    individuos,
-    severidade
-  };
-
-  registrosDoPonto.push(registro);
-  renderizarLista();
-}
-
-
-function concluirPonto() {
-  document.getElementById("formMissaoContainer").classList.remove("ativo")
-}
-
+/* ================= 📋 LISTA ================= */
 
 function renderizarLista(){
 
@@ -297,153 +148,177 @@ lista.innerHTML = "<h4>Registros do ponto:</h4>"
 
 registrosDoPonto.forEach(r=>{
 
-  const div = document.createElement("div")
+```
+const div = document.createElement("div")
 
-  div.style.border = "1px solid #ddd"
-  div.style.padding = "8px"
-  div.style.marginBottom = "6px"
-  div.style.borderRadius = "6px"
-  div.style.background = "#fafafa"
+div.style.border = "1px solid #ddd"
+div.style.padding = "8px"
+div.style.marginBottom = "6px"
+div.style.borderRadius = "6px"
 
-  div.innerHTML = `
+div.innerHTML = `
   <strong>${r.ocorrencia}</strong> - ${r.especie}<br>
   Fase: ${r.fase} | Ind: ${r.individuos || 0} | Sev: ${r.severidade || 0}%
-  `
+`
 
-  lista.appendChild(div)
+lista.appendChild(div)
+```
 
 })
 
 }
+
+/* ================= ✅ CONCLUIR ================= */
+
+function concluirPonto(){
+
+let resumo = ""
+
+registrosDoPonto.forEach(r=>{
+resumo += `       <b>${r.ocorrencia}</b> - ${r.especie}<br>
+      Fase: ${r.fase} | Ind: ${r.individuos} | Sev: ${r.severidade}%<br><br>
+    `
+})
+
+if(marcadorPonto){
+marcadorPonto.bindPopup(resumo).openPopup()
+}
+
+document.getElementById("formMissaoContainer").style.display = "none"
+
+}
+
+/* ================= 📏 DISTÂNCIA ================= */
+
+function calcularDistancia(lat1, lon1, lat2, lon2){
+
+const R = 6371
+const dLat = (lat2-lat1) * Math.PI/180
+const dLon = (lon2-lon1) * Math.PI/180
+
+const a =
+Math.sin(dLat/2)**2 +
+Math.cos(lat1*Math.PI/180) *
+Math.cos(lat2*Math.PI/180) *
+Math.sin(dLon/2)**2
+
+const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+return R * c
+
+}
+
+/* ================= 🛰️ RASTRO ================= */
+
+function controlarRastro(){
+
+if(!rastroAtivo){
+iniciarRastro()
+}else if(!rastroPausado){
+pausarRastro()
+}else{
+continuarRastro()
+}
+
+}
+
 function iniciarRastro(){
 
-  rastroAtivo = true
-  rastroPausado = false
-  pontosRastro = []
-  distanciaTotal = 0
-  ultimoPonto = null
-  inicioTempo = new Date()
+rastroAtivo = true
+rastroPausado = false
+pontosRastro = []
+distanciaTotal = 0
+ultimoPonto = null
+inicioTempo = new Date()
 
-  watchId = navigator.geolocation.watchPosition((pos)=>{
+watchId = navigator.geolocation.watchPosition((pos)=>{
 
-    if(rastroPausado) return
+```
+if(rastroPausado) return
 
-    const lat = pos.coords.latitude
-    const lng = pos.coords.longitude
+const lat = pos.coords.latitude
+const lng = pos.coords.longitude
 
-    pontosRastro.push([lat,lng])
+pontosRastro.push([lat,lng])
 
-    if(ultimoPonto){
-      distanciaTotal += calcularDistancia(
-        ultimoPonto.lat,
-        ultimoPonto.lng,
-        lat,
-        lng
-      )
-    }
+if(ultimoPonto){
+  distanciaTotal += calcularDistancia(
+    ultimoPonto.lat,
+    ultimoPonto.lng,
+    lat,
+    lng
+  )
+}
+
+ultimoPonto = {lat,lng}
+
+if(linhaRastro) map.removeLayer(linhaRastro)
+
+linhaRastro = L.polyline(pontosRastro,{color:"red"}).addTo(map)
+
+atualizarPainelRastro()
+```
+
+})
+
+mostrarPainelRastro()
+
+}
+
 function pausarRastro(){
-  rastroPausado = true
+rastroPausado = true
 }
-      
- function continuarRastro(){
-  rastroPausado = false
+
+function continuarRastro(){
+rastroPausado = false
 }
-      function finalizarRastro(){
 
-  navigator.geolocation.clearWatch(watchId)
+function finalizarRastro(){
 
-  rastroAtivo = false
-  rastroPausado = false
+navigator.geolocation.clearWatch(watchId)
 
-  gerarKML()
+rastroAtivo = false
+rastroPausado = false
 
-  esconderPainelRastro()
+gerarKML()
+
+esconderPainelRastro()
 
 }
-      function mostrarPainelRastro(){
-  document.getElementById("painelRastro").style.display = "block"
+
+/* ================= 📊 PAINEL ================= */
+
+function mostrarPainelRastro(){
+document.getElementById("painelRastro").style.display = "block"
 }
 
 function esconderPainelRastro(){
-  document.getElementById("painelRastro").style.display = "none"
+document.getElementById("painelRastro").style.display = "none"
 }
 
 function atualizarPainelRastro(){
 
-  const agora = new Date()
-  const tempo = Math.floor((agora - inicioTempo)/1000)
+const tempo = Math.floor((new Date() - inicioTempo)/1000)
 
-  const min = Math.floor(tempo/60)
-  const seg = tempo % 60
+const min = Math.floor(tempo/60)
+const seg = tempo % 60
 
-  document.getElementById("infoRastro").innerHTML =
-    `Tempo: ${min}m ${seg}s <br> Distância: ${distanciaTotal.toFixed(2)} km`
+document.getElementById("infoRastro").innerHTML =
+`Tempo: ${min}m ${seg}s <br> Distância: ${distanciaTotal.toFixed(2)} km`
 
 }
-      
- function gerarKML(){
 
-let kml = `<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
-<Document>
-<Placemark>
-<LineString>
-<coordinates>`
+/* ================= 📁 KML ================= */
+
+function gerarKML(){
+
+let kml = `<?xml version="1.0" encoding="UTF-8"?>   <kml xmlns="http://www.opengis.net/kml/2.2">   <Document><Placemark><LineString><coordinates>`
 
 pontosRastro.forEach(p=>{
-  kml += `${p[1]},${p[0]},0 `
+kml += `${p[1]},${p[0]},0 `
 })
 
-kml += `
-</coordinates>
-</LineString>
-</Placemark>
-</Document>
-</kml>`
+kml += `</coordinates></LineString></Placemark></Document></kml>`
 
-console.log(kml)
-
-}
-      ultimoPonto = {lat,lng}
-
-    if(linhaRastro) map.removeLayer(linhaRastro)
-
-    linhaRastro = L.polyline(pontosRastro,{
-      color:"red"
-    }).addTo(map)
-
-    atualizarPainelRastro()
-
-  })
-
-  mostrarPainelRastro()
-
-}
-function carregarPontosDoBanco(){
-
-  db.collection("registros")
-  .onSnapshot((snapshot)=>{
-
-    snapshot.docChanges().forEach((change)=>{
-
-      if(change.type === "added"){
-
-        const r = change.doc.data()
-
-        const marker = L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map)
-
-        marker.bindPopup("📍 Ponto em registro...")
-
-          <b>${r.ocorrencia}</b><br>
-          ${r.especie}<br>
-          Fase: ${r.fase}<br>
-          Sev: ${r.severidade}%
-        `)
-
-      }
-
-    })
-
-  })
+console.log("KML gerado:", kml)
 
 }
