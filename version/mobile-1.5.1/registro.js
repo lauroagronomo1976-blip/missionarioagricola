@@ -315,6 +315,110 @@ registrosDoPonto.forEach(r=>{
 })
 
 }
+function iniciarRastro(){
+
+  rastroAtivo = true
+  rastroPausado = false
+  pontosRastro = []
+  distanciaTotal = 0
+  ultimoPonto = null
+  inicioTempo = new Date()
+
+  watchId = navigator.geolocation.watchPosition((pos)=>{
+
+    if(rastroPausado) return
+
+    const lat = pos.coords.latitude
+    const lng = pos.coords.longitude
+
+    pontosRastro.push([lat,lng])
+
+    if(ultimoPonto){
+      distanciaTotal += calcularDistancia(
+        ultimoPonto.lat,
+        ultimoPonto.lng,
+        lat,
+        lng
+      )
+    }
+function pausarRastro(){
+  rastroPausado = true
+}
+      
+ function continuarRastro(){
+  rastroPausado = false
+}
+      function finalizarRastro(){
+
+  navigator.geolocation.clearWatch(watchId)
+
+  rastroAtivo = false
+  rastroPausado = false
+
+  gerarKML()
+
+  esconderPainelRastro()
+
+}
+      function mostrarPainelRastro(){
+  document.getElementById("painelRastro").style.display = "block"
+}
+
+function esconderPainelRastro(){
+  document.getElementById("painelRastro").style.display = "none"
+}
+
+function atualizarPainelRastro(){
+
+  const agora = new Date()
+  const tempo = Math.floor((agora - inicioTempo)/1000)
+
+  const min = Math.floor(tempo/60)
+  const seg = tempo % 60
+
+  document.getElementById("infoRastro").innerHTML =
+    `Tempo: ${min}m ${seg}s <br> Distância: ${distanciaTotal.toFixed(2)} km`
+
+}
+      
+ function gerarKML(){
+
+let kml = `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+<Placemark>
+<LineString>
+<coordinates>`
+
+pontosRastro.forEach(p=>{
+  kml += `${p[1]},${p[0]},0 `
+})
+
+kml += `
+</coordinates>
+</LineString>
+</Placemark>
+</Document>
+</kml>`
+
+console.log(kml)
+
+}
+      ultimoPonto = {lat,lng}
+
+    if(linhaRastro) map.removeLayer(linhaRastro)
+
+    linhaRastro = L.polyline(pontosRastro,{
+      color:"red"
+    }).addTo(map)
+
+    atualizarPainelRastro()
+
+  })
+
+  mostrarPainelRastro()
+
+}
 function carregarPontosDoBanco(){
 
   db.collection("registros")
