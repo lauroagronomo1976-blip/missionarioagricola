@@ -59,10 +59,10 @@ function ativarMira(){
 
 navigator.geolocation.getCurrentPosition((pos)=>{
 
-```
 const lat = pos.coords.latitude
 const lng = pos.coords.longitude
 
+})
 coordenadaAtual = {lat,lng}
 
 map.setView([lat,lng],17)
@@ -176,9 +176,9 @@ function concluirPonto(){
 let resumo = ""
 
 registrosDoPonto.forEach(r=>{
-resumo += `       <b>${r.ocorrencia}</b> - ${r.especie}<br>
-      Fase: ${r.fase} | Ind: ${r.individuos} | Sev: ${r.severidade}%<br><br>
-    `
+
+const div = document.createElement("div")
+
 })
 
 if(marcadorPonto){
