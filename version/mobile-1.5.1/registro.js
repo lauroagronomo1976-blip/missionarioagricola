@@ -1,3 +1,4 @@
+console.log("JS carregou")
 /* ================= VARIÁVEIS ================= */
 
 let map
