@@ -129,8 +129,8 @@ data: new Date().toISOString()
 }
 
 try{
-await db.collection("registros").add(registro)
-console.log("Salvo no Firebase")
+// await db.collection("registros").add(registro)
+// console.log("Salvo no Firebase")
 }catch(e){
 console.error(e)
 }
