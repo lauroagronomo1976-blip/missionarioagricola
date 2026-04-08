@@ -601,7 +601,7 @@ body, main, .container {
 
 .painel-controles{
   position:absolute;
-  top:120px; /* 🔥 AUMENTA AQUI */
+  top:180px; /* 🔥 AUMENTA AQUI */
   right:10px;
   display:flex;
   flex-direction:column;
