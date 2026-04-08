@@ -677,7 +677,7 @@ L.control.layers({
 
 .painel-controles {
   position: absolute;
-  top: 80px;         /* abaixo do botão camadas */
+  top: 90px;         /* abaixo do botão camadas */
   right: 10px;       /* colado à direita */
   display: flex;
   flex-direction: column;
