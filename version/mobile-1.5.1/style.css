@@ -915,3 +915,6 @@ button {
   height: 550px; /* 🔥 AUMENTA A ALTURA */
   border-radius: 12px;
 }
+.leaflet-top{
+  top: 60px !important;
+}
