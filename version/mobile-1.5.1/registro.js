@@ -187,8 +187,11 @@ function iniciarRastro(){
 
   watchId = navigator.geolocation.watchPosition((pos)=>{
 
-    if(rastroPausado) return
+const accuracy = pos.coords.accuracy
 
+// IGNORA GPS RUIM
+if(accuracy > 20) return
+    
     const lat = pos.coords.latitude
     const lng = pos.coords.longitude
 
@@ -208,6 +211,16 @@ function iniciarRastro(){
     if(linhaRastro) map.removeLayer(linhaRastro)
 
     linhaRastro = L.polyline(pontosRastro,{color:"red"}).addTo(map)
+
+     // MARCADOR AZUL (posição atual)
+if(marcadorRastro) map.removeLayer(marcadorRastro)
+
+marcadorRastro = L.circleMarker([lat,lng],{
+  radius:6,
+  color:"#1976d2",
+  fillColor:"#1976d2",
+  fillOpacity:1
+}).addTo(map)
 
     atualizarPainelRastro()
 
