@@ -189,8 +189,10 @@ function iniciarRastro(){
 
 const accuracy = pos.coords.accuracy
 
+    map.setView([lat,lng])
+    
 // IGNORA GPS RUIM
-if(accuracy > 20) return
+if(accuracy > 10) return
     
     const lat = pos.coords.latitude
     const lng = pos.coords.longitude
