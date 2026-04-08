@@ -606,7 +606,7 @@ body, main, .container {
   display:flex;
   flex-direction:column;
   gap:8px;
-  z-index:900;
+  z-index:9999; /* 🔥 força ficar na frente */
 }
 
 L.control.layers({
