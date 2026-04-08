@@ -601,12 +601,12 @@ body, main, .container {
 
 .painel-controles{
   position:absolute;
-  top:70px;
+  top:100px; /* 🔥 AUMENTA AQUI */
   right:10px;
   display:flex;
   flex-direction:column;
   gap:8px;
-  z-index:9999; /* 🔥 força ficar na frente */
+  z-index:9999;
 }
 
 L.control.layers({
