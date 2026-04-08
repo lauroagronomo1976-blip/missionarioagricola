@@ -1,5 +1,5 @@
 console.log("JS carregou")
-
+let marcadorRastro = null
 let map
 let coordenadaAtual = null
 let marcadorAtual = null
