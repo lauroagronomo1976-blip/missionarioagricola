@@ -187,27 +187,27 @@ function iniciarRastro(){
 
   watchId = navigator.geolocation.watchPosition((pos)=>{
 
-const accuracy = pos.coords.accuracy
+  const lat = pos.coords.latitude
+  const lng = pos.coords.longitude
+  const accuracy = pos.coords.accuracy
 
-    map.setView([lat,lng])
+  // 🔥 FILTRO PROFISSIONAL
+  if(accuracy > 30) return
+
+  // 🔥 SUAVIZA SALTOS
+  if(ultimoPonto){
+    const dist = calcularDistancia(
+      ultimoPonto.lat,
+      ultimoPonto.lng,
+      lat,
+      lng
+    )
+
+    if(dist < 0.005) return // ignora micro variações
+  }
+
+  pontosRastro.push([lat,lng])
     
-// IGNORA GPS RUIM
-if(accuracy > 10) return
-    
-    const lat = pos.coords.latitude
-    const lng = pos.coords.longitude
-
-    pontosRastro.push([lat,lng])
-
-    if(ultimoPonto){
-      distanciaTotal += calcularDistancia(
-        ultimoPonto.lat,
-        ultimoPonto.lng,
-        lat,
-        lng
-      )
-    }
-
     ultimoPonto = {lat,lng}
 
     if(linhaRastro) map.removeLayer(linhaRastro)
