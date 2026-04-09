@@ -225,7 +225,14 @@ marcadorRastro = L.circleMarker([lat,lng],{
 }).addTo(map)
 
     atualizarPainelRastro()
+if(marcadorAtual) map.removeLayer(marcadorAtual)
 
+marcadorAtual = L.circleMarker([lat, lng], {
+  radius: 6,
+  color: "#1e88e5",
+  fillColor: "#1e88e5",
+  fillOpacity: 1
+}).addTo(map)
   })
 
   mostrarPainelRastro()
