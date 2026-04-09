@@ -197,3 +197,20 @@ z-index: 500;
 #mapContainer {
 overflow: visible;
 }
+
+/* FORÇA BOTÕES NA FRENTE DE TUDO */
+.painel-controles {
+  position: absolute !important;
+  top: 140px !important;   /* desce mais */
+  right: 10px !important;
+  z-index: 99999 !important;
+}
+
+/* força Leaflet ficar abaixo */
+.leaflet-control-container {
+  z-index: 1000 !important;
+}
+
+#btnMira {
+  background: red !important;
+}
