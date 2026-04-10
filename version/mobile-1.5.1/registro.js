@@ -192,6 +192,9 @@ function controlarRastro(){
 
 function iniciarRastro(){
 
+  intervaloTempo = setInterval(()=>{
+  atualizarPainelRastro()
+}, 1000)
   rastroAtivo = true
   rastroPausado = false
   pontosRastro = []
@@ -201,48 +204,57 @@ function iniciarRastro(){
 
   watchId = navigator.geolocation.watchPosition((pos)=>{
 
-    if(rastroPausado) return
+  if(rastroPausado) return
 
-    const lat = pos.coords.latitude
-    const lng = pos.coords.longitude
+  const lat = pos.coords.latitude
+  const lng = pos.coords.longitude
 
-    let dist = 0
+  // 🔥 FILTRO 1 - ignora erro grande do GPS
+  if(pos.coords.accuracy > 20) return
 
-if(ultimoPonto){
-  dist = calcularDistancia(
-    ultimoPonto.lat,
-    ultimoPonto.lng,
-    lat,
-    lng
-  )
+  // 🔥 FILTRO 2 - ignora ponto muito próximo (menos de 3 metros)
+  if(ultimoPonto){
+    const dist = calcularDistancia(
+      ultimoPonto.lat,
+      ultimoPonto.lng,
+      lat,
+      lng
+    )
 
-  // ignora ruído muito pequeno (menos de 2 metros)
-  if(dist < 0.002) return
+    if(dist < 0.003) return   // 3 metros
+    if(dist > 0.2) return     // ignora salto >200m (erro GPS)
 
-  // ignora salto absurdo de GPS
-  if(dist > 0.1) return
+    distanciaTotal += dist
+  }
 
-  distanciaTotal += dist
-}
+  ultimoPonto = {lat,lng}
 
-ultimoPonto = {lat,lng}
+  pontosRastro.push([lat,lng])
 
-pontosRastro.push([lat,lng])
+  // 🔥 LINHA MAIS SUAVE
+  if(linhaRastro) map.removeLayer(linhaRastro)
 
-    if(linhaRastro) map.removeLayer(linhaRastro)
+  linhaRastro = L.polyline(pontosRastro,{
+    color:"red",
+    weight:4,
+    smoothFactor:3
+  }).addTo(map)
 
-    linhaRastro = L.polyline(pontosRastro,{
-  color:"red",
-  weight: 4,
-  smoothFactor: 2
-}).addTo(map)
+  atualizarPainelRastro()
 
-    atualizarPainelRastro()
-
-  })
-
+}, (erro)=>{
+  console.log("Erro GPS:", erro)
+},{
+  enableHighAccuracy: true,
+  maximumAge: 1000,
+  timeout: 10000
+})
   mostrarPainelRastro()
 }
+
+intervaloTempo = setInterval(()=>{
+  atualizarPainelRastro()
+}, 1000)
 
 function pausarRastro(){
   rastroPausado = true
@@ -254,12 +266,32 @@ function continuarRastro(){
 
 function finalizarRastro(){
 
+  intervaloTempo = setInterval(()=>{
+  atualizarPainelRastro()
+}, 1000)
+  
   navigator.geolocation.clearWatch(watchId)
 
   rastroAtivo = false
   rastroPausado = false
 
   esconderPainelRastro()
+gerarKML()
+
+const blob = new Blob([gerarKML()], { type: "application/vnd.google-earth.kml+xml" })
+
+const link = document.createElement("a")
+link.href = URL.createObjectURL(blob)
+link.download = "rastro.kml"
+link.click()
+gerarKML()
+
+const blob = new Blob([gerarKML()], { type: "application/vnd.google-earth.kml+xml" })
+
+const link = document.createElement("a")
+link.href = URL.createObjectURL(blob)
+link.download = "rastro.kml"
+link.click()
 }
 
 /* ================= 📊 PAINEL ================= */
