@@ -206,25 +206,36 @@ function iniciarRastro(){
     const lat = pos.coords.latitude
     const lng = pos.coords.longitude
 
-    pontosRastro.push([lat,lng])
+    let dist = 0
 
-    if(ultimoPonto){
-      const dist = calcularDistancia(
-        ultimoPonto.lat,
-        ultimoPonto.lng,
-        lat,
-        lng
-      )
-      distanciaTotal += dist
-    }
+if(ultimoPonto){
+  dist = calcularDistancia(
+    ultimoPonto.lat,
+    ultimoPonto.lng,
+    lat,
+    lng
+  )
 
-    ultimoPonto = {lat,lng}
+  // ignora ruído muito pequeno (menos de 2 metros)
+  if(dist < 0.002) return
+
+  // ignora salto absurdo de GPS
+  if(dist > 0.1) return
+
+  distanciaTotal += dist
+}
+
+ultimoPonto = {lat,lng}
+
+pontosRastro.push([lat,lng])
 
     if(linhaRastro) map.removeLayer(linhaRastro)
 
     linhaRastro = L.polyline(pontosRastro,{
-      color:"red"
-    }).addTo(map)
+  color:"red",
+  weight: 4,
+  smoothFactor: 2
+}).addTo(map)
 
     atualizarPainelRastro()
 
