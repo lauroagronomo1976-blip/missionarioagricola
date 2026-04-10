@@ -186,6 +186,12 @@ function controlarRastro(){
 
 function iniciarRastro(){
 
+  intervaloTempo = setInterval(()=>{
+  atualizarPainelRastro()
+}, 1000)
+
+  clearInterval(intervaloTempo)
+  
   rastroAtivo = true
   rastroPausado = false
   pontosRastro = []
@@ -294,7 +300,7 @@ function atualizarPainelRastro(){
   const seg = tempo % 60
 
   document.getElementById("infoRastro").innerHTML =
-    `Tempo: ${min}m ${seg}s <br> Distância: ${distanciaTotal.toFixed(2)} km`
+`Tempo: ${min}m ${seg}s <br> Distância: ${distanciaTotal.toFixed(3)} km`
 }
 
 function gerarKML(){
