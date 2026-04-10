@@ -231,28 +231,8 @@ function iniciarRastro(){
     timeout: 10000
   })
 
-  mostrarPainelRastro()
-}
-
-function pausarRastro(){
-  rastroPausado = true
-}
-
-function continuarRastro(){
-  rastroPausado = false
-}
-
-function finalizarRastro(){
-
-  navigator.geolocation.clearWatch(watchId)
-  clearInterval(intervaloTempo)
-
-  rastroAtivo = false
-  rastroPausado = false
-
-  gerarKML()
-  esconderPainelRastro()
-
+  /* ================= 📊 PAINEL ================= */
+ 
 function mostrarPainelRastro(){
   document.getElementById("painelRastro").style.display = "block"
 }
@@ -269,20 +249,88 @@ function atualizarPainelRastro(){
   const seg = tempo % 60
 
   document.getElementById("infoRastro").innerHTML =
-`Tempo: ${min}m ${seg}s <br> Distância: ${distanciaTotal.toFixed(3)} km`
+    `Tempo: ${min}m ${seg}s <br> Distância: ${distanciaTotal.toFixed(3)} km`
+
 }
 
-function gerarKML(){
+/* ================= 🛰️ RASTRO ================= */
 
-  let kml = `<?xml version="1.0" encoding="UTF-8"?>
-  <kml xmlns="http://www.opengis.net/kml/2.2">
-  <Document><Placemark><LineString><coordinates>`
+function controlarRastro(){
 
-  pontosRastro.forEach(p=>{
-    kml += `${p[1]},${p[0]},0 `
+  if(!rastroAtivo){
+    iniciarRastro()
+  }else if(!rastroPausado){
+    pausarRastro()
+  }else{
+    continuarRastro()
+  }
+
+}
+
+function iniciarRastro(){
+
+  rastroAtivo = true
+  rastroPausado = false
+  pontosRastro = []
+  distanciaTotal = 0
+  ultimoPonto = null
+  inicioTempo = new Date()
+
+  watchId = navigator.geolocation.watchPosition((pos)=>{
+
+    if(rastroPausado) return
+
+    const lat = pos.coords.latitude
+    const lng = pos.coords.longitude
+
+    pontosRastro.push([lat,lng])
+
+    if(ultimoPonto){
+      const dist = calcularDistancia(
+        ultimoPonto.lat,
+        ultimoPonto.lng,
+        lat,
+        lng
+      )
+      distanciaTotal += dist
+    }
+
+    ultimoPonto = {lat,lng}
+
+    if(linhaRastro) map.removeLayer(linhaRastro)
+
+    linhaRastro = L.polyline(pontosRastro,{
+      color:"red"
+    }).addTo(map)
+
+    atualizarPainelRastro()
+
+  }, (erro)=>{
+    console.log("Erro GPS:", erro)
+  },{
+    enableHighAccuracy: true,
+    maximumAge: 0,
+    timeout: 10000
   })
 
-  kml += `</coordinates></LineString></Placemark></Document></kml>`
+  mostrarPainelRastro()
+}
 
-  console.log("KML gerado:", kml)
+function pausarRastro(){
+  rastroPausado = true
+}
+
+function continuarRastro(){
+  rastroPausado = false
+}
+
+function finalizarRastro(){
+
+  navigator.geolocation.clearWatch(watchId)
+
+  rastroAtivo = false
+  rastroPausado = false
+
+  esconderPainelRastro()
+
 }
