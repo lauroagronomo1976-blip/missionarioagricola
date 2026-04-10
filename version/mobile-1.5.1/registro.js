@@ -194,58 +194,40 @@ function iniciarRastro(){
   ultimoPonto = null
   inicioTempo = new Date()
 
-  intervaloTempo = setInterval(()=>{
-    atualizarPainelRastro()
-  }, 1000)
-
   watchId = navigator.geolocation.watchPosition((pos)=>{
+
+    if(rastroPausado) return
 
     const lat = pos.coords.latitude
     const lng = pos.coords.longitude
-    const accuracy = pos.coords.accuracy
 
-    if(accuracy > 50) return
-
-    let dist = 0
+    pontosRastro.push([lat,lng])
 
     if(ultimoPonto){
-      dist = calcularDistancia(
+      const dist = calcularDistancia(
         ultimoPonto.lat,
         ultimoPonto.lng,
         lat,
         lng
       )
-
-      if(dist < 0.002) return
-      if(dist > 0.2) return
-
       distanciaTotal += dist
     }
 
-    ultimoPonto = {lat, lng}
-    pontosRastro.push([lat, lng])
-
-    if(marcadorAtual) map.removeLayer(marcadorAtual)
-
-    marcadorAtual = L.circleMarker([lat, lng], {
-      radius: 6,
-      color: "#1e88e5",
-      fillColor: "#1e88e5",
-      fillOpacity: 1
-    }).addTo(map)
+    ultimoPonto = {lat,lng}
 
     if(linhaRastro) map.removeLayer(linhaRastro)
 
-    linhaRastro = L.polyline(pontosRastro, {
-      color: "red",
-      weight: 4
+    linhaRastro = L.polyline(pontosRastro,{
+      color:"red"
     }).addTo(map)
+
+    atualizarPainelRastro()
 
   }, (erro)=>{
     console.log("Erro GPS:", erro)
-  }, {
+  },{
     enableHighAccuracy: true,
-    maximumAge: 2000,
+    maximumAge: 0,
     timeout: 10000
   })
 
@@ -270,7 +252,6 @@ function finalizarRastro(){
 
   gerarKML()
   esconderPainelRastro()
-}
 
 function mostrarPainelRastro(){
   document.getElementById("painelRastro").style.display = "block"
