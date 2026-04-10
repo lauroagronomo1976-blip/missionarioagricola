@@ -1,4 +1,5 @@
 console.log("JS carregou")
+let intervaloTempo = null
 let marcadorRastro = null
 let map
 let coordenadaAtual = null
@@ -186,12 +187,6 @@ function controlarRastro(){
 
 function iniciarRastro(){
 
-  intervaloTempo = setInterval(()=>{
-  atualizarPainelRastro()
-}, 1000)
-
-  clearInterval(intervaloTempo)
-  
   rastroAtivo = true
   rastroPausado = false
   pontosRastro = []
@@ -199,67 +194,59 @@ function iniciarRastro(){
   ultimoPonto = null
   inicioTempo = new Date()
 
+  intervaloTempo = setInterval(()=>{
+    atualizarPainelRastro()
+  }, 1000)
+
   watchId = navigator.geolocation.watchPosition((pos)=>{
 
-  const lat = pos.coords.latitude
-  const lng = pos.coords.longitude
-  const accuracy = pos.coords.accuracy
+    const lat = pos.coords.latitude
+    const lng = pos.coords.longitude
+    const accuracy = pos.coords.accuracy
 
-  console.log("ACC:", accuracy)
+    if(accuracy > 50) return
 
-  // 🔥 FILTRO REALISTA (não travar o sistema)
-  if(accuracy > 50) return
+    let dist = 0
 
-  // 🔥 CALCULA DISTÂNCIA
-  let dist = 0
+    if(ultimoPonto){
+      dist = calcularDistancia(
+        ultimoPonto.lat,
+        ultimoPonto.lng,
+        lat,
+        lng
+      )
 
-  if(ultimoPonto){
-    dist = calcularDistancia(
-      ultimoPonto.lat,
-      ultimoPonto.lng,
-      lat,
-      lng
-    )
+      if(dist < 0.002) return
+      if(dist > 0.2) return
 
-    // ignora só ruído MUITO pequeno
-    if(dist < 0.002) return
+      distanciaTotal += dist
+    }
 
-    // ignora salto absurdo
-    if(dist > 0.2) return
+    ultimoPonto = {lat, lng}
+    pontosRastro.push([lat, lng])
 
-    distanciaTotal += dist
-  }
+    if(marcadorAtual) map.removeLayer(marcadorAtual)
 
-  ultimoPonto = {lat, lng}
-  pontosRastro.push([lat, lng])
+    marcadorAtual = L.circleMarker([lat, lng], {
+      radius: 6,
+      color: "#1e88e5",
+      fillColor: "#1e88e5",
+      fillOpacity: 1
+    }).addTo(map)
 
-  // 🔵 posição atual
-  if(marcadorAtual) map.removeLayer(marcadorAtual)
+    if(linhaRastro) map.removeLayer(linhaRastro)
 
-  marcadorAtual = L.circleMarker([lat, lng], {
-    radius: 6,
-    color: "#1e88e5",
-    fillColor: "#1e88e5",
-    fillOpacity: 1
-  }).addTo(map)
+    linhaRastro = L.polyline(pontosRastro, {
+      color: "red",
+      weight: 4
+    }).addTo(map)
 
-  // 🔴 linha
-  if(linhaRastro) map.removeLayer(linhaRastro)
-
-  linhaRastro = L.polyline(pontosRastro, {
-    color: "red",
-    weight: 4
-  }).addTo(map)
-
-  atualizarPainelRastro()
-
-}, (erro)=>{
-  console.log("Erro GPS:", erro)
-}, {
-  enableHighAccuracy: true,
-  maximumAge: 2000,
-  timeout: 10000
-})
+  }, (erro)=>{
+    console.log("Erro GPS:", erro)
+  }, {
+    enableHighAccuracy: true,
+    maximumAge: 2000,
+    timeout: 10000
   })
 
   mostrarPainelRastro()
@@ -276,6 +263,7 @@ function continuarRastro(){
 function finalizarRastro(){
 
   navigator.geolocation.clearWatch(watchId)
+  clearInterval(intervaloTempo)
 
   rastroAtivo = false
   rastroPausado = false
