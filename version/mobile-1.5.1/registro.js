@@ -15,6 +15,7 @@ let linhaRastro = null
 let distanciaTotal = 0
 let ultimoPonto = null
 let inicioTempo = null
+let intervaloTempo = null
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -46,16 +47,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })
 
-/* ================= 🎯 MIRA ================= */
-
+/* 🎯 MIRA */
 function ativarMira(){
   navigator.geolocation.getCurrentPosition((pos)=>{
-
     const lat = pos.coords.latitude
     const lng = pos.coords.longitude
 
     coordenadaAtual = {lat,lng}
-
     map.setView([lat,lng],17)
 
     if(marcadorAtual) map.removeLayer(marcadorAtual)
@@ -66,12 +64,10 @@ function ativarMira(){
       fillColor:"#1e88e5",
       fillOpacity:1
     }).addTo(map)
-
   })
 }
 
-/* ================= 📍 MARCAR ================= */
-
+/* 📍 MARCAR */
 function marcarPonto(){
 
   if(!coordenadaAtual){
@@ -89,79 +85,42 @@ function marcarPonto(){
   document.getElementById("formMissaoContainer").style.display = "block"
 }
 
-/* ================= 💾 SALVAR ================= */
-
+/* 💾 SALVAR */
 function salvarRegistro(){
 
   const ocorrencia = document.getElementById("ocorrenciaSelect").value
   const especie = document.getElementById("especieInput").value
-  const fase = document.getElementById("faseSelect").value
-  const individuos = document.getElementById("individuosInput").value
-  const severidade = document.getElementById("severidadeInput").value
 
   if(!ocorrencia || !especie){
     alert("Preencha os campos obrigatórios")
     return
   }
 
-  const registro = {
-    ocorrencia,
-    especie,
-    fase,
-    individuos,
-    severidade
-  }
-
-  registrosDoPonto.push(registro)
-
+  registrosDoPonto.push({ocorrencia, especie})
   renderizarLista()
 }
 
-/* ================= 📋 LISTA ================= */
-
+/* 📋 LISTA */
 function renderizarLista(){
 
   const lista = document.getElementById("listaRegistros")
   lista.innerHTML = "<h4>Registros do ponto:</h4>"
 
   registrosDoPonto.forEach(r=>{
-
     const div = document.createElement("div")
-
-    div.innerHTML = `
-      <strong>${r.ocorrencia}</strong> - ${r.especie}<br>
-      Fase: ${r.fase} | Ind: ${r.individuos || 0} | Sev: ${r.severidade || 0}%
-    `
-
+    div.innerHTML = `<strong>${r.ocorrencia}</strong> - ${r.especie}`
     lista.appendChild(div)
-
   })
 }
 
-/* ================= ✅ CONCLUIR ================= */
-
+/* ✅ CONCLUIR */
 function concluirPonto(){
-
-  let resumo = ""
-
-  registrosDoPonto.forEach(r=>{
-    resumo += `
-      <b>${r.ocorrencia}</b> - ${r.especie}<br>
-      Fase: ${r.fase} | Ind: ${r.individuos} | Sev: ${r.severidade}%<br><br>
-    `
-  })
-
-  if(marcadorPonto){
-    marcadorPonto.bindPopup(resumo).openPopup()
-  }
 
   document.getElementById("formMissaoContainer").style.display = "none"
 }
 
-/* ================= 📏 DISTÂNCIA ================= */
-
+/* 📏 DISTÂNCIA */
 function calcularDistancia(lat1, lon1, lat2, lon2){
-
   const R = 6371
   const dLat = (lat2-lat1) * Math.PI/180
   const dLon = (lon2-lon1) * Math.PI/180
@@ -172,12 +131,10 @@ function calcularDistancia(lat1, lon1, lat2, lon2){
     Math.cos(lat2*Math.PI/180) *
     Math.sin(dLon/2)**2
 
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
-  return R * c
+  return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
 }
 
-/* ================= 🛰️ RASTRO ================= */
-
+/* 🛰️ RASTRO */
 function controlarRastro(){
 
   if(!rastroAtivo){
@@ -187,14 +144,10 @@ function controlarRastro(){
   }else{
     continuarRastro()
   }
-
 }
 
 function iniciarRastro(){
 
-  intervaloTempo = setInterval(()=>{
-  atualizarPainelRastro()
-}, 1000)
   rastroAtivo = true
   rastroPausado = false
   pontosRastro = []
@@ -202,100 +155,68 @@ function iniciarRastro(){
   ultimoPonto = null
   inicioTempo = new Date()
 
+  intervaloTempo = setInterval(()=>{
+    atualizarPainelRastro()
+  }, 1000)
+
   watchId = navigator.geolocation.watchPosition((pos)=>{
 
-  if(rastroPausado) return
+    if(rastroPausado) return
 
-  const lat = pos.coords.latitude
-  const lng = pos.coords.longitude
+    if(pos.coords.accuracy > 20) return
 
-  // 🔥 FILTRO 1 - ignora erro grande do GPS
-  if(pos.coords.accuracy > 20) return
+    const lat = pos.coords.latitude
+    const lng = pos.coords.longitude
 
-  // 🔥 FILTRO 2 - ignora ponto muito próximo (menos de 3 metros)
-  if(ultimoPonto){
-    const dist = calcularDistancia(
-      ultimoPonto.lat,
-      ultimoPonto.lng,
-      lat,
-      lng
-    )
+    if(ultimoPonto){
+      const dist = calcularDistancia(
+        ultimoPonto.lat,
+        ultimoPonto.lng,
+        lat,
+        lng
+      )
 
-    if(dist < 0.003) return   // 3 metros
-    if(dist > 0.2) return     // ignora salto >200m (erro GPS)
+      if(dist < 0.003 || dist > 0.2) return
 
-    distanciaTotal += dist
-  }
+      distanciaTotal += dist
+    }
 
-  ultimoPonto = {lat,lng}
+    ultimoPonto = {lat,lng}
 
-  pontosRastro.push([lat,lng])
+    pontosRastro.push([lat,lng])
 
-  // 🔥 LINHA MAIS SUAVE
-  if(linhaRastro) map.removeLayer(linhaRastro)
+    if(linhaRastro) map.removeLayer(linhaRastro)
 
-  linhaRastro = L.polyline(pontosRastro,{
-    color:"red",
-    weight:4,
-    smoothFactor:3
-  }).addTo(map)
+    linhaRastro = L.polyline(pontosRastro,{
+      color:"red",
+      weight:4,
+      smoothFactor:3
+    }).addTo(map)
 
-  atualizarPainelRastro()
+  },{
+    enableHighAccuracy:true
+  })
 
-}, (erro)=>{
-  console.log("Erro GPS:", erro)
-},{
-  enableHighAccuracy: true,
-  maximumAge: 1000,
-  timeout: 10000
-})
   mostrarPainelRastro()
 }
 
-intervaloTempo = setInterval(()=>{
-  atualizarPainelRastro()
-}, 1000)
-
-function pausarRastro(){
-  rastroPausado = true
-}
-
-function continuarRastro(){
-  rastroPausado = false
-}
+function pausarRastro(){ rastroPausado = true }
+function continuarRastro(){ rastroPausado = false }
 
 function finalizarRastro(){
 
-  intervaloTempo = setInterval(()=>{
-  atualizarPainelRastro()
-}, 1000)
-  
   navigator.geolocation.clearWatch(watchId)
+  clearInterval(intervaloTempo)
 
   rastroAtivo = false
   rastroPausado = false
 
+  gerarKML()
+
   esconderPainelRastro()
-gerarKML()
-
-const blob = new Blob([gerarKML()], { type: "application/vnd.google-earth.kml+xml" })
-
-const link = document.createElement("a")
-link.href = URL.createObjectURL(blob)
-link.download = "rastro.kml"
-link.click()
-gerarKML()
-
-const blob = new Blob([gerarKML()], { type: "application/vnd.google-earth.kml+xml" })
-
-const link = document.createElement("a")
-link.href = URL.createObjectURL(blob)
-link.download = "rastro.kml"
-link.click()
 }
 
-/* ================= 📊 PAINEL ================= */
-
+/* 📊 PAINEL */
 function mostrarPainelRastro(){
   document.getElementById("painelRastro").style.display = "block"
 }
@@ -307,11 +228,25 @@ function esconderPainelRastro(){
 function atualizarPainelRastro(){
 
   const tempo = Math.floor((new Date() - inicioTempo)/1000)
-
   const min = Math.floor(tempo/60)
   const seg = tempo % 60
 
   document.getElementById("infoRastro").innerHTML =
     `Tempo: ${min}m ${seg}s <br> Distância: ${distanciaTotal.toFixed(3)} km`
+}
 
+/* 📁 KML */
+function gerarKML(){
+
+  let kml = `<?xml version="1.0" encoding="UTF-8"?>
+  <kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document><Placemark><LineString><coordinates>`
+
+  pontosRastro.forEach(p=>{
+    kml += `${p[1]},${p[0]},0 `
+  })
+
+  kml += `</coordinates></LineString></Placemark></Document></kml>`
+
+  console.log("KML:", kml)
 }
