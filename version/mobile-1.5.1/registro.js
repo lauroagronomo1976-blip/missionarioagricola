@@ -199,48 +199,61 @@ function iniciarRastro(){
   const lng = pos.coords.longitude
   const accuracy = pos.coords.accuracy
 
-  // 🔥 FILTRO PROFISSIONAL
-  if(accuracy > 30) return
+  console.log("ACC:", accuracy)
 
-  // 🔥 SUAVIZA SALTOS
+  // 🔥 FILTRO REALISTA (não travar o sistema)
+  if(accuracy > 50) return
+
+  // 🔥 CALCULA DISTÂNCIA
+  let dist = 0
+
   if(ultimoPonto){
-    const dist = calcularDistancia(
+    dist = calcularDistancia(
       ultimoPonto.lat,
       ultimoPonto.lng,
       lat,
       lng
     )
 
-    if(dist < 0.005) return // ignora micro variações
+    // ignora só ruído MUITO pequeno
+    if(dist < 0.002) return
+
+    // ignora salto absurdo
+    if(dist > 0.2) return
+
+    distanciaTotal += dist
   }
 
-  pontosRastro.push([lat,lng])
-    
-    ultimoPonto = {lat,lng}
+  ultimoPonto = {lat, lng}
+  pontosRastro.push([lat, lng])
 
-    if(linhaRastro) map.removeLayer(linhaRastro)
+  // 🔵 posição atual
+  if(marcadorAtual) map.removeLayer(marcadorAtual)
 
-    linhaRastro = L.polyline(pontosRastro,{color:"red"}).addTo(map)
+  marcadorAtual = L.circleMarker([lat, lng], {
+    radius: 6,
+    color: "#1e88e5",
+    fillColor: "#1e88e5",
+    fillOpacity: 1
+  }).addTo(map)
 
-     // MARCADOR AZUL (posição atual)
-if(marcadorRastro) map.removeLayer(marcadorRastro)
+  // 🔴 linha
+  if(linhaRastro) map.removeLayer(linhaRastro)
 
-marcadorRastro = L.circleMarker([lat,lng],{
-  radius:6,
-  color:"#1976d2",
-  fillColor:"#1976d2",
-  fillOpacity:1
-}).addTo(map)
+  linhaRastro = L.polyline(pontosRastro, {
+    color: "red",
+    weight: 4
+  }).addTo(map)
 
-    atualizarPainelRastro()
-if(marcadorAtual) map.removeLayer(marcadorAtual)
+  atualizarPainelRastro()
 
-marcadorAtual = L.circleMarker([lat, lng], {
-  radius: 6,
-  color: "#1e88e5",
-  fillColor: "#1e88e5",
-  fillOpacity: 1
-}).addTo(map)
+}, (erro)=>{
+  console.log("Erro GPS:", erro)
+}, {
+  enableHighAccuracy: true,
+  maximumAge: 2000,
+  timeout: 10000
+})
   })
 
   mostrarPainelRastro()
