@@ -18,6 +18,7 @@ let ultimoPonto = null
 let inicioTempo = null
 let intervaloTempo = null
 
+/* ================= INIT ================= */
 document.addEventListener("DOMContentLoaded", () => {
 
   map = L.map('map', { zoomControl:false }).setView([-15,-47],5)
@@ -48,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })
 
-/* 🎯 MIRA */
+/* ================= 🎯 MIRA ================= */
 function ativarMira(){
   navigator.geolocation.getCurrentPosition((pos)=>{
     const lat = pos.coords.latitude
@@ -68,7 +69,7 @@ function ativarMira(){
   })
 }
 
-/* 📍 MARCAR */
+/* ================= 📍 MARCAR ================= */
 function marcarPonto(){
 
   if(!coordenadaAtual){
@@ -86,7 +87,7 @@ function marcarPonto(){
   document.getElementById("formMissaoContainer").style.display = "block"
 }
 
-/* 💾 SALVAR */
+/* ================= 💾 SALVAR ================= */
 function salvarRegistro(){
 
   const ocorrencia = document.getElementById("ocorrenciaSelect").value
@@ -101,7 +102,7 @@ function salvarRegistro(){
   renderizarLista()
 }
 
-/* 📋 LISTA */
+/* ================= 📋 LISTA ================= */
 function renderizarLista(){
 
   const lista = document.getElementById("listaRegistros")
@@ -114,13 +115,12 @@ function renderizarLista(){
   })
 }
 
-/* ✅ CONCLUIR */
+/* ================= ✅ CONCLUIR ================= */
 function concluirPonto(){
-
   document.getElementById("formMissaoContainer").style.display = "none"
 }
 
-/* 📏 DISTÂNCIA */
+/* ================= 📏 DISTÂNCIA ================= */
 function calcularDistancia(lat1, lon1, lat2, lon2){
   const R = 6371
   const dLat = (lat2-lat1) * Math.PI/180
@@ -135,7 +135,7 @@ function calcularDistancia(lat1, lon1, lat2, lon2){
   return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
 }
 
-/* 🛰️ RASTRO */
+/* ================= 🛰️ RASTRO ================= */
 function controlarRastro(){
 
   if(!rastroAtivo){
@@ -148,7 +148,9 @@ function controlarRastro(){
 }
 
 function iniciarRastro(){
-alert("Rastro iniciado")
+
+  console.log("Rastro iniciado")
+
   rastroAtivo = true
   rastroPausado = false
   pontosRastro = []
@@ -162,102 +164,65 @@ alert("Rastro iniciado")
 
   watchId = navigator.geolocation.watchPosition(
 
-  (pos)=>{
+    (pos)=>{
 
-    if(rastroPausado) return
+      if(rastroPausado) return
 
-    const lat = pos.coords.latitude
-    const lng = pos.coords.longitude
+      const lat = pos.coords.latitude
+      const lng = pos.coords.longitude
 
-    console.log("GPS ativo:", lat, lng)
+      if(pos.coords.accuracy > 30) return
 
-    if(pos.coords.accuracy > 50) return
+      // bolinha azul
+      if(marcadorRastro){
+        marcadorRastro.setLatLng([lat,lng])
+      }else{
+        marcadorRastro = L.circleMarker([lat,lng],{
+          radius:6,
+          color:"#2196f3",
+          fillColor:"#2196f3",
+          fillOpacity:1
+        }).addTo(map)
+      }
 
-    // 🔵 bolinha
-    if(marcadorRastro){
-      marcadorRastro.setLatLng([lat,lng])
-    }else{
-      marcadorRastro = L.circleMarker([lat,lng],{
-        radius:6,
-        color:"#2196f3",
-        fillColor:"#2196f3",
-        fillOpacity:1
+      if(ultimoPonto){
+        const dist = calcularDistancia(
+          ultimoPonto.lat,
+          ultimoPonto.lng,
+          lat,
+          lng
+        )
+
+        if(dist < 0.002) return
+        if(dist > 0.3) return
+
+        distanciaTotal += dist
+      }
+
+      ultimoPonto = {lat,lng}
+      pontosRastro.push([lat,lng])
+
+      if(linhaRastro) map.removeLayer(linhaRastro)
+
+      linhaRastro = L.polyline(pontosRastro,{
+        color:"red",
+        weight:4,
+        smoothFactor:2
       }).addTo(map)
+
+    },
+
+    (erro)=>{
+      console.log("Erro GPS:", erro)
+    },
+
+    {
+      enableHighAccuracy: true,
+      maximumAge: 1000,
+      timeout: 15000
     }
 
-    if(ultimoPonto){
-      const dist = calcularDistancia(
-        ultimoPonto.lat,
-        ultimoPonto.lng,
-        lat,
-        lng
-      )
-
-      if(dist < 0.002) return
-      if(dist > 0.5) return
-
-      distanciaTotal += dist
-    }
-
-    ultimoPonto = {lat,lng}
-
-    pontosRastro.push([lat,lng])
-
-    if(linhaRastro) map.removeLayer(linhaRastro)
-
-    linhaRastro = L.polyline(pontosRastro,{
-      color:"red",
-      weight:4,
-      smoothFactor:3
-    }).addTo(map)
-
-  },
-
-  (erro)=>{
-    console.log("Erro GPS:", erro)
-  },
-
-  {
-    enableHighAccuracy: true,
-    maximumAge: 0,
-    timeout: 15000
-  }
-
-)
-  }
-    
-    if(ultimoPonto){
-      const dist = calcularDistancia(
-        ultimoPonto.lat,
-        ultimoPonto.lng,
-        lat,
-        lng
-      )
-
-      if(dist < 0.002) return   // 2 metros
-      if(dist > 0.5) return     // 500m (menos agressivo)
-
-      distanciaTotal += dist
-    }
-
-    ultimoPonto = {lat,lng}
-
-    pontosRastro.push([lat,lng])
-
-    if(linhaRastro) map.removeLayer(linhaRastro)
-
-    linhaRastro = L.polyline(pontosRastro,{
-      color:"red",
-      weight:4,
-      smoothFactor:3
-    }).addTo(map)
-
-  },{
-    enableHighAccuracy:true
-    enableHighAccuracy: true,
-  maximumAge: 0,
-  timeout: 15000
-  })
+  )
 
   mostrarPainelRastro()
 }
@@ -276,20 +241,20 @@ function finalizarRastro(){
   gerarKML()
 
   esconderPainelRastro()
-}
-// limpar linha
-if(linhaRastro){
-  map.removeLayer(linhaRastro)
-  linhaRastro = null
+
+  // limpa mapa
+  if(linhaRastro){
+    map.removeLayer(linhaRastro)
+    linhaRastro = null
+  }
+
+  if(marcadorRastro){
+    map.removeLayer(marcadorRastro)
+    marcadorRastro = null
+  }
 }
 
-// limpar bolinha
-if(marcadorRastro){
-  map.removeLayer(marcadorRastro)
-  marcadorRastro = null
-}
-
-/* 📊 PAINEL */
+/* ================= 📊 PAINEL ================= */
 function mostrarPainelRastro(){
   document.getElementById("painelRastro").style.display = "block"
 }
@@ -308,7 +273,7 @@ function atualizarPainelRastro(){
     `Tempo: ${min}m ${seg}s <br> Distância: ${distanciaTotal.toFixed(3)} km`
 }
 
-/* 📁 KML */
+/* ================= 📁 KML ================= */
 function gerarKML(){
 
   let kml = `<?xml version="1.0" encoding="UTF-8"?>
