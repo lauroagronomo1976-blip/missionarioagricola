@@ -148,7 +148,7 @@ function controlarRastro(){
 }
 
 function iniciarRastro(){
-
+alert("Rastro iniciado")
   rastroAtivo = true
   rastroPausado = false
   pontosRastro = []
@@ -161,10 +161,10 @@ function iniciarRastro(){
   }, 1000)
 
   watchId = navigator.geolocation.watchPosition((pos)=>{
-
+  console.log("GPS ativo:", pos.coords.latitude, pos.coords.longitude)
     if(rastroPausado) return
 
-    if(pos.coords.accuracy > 20) return
+    if(pos.coords.accuracy > 50) return
 
     const lat = pos.coords.latitude
     const lng = pos.coords.longitude
@@ -189,7 +189,8 @@ if(marcadorRastro){
         lng
       )
 
-      if(dist < 0.003 || dist > 0.2) return
+      if(dist < 0.002) return   // 2 metros
+      if(dist > 0.5) return     // 500m (menos agressivo)
 
       distanciaTotal += dist
     }
@@ -208,6 +209,9 @@ if(marcadorRastro){
 
   },{
     enableHighAccuracy:true
+    enableHighAccuracy: true,
+  maximumAge: 0,
+  timeout: 15000
   })
 
   mostrarPainelRastro()
