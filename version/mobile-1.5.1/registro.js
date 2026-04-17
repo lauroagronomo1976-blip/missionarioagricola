@@ -160,7 +160,59 @@ alert("Rastro iniciado")
     atualizarPainelRastro()
   }, 1000)
 
-  watchId = navigator.geolocation.watchPosition((pos)=>{
+  watchId = navigator.geolocation.watchPosition(
+
+  (pos)=>{
+
+    if(rastroPausado) return
+
+    const lat = pos.coords.latitude
+    const lng = pos.coords.longitude
+
+    console.log("GPS ativo:", lat, lng)
+
+    // filtro leve
+    if(pos.coords.accuracy > 50) return
+
+    if(ultimoPonto){
+      const dist = calcularDistancia(
+        ultimoPonto.lat,
+        ultimoPonto.lng,
+        lat,
+        lng
+      )
+
+      if(dist < 0.002) return
+      if(dist > 0.5) return
+
+      distanciaTotal += dist
+    }
+
+    ultimoPonto = {lat,lng}
+
+    pontosRastro.push([lat,lng])
+
+    if(linhaRastro) map.removeLayer(linhaRastro)
+
+    linhaRastro = L.polyline(pontosRastro,{
+      color:"red",
+      weight:4,
+      smoothFactor:3
+    }).addTo(map)
+
+  },
+
+  (erro)=>{
+    console.log("Erro GPS:", erro)
+  },
+
+  {
+    enableHighAccuracy: true,
+    maximumAge: 0,
+    timeout: 15000
+  }
+
+)
   console.log("GPS ativo:", pos.coords.latitude, pos.coords.longitude)
     if(rastroPausado) return
 
