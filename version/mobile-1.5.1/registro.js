@@ -171,8 +171,19 @@ alert("Rastro iniciado")
 
     console.log("GPS ativo:", lat, lng)
 
-    // filtro leve
     if(pos.coords.accuracy > 50) return
+
+    // 🔵 bolinha
+    if(marcadorRastro){
+      marcadorRastro.setLatLng([lat,lng])
+    }else{
+      marcadorRastro = L.circleMarker([lat,lng],{
+        radius:6,
+        color:"#2196f3",
+        fillColor:"#2196f3",
+        fillOpacity:1
+      }).addTo(map)
+    }
 
     if(ultimoPonto){
       const dist = calcularDistancia(
@@ -213,25 +224,7 @@ alert("Rastro iniciado")
   }
 
 )
-  console.log("GPS ativo:", pos.coords.latitude, pos.coords.longitude)
-    if(rastroPausado) return
-
-    if(pos.coords.accuracy > 50) return
-
-    const lat = pos.coords.latitude
-    const lng = pos.coords.longitude
-
-    // 🔵 bolinha do técnico
-if(marcadorRastro){
-  marcadorRastro.setLatLng([lat,lng])
-}else{
-  marcadorRastro = L.circleMarker([lat,lng],{
-    radius:6,
-    color:"#2196f3",
-    fillColor:"#2196f3",
-    fillOpacity:1
-  }).addTo(map)
-}
+  }
     
     if(ultimoPonto){
       const dist = calcularDistancia(
