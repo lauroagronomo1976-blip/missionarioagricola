@@ -12,6 +12,7 @@ let rastroPausado = false
 let watchId = null
 let pontosRastro = []
 let linhaRastro = null
+let marcadorRastro = null
 let distanciaTotal = 0
 let ultimoPonto = null
 let inicioTempo = null
@@ -168,6 +169,18 @@ function iniciarRastro(){
     const lat = pos.coords.latitude
     const lng = pos.coords.longitude
 
+    // 🔵 bolinha do técnico
+if(marcadorRastro){
+  marcadorRastro.setLatLng([lat,lng])
+}else{
+  marcadorRastro = L.circleMarker([lat,lng],{
+    radius:6,
+    color:"#2196f3",
+    fillColor:"#2196f3",
+    fillOpacity:1
+  }).addTo(map)
+}
+    
     if(ultimoPonto){
       const dist = calcularDistancia(
         ultimoPonto.lat,
@@ -215,6 +228,17 @@ function finalizarRastro(){
 
   esconderPainelRastro()
 }
+// limpar linha
+if(linhaRastro){
+  map.removeLayer(linhaRastro)
+  linhaRastro = null
+}
+
+// limpar bolinha
+if(marcadorRastro){
+  map.removeLayer(marcadorRastro)
+  marcadorRastro = null
+}
 
 /* 📊 PAINEL */
 function mostrarPainelRastro(){
@@ -248,5 +272,12 @@ function gerarKML(){
 
   kml += `</coordinates></LineString></Placemark></Document></kml>`
 
-  console.log("KML:", kml)
+  const blob = new Blob([kml], {
+    type: "application/vnd.google-earth.kml+xml"
+  })
+
+  const link = document.createElement("a")
+  link.href = URL.createObjectURL(blob)
+  link.download = `rastro_${Date.now()}.kml`
+  link.click()
 }
