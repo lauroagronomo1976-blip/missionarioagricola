@@ -171,7 +171,7 @@ function iniciarRastro(){
       const lat = pos.coords.latitude
       const lng = pos.coords.longitude
 
-      if(pos.coords.accuracy > 30) return
+      if(pos.coords.accuracy > 15) return
 
       // bolinha azul
       if(marcadorRastro){
