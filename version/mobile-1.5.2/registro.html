@@ -1,1 +1,210 @@
+<!DOCTYPE html>
 
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Missionário Agrícola</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<style>
+
+/* ================= BASE ================= */
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#f4f6f8;
+}
+
+#topoApp{
+  background:#1b5e20;
+  color:white;
+  padding:18px;
+  text-align:center;
+  font-weight:bold;
+}
+
+/* ================= MAPA ================= */
+#mapContainer{
+  position:relative;
+  width:94%;
+  height:60vh;
+  margin:15px auto;
+}
+
+#map{
+  width:100%;
+  height:100%;
+  border-radius:14px;
+  z-index:1;
+}
+
+/* ================= BOTÕES ================= */
+.painel-controles{
+  position:absolute;
+  top:80px;
+  right:10px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  z-index:9999;
+}
+
+.painel-controles button{
+  width:40px;
+  height:40px;
+  background:white;
+  border:1px solid #ccc;
+  border-radius:6px;
+  font-size:18px;
+  cursor:pointer;
+}
+
+/* ================= RASTRO ================= */
+#painelRastro{
+  display:none;
+  position:absolute;
+  bottom:10px;
+  left:10px;
+  background:white;
+  padding:10px;
+  border-radius:10px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.2);
+  z-index:9999;
+}
+
+/* ================= FORM ================= */
+#painelInferior{
+  width:94%;
+  margin:0 auto 40px auto;
+}
+
+#btnMarcarPontoInferior{
+  background:#1b5e20;
+  color:white;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+#formMissaoContainer{
+  display:none;
+  margin-top:15px;
+  background:white;
+  padding:15px;
+  border-radius:10px;
+}
+
+.form-group{margin-bottom:10px;}
+
+.form-row{
+  display:flex;
+  gap:10px;
+}
+
+.form-row .form-group{
+  flex:1;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="topoApp">Missionário Agrícola</div>
+
+<div id="mapContainer">
+
+  <div id="map"></div>
+
+  <!-- BOTÕES -->
+
+  <div class="painel-controles">
+    <button id="btnMira">🎯</button>
+    <button id="btnRastro">🛰️</button>
+  </div>
+
+  <!-- PAINEL RASTRO -->
+
+  <div id="painelRastro">
+    <div id="infoRastro"></div>
+    <button onclick="pausarRastro()">Pausar</button>
+    <button onclick="continuarRastro()">Continuar</button>
+    <button onclick="finalizarRastro()">Finalizar</button>
+  </div>
+
+</div>
+
+<div id="painelInferior">
+
+<button id="btnMarcarPontoInferior">Marcar Ponto</button>
+
+  <div id="formMissaoContainer">
+
+```
+<h3>Registro</h3>
+
+<div class="form-group">
+  <label>Ocorrência</label>
+  <select id="ocorrenciaSelect">
+    <option value="">Selecione</option>
+    <option>Praga</option>
+    <option>Doença</option>
+    <option>Planta Daninha</option>
+    <option>Outros</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label>Espécie</label>
+  <input type="text" id="especieInput">
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <label>Fase</label>
+    <select id="faseSelect">
+      <option>Ovo</option>
+      <option>Larva</option>
+      <option>Ninfa</option>
+      <option>Adulto</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Nº Indivíduos</label>
+    <input type="number" id="individuosInput">
+  </div>
+</div>
+
+<div class="form-group">
+  <label>Severidade (%)</label>
+  <input type="number" id="severidadeInput">
+</div>
+
+<button id="btnSalvarRegistro">Salvar Registro</button>
+<button id="btnConcluirPonto">Concluir Ponto</button>
+
+<div id="listaRegistros"></div>
+```
+
+  </div>
+
+</div>
+
+<!-- SCRIPTS -->
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<script src="./registro.js"></script>
+
+</body>
+</html>
