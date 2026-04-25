@@ -19,6 +19,9 @@ let inicioTempo = null
 let intervaloTempo = null
 
 // ÁREA
+let intervaloAreaTempo = null
+let inicioAreaTempo = null
+let areaPausada = false
 let modoArea = false
 let watchAreaId = null
 let pontosArea = []
@@ -168,6 +171,7 @@ function iniciarRastro(){
   }, 1000)
 
   watchId = navigator.geolocation.watchPosition(
+    
 
     (pos)=>{
 
@@ -296,12 +300,18 @@ function iniciarArea(){
 
   modoArea = true
   pontosArea = []
+  areaPausada = false
+inicioAreaTempo = new Date()
+
+intervaloAreaTempo = setInterval(()=>{
+  atualizarPainelArea()
+}, 1000)
 
   if(linhaArea) map.removeLayer(linhaArea)
   if(poligonoArea) map.removeLayer(poligonoArea)
 
   watchAreaId = navigator.geolocation.watchPosition(
-
+if(areaPausada) return
     (pos)=>{
 
       if(!modoArea) return
@@ -327,7 +337,7 @@ function iniciarArea(){
       if(linhaArea) map.removeLayer(linhaArea)
 
       linhaArea = L.polyline(pontosArea,{
-        color:"orange",
+        color:"red",
         weight:4,
         smoothFactor:2
       }).addTo(map)
@@ -368,6 +378,29 @@ function fecharArea(){
   alert("Área: " + area.toFixed(2) + " ha")
 }
 
+function atualizarPainelArea(){
+
+  const tempo = Math.floor((new Date() - inicioAreaTempo)/1000)
+
+  const min = Math.floor(tempo/60)
+  const seg = tempo % 60
+
+  let distancia = 0
+
+  for(let i = 1; i < pontosArea.length; i++){
+    distancia += calcularDistancia(
+      pontosArea[i-1][0],
+      pontosArea[i-1][1],
+      pontosArea[i][0],
+      pontosArea[i][1]
+    )
+  }
+
+  document.getElementById("infoRastro").innerHTML =
+    `Área ativa<br>Tempo: ${min}m ${seg}s <br>Distância: ${distancia.toFixed(3)} km`
+}
+clearInterval(intervaloAreaTempo)
+
 /* cálculo área */
 function calcularAreaHectares(coords){
 
@@ -379,6 +412,12 @@ function calcularAreaHectares(coords){
 
     area += (lon2 * lat1) - (lon1 * lat2)
   }
-
   return Math.abs(area / 2) * 111139 * 111139 / 10000
+}
+function pausarArea(){
+  areaPausada = true
+}
+
+function continuarArea(){
+  areaPausada = false
 }
