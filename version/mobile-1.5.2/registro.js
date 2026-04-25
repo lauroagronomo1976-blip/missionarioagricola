@@ -18,6 +18,14 @@ let ultimoPonto = null
 let inicioTempo = null
 let intervaloTempo = null
 
+// ÁREA
+let modoArea = false
+let watchAreaId = null
+let pontosArea = []
+let linhaArea = null
+let poligonoArea = null
+let marcadorArea = null
+
 // RASTRO Será?
 let modoArea = false
 let pontosArea = []
@@ -51,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnSalvarRegistro").onclick = salvarRegistro
   document.getElementById("btnConcluirPonto").onclick = concluirPonto
   document.getElementById("btnRastro").onclick = controlarRastro
-  document.getElementById("btnArea").onclick = iniciarModoArea
+  document.getElementById("btnArea").onclick = iniciarArea
 })
 
 map.on("click", (e)=>{
@@ -173,10 +181,10 @@ function iniciarModoArea(){
   let area = 0
 
   for(let i=0; i < coords.length; i++){
-    const [x1,y1] = coords[i]
-    const [x2,y2] = coords[(i+1) % coords.length]
+    const [lat1, lon1] = coords[i]
+    const [lat2, lon2] = coords[(i+1) % coords.length]
 
-    area += (y2 * x1) - (y1 * x2)
+    area += (lon2 * lat1) - (lon1 * lat2)
   }
 
   return Math.abs(area / 2) * 111139 * 111139 / 10000
@@ -387,4 +395,98 @@ function gerarKML(){
   link.href = URL.createObjectURL(blob)
   link.download = `rastro_${Date.now()}.kml`
   link.click()
+}
+
+/* ================= 📐 ÁREA ================= */
+
+function iniciarArea(){
+
+  console.log("Modo área iniciado")
+
+  modoArea = true
+  pontosArea = []
+
+  if(linhaArea){
+    map.removeLayer(linhaArea)
+    linhaArea = null
+  }
+
+  if(poligonoArea){
+    map.removeLayer(poligonoArea)
+    poligonoArea = null
+  }
+
+  watchAreaId = navigator.geolocation.watchPosition(
+
+    (pos)=>{
+
+      if(!modoArea) return
+
+      const lat = pos.coords.latitude
+      const lng = pos.coords.longitude
+
+      // filtro de precisão
+      if(pos.coords.accuracy > 20) return
+
+      // 🔵 bolinha azul
+      if(marcadorArea){
+        marcadorArea.setLatLng([lat,lng])
+      }else{
+        marcadorArea = L.circleMarker([lat,lng],{
+          radius:6,
+          color:"#2196f3",
+          fillColor:"#2196f3",
+          fillOpacity:1
+        }).addTo(map)
+      }
+
+      // adiciona ponto
+      pontosArea.push([lat,lng])
+
+      // desenha linha (igual rastro)
+      if(linhaArea) map.removeLayer(linhaArea)
+
+      linhaArea = L.polyline(pontosArea,{
+        color:"red",
+        weight:4,
+        smoothFactor:2
+      }).addTo(map)
+
+    },
+
+    (erro)=>{
+      console.log("Erro GPS área:", erro)
+    },
+
+    {
+      enableHighAccuracy:true,
+      maximumAge:1000,
+      timeout:15000
+    }
+
+  )
+
+  alert("Caminhe ao redor da área e depois clique em FECHAR ÁREA")
+
+}
+
+function fecharArea(){
+
+  modoArea = false
+  navigator.geolocation.clearWatch(watchAreaId)
+
+  if(pontosArea.length < 3){
+    alert("Área inválida")
+    return
+  }
+
+  // fecha polígono
+  poligonoArea = L.polygon(pontosArea,{
+    color:"green"
+  }).addTo(map)
+
+  const area = calcularAreaHectares(pontosArea)
+
+  alert("Área: " + area.toFixed(2) + " ha")
+
 }
