@@ -295,23 +295,37 @@ function gerarKML(){
   link.click()
 }
 
-/* ================= 📐 ÁREA ================= */
+/* ================= 📐 ÁREA (PROFISSIONAL) ================= */
+
+let tempoAreaInicio = null
+let intervaloArea = null
+
 function iniciarArea(){
+
+  console.log("Modo área iniciado")
 
   modoArea = true
   pontosArea = []
-  areaPausada = false
-inicioAreaTempo = new Date()
+  distanciaTotal = 0
+  ultimoPonto = null
+  tempoAreaInicio = new Date()
 
-intervaloAreaTempo = setInterval(()=>{
-  atualizarPainelArea()
-}, 1000)
+  if(linhaArea){
+    map.removeLayer(linhaArea)
+    linhaArea = null
+  }
 
-  if(linhaArea) map.removeLayer(linhaArea)
-  if(poligonoArea) map.removeLayer(poligonoArea)
+  if(poligonoArea){
+    map.removeLayer(poligonoArea)
+    poligonoArea = null
+  }
+
+  intervaloArea = setInterval(()=>{
+    atualizarPainelArea()
+  }, 1000)
 
   watchAreaId = navigator.geolocation.watchPosition(
-if(areaPausada) return
+
     (pos)=>{
 
       if(!modoArea) return
@@ -319,8 +333,9 @@ if(areaPausada) return
       const lat = pos.coords.latitude
       const lng = pos.coords.longitude
 
-      if(pos.coords.accuracy > 10) return
+      if(pos.coords.accuracy > 15) return
 
+      // 🔵 bolinha
       if(marcadorArea){
         marcadorArea.setLatLng([lat,lng])
       }else{
@@ -332,12 +347,29 @@ if(areaPausada) return
         }).addTo(map)
       }
 
+      // distância (igual rastro)
+      if(ultimoPonto){
+        const dist = calcularDistancia(
+          ultimoPonto.lat,
+          ultimoPonto.lng,
+          lat,
+          lng
+        )
+
+        if(dist < 0.002) return
+        if(dist > 0.3) return
+
+        distanciaTotal += dist
+      }
+
+      ultimoPonto = {lat,lng}
       pontosArea.push([lat,lng])
 
+      // 🔴 linha RED PROFISSIONAL
       if(linhaArea) map.removeLayer(linhaArea)
 
       linhaArea = L.polyline(pontosArea,{
-        color:"red",
+        color:"#ff0000",
         weight:4,
         smoothFactor:2
       }).addTo(map)
@@ -356,19 +388,32 @@ if(areaPausada) return
 
   )
 
-  alert("Caminhe ao redor da área e depois clique em FECHAR ÁREA")
+  mostrarPainelArea()
 }
 
-function fecharArea(){
+/* ================= ⏸️ CONTROLES ================= */
+
+function pausarArea(){
+  modoArea = false
+}
+
+function continuarArea(){
+  modoArea = true
+}
+
+function finalizarArea(){
+
+  navigator.geolocation.clearWatch(watchAreaId)
+  clearInterval(intervaloArea)
 
   modoArea = false
-  navigator.geolocation.clearWatch(watchAreaId)
 
   if(pontosArea.length < 3){
     alert("Área inválida")
     return
   }
 
+  // 🔺 fecha polígono
   poligonoArea = L.polygon(pontosArea,{
     color:"green"
   }).addTo(map)
@@ -376,32 +421,33 @@ function fecharArea(){
   const area = calcularAreaHectares(pontosArea)
 
   alert("Área: " + area.toFixed(2) + " ha")
+
+  gerarKMLArea()
+  esconderPainelArea()
+}
+
+/* ================= 📊 PAINEL ÁREA ================= */
+
+function mostrarPainelArea(){
+  document.getElementById("painelRastro").style.display = "block"
+}
+
+function esconderPainelArea(){
+  document.getElementById("painelRastro").style.display = "none"
 }
 
 function atualizarPainelArea(){
 
-  const tempo = Math.floor((new Date() - inicioAreaTempo)/1000)
-
+  const tempo = Math.floor((new Date() - tempoAreaInicio)/1000)
   const min = Math.floor(tempo/60)
   const seg = tempo % 60
 
-  let distancia = 0
-
-  for(let i = 1; i < pontosArea.length; i++){
-    distancia += calcularDistancia(
-      pontosArea[i-1][0],
-      pontosArea[i-1][1],
-      pontosArea[i][0],
-      pontosArea[i][1]
-    )
-  }
-
   document.getElementById("infoRastro").innerHTML =
-    `Área ativa<br>Tempo: ${min}m ${seg}s <br>Distância: ${distancia.toFixed(3)} km`
+    `Área em medição<br>Tempo: ${min}m ${seg}s<br>Distância: ${distanciaTotal.toFixed(3)} km`
 }
-clearInterval(intervaloAreaTempo)
 
-/* cálculo área */
+/* ================= 📐 CÁLCULO ÁREA ================= */
+
 function calcularAreaHectares(coords){
 
   let area = 0
@@ -412,12 +458,33 @@ function calcularAreaHectares(coords){
 
     area += (lon2 * lat1) - (lon1 * lat2)
   }
+
   return Math.abs(area / 2) * 111139 * 111139 / 10000
 }
-function pausarArea(){
-  areaPausada = true
-}
 
-function continuarArea(){
-  areaPausada = false
+/* ================= 📁 KML ÁREA ================= */
+
+function gerarKMLArea(){
+
+  let kml = `<?xml version="1.0" encoding="UTF-8"?>
+  <kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document><Placemark><Polygon><outerBoundaryIs><LinearRing><coordinates>`
+
+  pontosArea.forEach(p=>{
+    kml += `${p[1]},${p[0]},0 `
+  })
+
+  // fecha polígono
+  kml += `${pontosArea[0][1]},${pontosArea[0][0]},0 `
+
+  kml += `</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark></Document></kml>`
+
+  const blob = new Blob([kml], {
+    type: "application/vnd.google-earth.kml+xml"
+  })
+
+  const link = document.createElement("a")
+  link.href = URL.createObjectURL(blob)
+  link.download = `area_${Date.now()}.kml`
+  link.click()
 }
