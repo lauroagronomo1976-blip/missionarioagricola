@@ -201,7 +201,7 @@ function iniciarRastro(){
           lng
         )
 
-        if(dist < 0.002) return
+        if(dist < 0.003) return
         if(dist > 0.3) return
 
         distanciaTotal += dist
@@ -319,7 +319,7 @@ if(areaPausada) return
       const lat = pos.coords.latitude
       const lng = pos.coords.longitude
 
-      if(pos.coords.accuracy > 20) return
+      if(pos.coords.accuracy > 10) return
 
       if(marcadorArea){
         marcadorArea.setLatLng([lat,lng])
