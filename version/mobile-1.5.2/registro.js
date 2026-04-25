@@ -19,6 +19,7 @@ let inicioTempo = null
 let intervaloTempo = null
 
 // ÁREA
+let areaPausada = false
 let intervaloAreaTempo = null
 let inicioAreaTempo = null
 let areaPausada = false
@@ -328,10 +329,11 @@ function iniciarArea(){
 
     (pos)=>{
 
-      if(!modoArea) return
+  if(!modoArea) return
+  if(areaPausada) return   // 🔥 ESSENCIAL
 
-      const lat = pos.coords.latitude
-      const lng = pos.coords.longitude
+  const lat = pos.coords.latitude
+  const lng = pos.coords.longitude
 
       if(pos.coords.accuracy > 15) return
 
@@ -394,11 +396,11 @@ function iniciarArea(){
 /* ================= ⏸️ CONTROLES ================= */
 
 function pausarArea(){
-  modoArea = false
+  areaPausada = true
 }
 
 function continuarArea(){
-  modoArea = true
+  areaPausada = false
 }
 
 function finalizarArea(){
@@ -407,25 +409,32 @@ function finalizarArea(){
   clearInterval(intervaloArea)
 
   modoArea = false
+  areaPausada = false
 
   if(pontosArea.length < 3){
     alert("Área inválida")
     return
   }
 
-  // 🔺 fecha polígono
+  // 🔺 remove linha aberta
+  if(linhaArea){
+    map.removeLayer(linhaArea)
+  }
+
+  // 🔺 fecha polígono corretamente
   poligonoArea = L.polygon(pontosArea,{
-    color:"green"
+    color:"green",
+    weight:3
   }).addTo(map)
 
+  // 🔥 calcula área
   const area = calcularAreaHectares(pontosArea)
 
-  alert("Área: " + area.toFixed(2) + " ha")
+  alert(`Área total: ${area.toFixed(2)} ha`)
 
   gerarKMLArea()
   esconderPainelArea()
 }
-
 /* ================= 📊 PAINEL ÁREA ================= */
 
 function mostrarPainelArea(){
