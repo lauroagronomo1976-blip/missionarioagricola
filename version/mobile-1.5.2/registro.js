@@ -18,6 +18,11 @@ let ultimoPonto = null
 let inicioTempo = null
 let intervaloTempo = null
 
+// RASTRO Será?
+let modoArea = false
+let pontosArea = []
+let poligonoArea = null
+
 /* ================= INIT ================= */
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -46,9 +51,32 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnSalvarRegistro").onclick = salvarRegistro
   document.getElementById("btnConcluirPonto").onclick = concluirPonto
   document.getElementById("btnRastro").onclick = controlarRastro
-
+  document.getElementById("btnArea").onclick = iniciarModoArea
 })
 
+map.on("click", (e)=>{
+
+  if(!modoArea) return
+
+  const lat = e.latlng.lat
+  const lng = e.latlng.lng
+
+  pontosArea.push([lat,lng])
+
+  L.circleMarker([lat,lng],{
+    radius:5,
+    color:"green"
+  }).addTo(map)
+
+  if(poligonoArea){
+    map.removeLayer(poligonoArea)
+  }
+
+  poligonoArea = L.polygon(pontosArea,{
+    color:"green"
+  }).addTo(map)
+
+})
 /* ================= 🎯 MIRA ================= */
 function ativarMira(){
   navigator.geolocation.getCurrentPosition((pos)=>{
@@ -135,6 +163,71 @@ function calcularDistancia(lat1, lon1, lat2, lon2){
   return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
 }
 
+//* ================= 🛰️ ÁREA Será Aqui? ================= */
+function iniciarModoArea(){
+
+  modoArea = true
+  pontosArea = []
+  function calcularAreaHectares(coords){
+
+  let area = 0
+
+  for(let i=0; i < coords.length; i++){
+    const [x1,y1] = coords[i]
+    const [x2,y2] = coords[(i+1) % coords.length]
+
+    area += (y2 * x1) - (y1 * x2)
+  }
+
+  return Math.abs(area / 2) * 111139 * 111139 / 10000
+}
+
+  if(poligonoArea){
+    map.removeLayer(poligonoArea)
+    poligonoArea = null
+  }
+
+  alert("Modo área ativado. Clique no mapa para marcar os pontos.")
+}
+
+function finalizarArea(){
+
+  modoArea = false
+
+  if(pontosArea.length < 3){
+    alert("Área inválida")
+    return
+  }
+
+  const area = calcularAreaHectares(pontosArea)
+
+  alert("Área: " + area.toFixed(2) + " ha")
+
+  gerarKMLArea()
+
+}
+
+function gerarKMLArea(){
+
+  let kml = `<?xml version="1.0" encoding="UTF-8"?>
+  <kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document><Placemark><Polygon><outerBoundaryIs><LinearRing><coordinates>`
+
+  pontosArea.forEach(p=>{
+    kml += `${p[1]},${p[0]},0 `
+  })
+
+  kml += `${pontosArea[0][1]},${pontosArea[0][0]},0 `
+
+  kml += `</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark></Document></kml>`
+
+  const blob = new Blob([kml], { type: "application/vnd.google-earth.kml+xml" })
+
+  const link = document.createElement("a")
+  link.href = URL.createObjectURL(blob)
+  link.download = "area.kml"
+  link.click()
+}
 /* ================= 🛰️ RASTRO ================= */
 function controlarRastro(){
 
