@@ -157,7 +157,6 @@ function iniciarRastro(){
 function iniciarArea(){
 
   modoArea = true
-  areaPausada = false
   pontosArea = []
   distanciaTotal = 0
   ultimoPonto = null
