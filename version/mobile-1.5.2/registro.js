@@ -3,34 +3,32 @@ console.log("JS carregou")
 let map
 let coordenadaAtual = null
 let marcadorAtual = null
-let marcadorPonto = null
-let registrosDoPonto = []
 
-// RASTRO
-let rastroAtivo = false
-let rastroPausado = false
+// ================= RASTRO =================
 let watchId = null
 let pontosRastro = []
 let linhaRastro = null
 let marcadorRastro = null
-let distanciaTotal = 0
 let ultimoPonto = null
+let distanciaTotal = 0
 let inicioTempo = null
 let intervaloTempo = null
+let rastroAtivo = false
+let rastroPausado = false
 
-// ÁREA
-let areaPausada = false
-let intervaloAreaTempo = null
-let inicioAreaTempo = null
-let areaPausada = false
+// ================= ÁREA =================
 let modoArea = false
+let areaPausada = false
 let watchAreaId = null
 let pontosArea = []
 let linhaArea = null
 let poligonoArea = null
 let marcadorArea = null
+let tempoAreaInicio = null
+let intervaloArea = null
 
 /* ================= INIT ================= */
+
 document.addEventListener("DOMContentLoaded", () => {
 
   map = L.map('map', { zoomControl:false }).setView([-15,-47],5)
@@ -51,17 +49,14 @@ document.addEventListener("DOMContentLoaded", () => {
     {position:'topright'}
   ).addTo(map)
 
-  document.getElementById("formMissaoContainer").style.display = "none"
-
   document.getElementById("btnMira").onclick = ativarMira
-  document.getElementById("btnMarcarPontoInferior").onclick = marcarPonto
-  document.getElementById("btnSalvarRegistro").onclick = salvarRegistro
-  document.getElementById("btnConcluirPonto").onclick = concluirPonto
   document.getElementById("btnRastro").onclick = controlarRastro
   document.getElementById("btnArea").onclick = iniciarArea
+
 })
 
 /* ================= 🎯 MIRA ================= */
+
 function ativarMira(){
   navigator.geolocation.getCurrentPosition((pos)=>{
     const lat = pos.coords.latitude
@@ -81,57 +76,8 @@ function ativarMira(){
   })
 }
 
-/* ================= 📍 MARCAR ================= */
-function marcarPonto(){
-
-  if(!coordenadaAtual){
-    alert("Clique na 🎯 primeiro.")
-    return
-  }
-
-  if(marcadorPonto) map.removeLayer(marcadorPonto)
-
-  marcadorPonto = L.marker([coordenadaAtual.lat, coordenadaAtual.lng]).addTo(map)
-  marcadorPonto.bindPopup("📍 Ponto em registro...")
-
-  registrosDoPonto = []
-  document.getElementById("formMissaoContainer").style.display = "block"
-}
-
-/* ================= 💾 SALVAR ================= */
-function salvarRegistro(){
-
-  const ocorrencia = document.getElementById("ocorrenciaSelect").value
-  const especie = document.getElementById("especieInput").value
-
-  if(!ocorrencia || !especie){
-    alert("Preencha os campos obrigatórios")
-    return
-  }
-
-  registrosDoPonto.push({ocorrencia, especie})
-  renderizarLista()
-}
-
-/* ================= 📋 LISTA ================= */
-function renderizarLista(){
-
-  const lista = document.getElementById("listaRegistros")
-  lista.innerHTML = "<h4>Registros do ponto:</h4>"
-
-  registrosDoPonto.forEach(r=>{
-    const div = document.createElement("div")
-    div.innerHTML = `<strong>${r.ocorrencia}</strong> - ${r.especie}`
-    lista.appendChild(div)
-  })
-}
-
-/* ================= ✅ CONCLUIR ================= */
-function concluirPonto(){
-  document.getElementById("formMissaoContainer").style.display = "none"
-}
-
 /* ================= 📏 DISTÂNCIA ================= */
+
 function calcularDistancia(lat1, lon1, lat2, lon2){
   const R = 6371
   const dLat = (lat2-lat1) * Math.PI/180
@@ -147,14 +93,14 @@ function calcularDistancia(lat1, lon1, lat2, lon2){
 }
 
 /* ================= 🛰️ RASTRO ================= */
-function controlarRastro(){
 
+function controlarRastro(){
   if(!rastroAtivo){
     iniciarRastro()
   }else if(!rastroPausado){
-    pausarRastro()
+    rastroPausado = true
   }else{
-    continuarRastro()
+    rastroPausado = false
   }
 }
 
@@ -167,241 +113,100 @@ function iniciarRastro(){
   ultimoPonto = null
   inicioTempo = new Date()
 
-  intervaloTempo = setInterval(()=>{
-    atualizarPainelRastro()
-  }, 1000)
+  intervaloTempo = setInterval(atualizarPainelRastro,1000)
 
-  watchId = navigator.geolocation.watchPosition(
-    
+  watchId = navigator.geolocation.watchPosition((pos)=>{
 
-    (pos)=>{
+    if(rastroPausado) return
+    if(pos.coords.accuracy > 20) return
 
-      if(rastroPausado) return
+    const lat = pos.coords.latitude
+    const lng = pos.coords.longitude
 
-      const lat = pos.coords.latitude
-      const lng = pos.coords.longitude
-
-      if(pos.coords.accuracy > 15) return
-
-      if(marcadorRastro){
-        marcadorRastro.setLatLng([lat,lng])
-      }else{
-        marcadorRastro = L.circleMarker([lat,lng],{
-          radius:6,
-          color:"#2196f3",
-          fillColor:"#2196f3",
-          fillOpacity:1
-        }).addTo(map)
-      }
-
-      if(ultimoPonto){
-        const dist = calcularDistancia(
-          ultimoPonto.lat,
-          ultimoPonto.lng,
-          lat,
-          lng
-        )
-
-        if(dist < 0.003) return
-        if(dist > 0.3) return
-
-        distanciaTotal += dist
-      }
-
-      ultimoPonto = {lat,lng}
-      pontosRastro.push([lat,lng])
-
-      if(linhaRastro) map.removeLayer(linhaRastro)
-
-      linhaRastro = L.polyline(pontosRastro,{
-        color:"red",
-        weight:4,
-        smoothFactor:2
+    if(marcadorRastro){
+      marcadorRastro.setLatLng([lat,lng])
+    }else{
+      marcadorRastro = L.circleMarker([lat,lng],{
+        radius:6,color:"#2196f3",fillColor:"#2196f3",fillOpacity:1
       }).addTo(map)
-
-    },
-
-    (erro)=>{
-      console.log("Erro GPS:", erro)
-    },
-
-    {
-      enableHighAccuracy: true,
-      maximumAge: 1000,
-      timeout: 15000
     }
 
-  )
+    if(ultimoPonto){
+      const dist = calcularDistancia(
+        ultimoPonto.lat,ultimoPonto.lng,lat,lng
+      )
+      if(dist < 0.002 || dist > 0.3) return
+      distanciaTotal += dist
+    }
 
-  mostrarPainelRastro()
-}
+    ultimoPonto = {lat,lng}
+    pontosRastro.push([lat,lng])
 
-function pausarRastro(){ rastroPausado = true }
-function continuarRastro(){ rastroPausado = false }
+    if(linhaRastro) map.removeLayer(linhaRastro)
 
-function finalizarRastro(){
+    linhaRastro = L.polyline(pontosRastro,{
+      color:"red",weight:4,smoothFactor:2
+    }).addTo(map)
 
-  navigator.geolocation.clearWatch(watchId)
-  clearInterval(intervaloTempo)
-
-  rastroAtivo = false
-  rastroPausado = false
-
-  gerarKML()
-  esconderPainelRastro()
-
-  if(linhaRastro) map.removeLayer(linhaRastro)
-  if(marcadorRastro) map.removeLayer(marcadorRastro)
-}
-
-/* ================= 📊 PAINEL ================= */
-function mostrarPainelRastro(){
-  document.getElementById("painelRastro").style.display = "block"
-}
-
-function esconderPainelRastro(){
-  document.getElementById("painelRastro").style.display = "none"
-}
-
-function atualizarPainelRastro(){
-
-  const tempo = Math.floor((new Date() - inicioTempo)/1000)
-  const min = Math.floor(tempo/60)
-  const seg = tempo % 60
-
-  document.getElementById("infoRastro").innerHTML =
-    `Tempo: ${min}m ${seg}s <br> Distância: ${distanciaTotal.toFixed(3)} km`
-}
-
-/* ================= 📁 KML ================= */
-function gerarKML(){
-
-  let kml = `<?xml version="1.0" encoding="UTF-8"?>
-  <kml xmlns="http://www.opengis.net/kml/2.2">
-  <Document><Placemark><LineString><coordinates>`
-
-  pontosRastro.forEach(p=>{
-    kml += `${p[1]},${p[0]},0 `
   })
 
-  kml += `</coordinates></LineString></Placemark></Document></kml>`
-
-  const blob = new Blob([kml], {
-    type: "application/vnd.google-earth.kml+xml"
-  })
-
-  const link = document.createElement("a")
-  link.href = URL.createObjectURL(blob)
-  link.download = `rastro_${Date.now()}.kml`
-  link.click()
 }
 
-/* ================= 📐 ÁREA (PROFISSIONAL) ================= */
-
-let tempoAreaInicio = null
-let intervaloArea = null
+/* ================= 📐 ÁREA ================= */
 
 function iniciarArea(){
 
-  console.log("Modo área iniciado")
-
   modoArea = true
+  areaPausada = false
   pontosArea = []
   distanciaTotal = 0
   ultimoPonto = null
   tempoAreaInicio = new Date()
 
-  if(linhaArea){
-    map.removeLayer(linhaArea)
-    linhaArea = null
-  }
+  intervaloArea = setInterval(atualizarPainelArea,1000)
 
-  if(poligonoArea){
-    map.removeLayer(poligonoArea)
-    poligonoArea = null
-  }
+  watchAreaId = navigator.geolocation.watchPosition((pos)=>{
 
-  intervaloArea = setInterval(()=>{
-    atualizarPainelArea()
-  }, 1000)
+    if(!modoArea) return
+    if(areaPausada) return
+    if(pos.coords.accuracy > 20) return
 
-  watchAreaId = navigator.geolocation.watchPosition(
+    const lat = pos.coords.latitude
+    const lng = pos.coords.longitude
 
-    (pos)=>{
-
-  if(!modoArea) return
-  if(areaPausada) return   // 🔥 ESSENCIAL
-
-  const lat = pos.coords.latitude
-  const lng = pos.coords.longitude
-
-      if(pos.coords.accuracy > 15) return
-
-      // 🔵 bolinha
-      if(marcadorArea){
-        marcadorArea.setLatLng([lat,lng])
-      }else{
-        marcadorArea = L.circleMarker([lat,lng],{
-          radius:6,
-          color:"#2196f3",
-          fillColor:"#2196f3",
-          fillOpacity:1
-        }).addTo(map)
-      }
-
-      // distância (igual rastro)
-      if(ultimoPonto){
-        const dist = calcularDistancia(
-          ultimoPonto.lat,
-          ultimoPonto.lng,
-          lat,
-          lng
-        )
-
-        if(dist < 0.002) return
-        if(dist > 0.3) return
-
-        distanciaTotal += dist
-      }
-
-      ultimoPonto = {lat,lng}
-      pontosArea.push([lat,lng])
-
-      // 🔴 linha RED PROFISSIONAL
-      if(linhaArea) map.removeLayer(linhaArea)
-
-      linhaArea = L.polyline(pontosArea,{
-        color:"#ff0000",
-        weight:4,
-        smoothFactor:2
+    if(marcadorArea){
+      marcadorArea.setLatLng([lat,lng])
+    }else{
+      marcadorArea = L.circleMarker([lat,lng],{
+        radius:6,color:"#2196f3",fillColor:"#2196f3",fillOpacity:1
       }).addTo(map)
-
-    },
-
-    (erro)=>{
-      console.log("Erro GPS área:", erro)
-    },
-
-    {
-      enableHighAccuracy:true,
-      maximumAge:1000,
-      timeout:15000
     }
 
-  )
+    if(ultimoPonto){
+      const dist = calcularDistancia(
+        ultimoPonto.lat,ultimoPonto.lng,lat,lng
+      )
+      if(dist < 0.002 || dist > 0.3) return
+      distanciaTotal += dist
+    }
 
-  mostrarPainelArea()
+    ultimoPonto = {lat,lng}
+    pontosArea.push([lat,lng])
+
+    if(linhaArea) map.removeLayer(linhaArea)
+
+    linhaArea = L.polyline(pontosArea,{
+      color:"red",weight:4,smoothFactor:2
+    }).addTo(map)
+
+  })
+
 }
 
-/* ================= ⏸️ CONTROLES ================= */
+/* ================= ⏸️ ÁREA CONTROLE ================= */
 
-function pausarArea(){
-  areaPausada = true
-}
-
-function continuarArea(){
-  areaPausada = false
-}
+function pausarArea(){ areaPausada = true }
+function continuarArea(){ areaPausada = false }
 
 function finalizarArea(){
 
@@ -409,91 +214,47 @@ function finalizarArea(){
   clearInterval(intervaloArea)
 
   modoArea = false
-  areaPausada = false
 
   if(pontosArea.length < 3){
     alert("Área inválida")
     return
   }
 
-  // 🔺 remove linha aberta
-  if(linhaArea){
-    map.removeLayer(linhaArea)
-  }
+  if(linhaArea) map.removeLayer(linhaArea)
 
-  // 🔺 fecha polígono corretamente
-  poligonoArea = L.polygon(pontosArea,{
-    color:"green",
-    weight:3
-  }).addTo(map)
+  poligonoArea = L.polygon(pontosArea,{color:"green"}).addTo(map)
 
-  // 🔥 calcula área
   const area = calcularAreaHectares(pontosArea)
 
-  alert(`Área total: ${area.toFixed(2)} ha`)
-
-  gerarKMLArea()
-  esconderPainelArea()
-}
-/* ================= 📊 PAINEL ÁREA ================= */
-
-function mostrarPainelArea(){
-  document.getElementById("painelRastro").style.display = "block"
+  alert("Área: " + area.toFixed(2) + " ha")
 }
 
-function esconderPainelArea(){
-  document.getElementById("painelRastro").style.display = "none"
+/* ================= 📊 PAINEL ================= */
+
+function atualizarPainelRastro(){
+  const tempo = Math.floor((new Date()-inicioTempo)/1000)
+  const min = Math.floor(tempo/60)
+  const seg = tempo%60
+  document.getElementById("infoRastro").innerHTML =
+    `Tempo: ${min}m ${seg}s<br>Distância: ${distanciaTotal.toFixed(3)} km`
 }
 
 function atualizarPainelArea(){
-
-  const tempo = Math.floor((new Date() - tempoAreaInicio)/1000)
+  const tempo = Math.floor((new Date()-tempoAreaInicio)/1000)
   const min = Math.floor(tempo/60)
-  const seg = tempo % 60
-
+  const seg = tempo%60
   document.getElementById("infoRastro").innerHTML =
-    `Área em medição<br>Tempo: ${min}m ${seg}s<br>Distância: ${distanciaTotal.toFixed(3)} km`
+    `Área<br>Tempo: ${min}m ${seg}s<br>Distância: ${distanciaTotal.toFixed(3)} km`
 }
 
-/* ================= 📐 CÁLCULO ÁREA ================= */
+/* ================= 📐 ÁREA CÁLCULO ================= */
 
 function calcularAreaHectares(coords){
-
   let area = 0
-
-  for(let i=0; i < coords.length; i++){
-    const [lat1, lon1] = coords[i]
-    const [lat2, lon2] = coords[(i+1) % coords.length]
-
-    area += (lon2 * lat1) - (lon1 * lat2)
+  for(let i=0;i<coords.length;i++){
+    const [lat1,lon1]=coords[i]
+    const [lat2,lon2]=coords[(i+1)%coords.length]
+    area += (lon2*lat1)-(lon1*lat2)
   }
-
-  return Math.abs(area / 2) * 111139 * 111139 / 10000
-}
-
-/* ================= 📁 KML ÁREA ================= */
-
-function gerarKMLArea(){
-
-  let kml = `<?xml version="1.0" encoding="UTF-8"?>
-  <kml xmlns="http://www.opengis.net/kml/2.2">
-  <Document><Placemark><Polygon><outerBoundaryIs><LinearRing><coordinates>`
-
-  pontosArea.forEach(p=>{
-    kml += `${p[1]},${p[0]},0 `
-  })
-
-  // fecha polígono
-  kml += `${pontosArea[0][1]},${pontosArea[0][0]},0 `
-
-  kml += `</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark></Document></kml>`
-
-  const blob = new Blob([kml], {
-    type: "application/vnd.google-earth.kml+xml"
-  })
-
-  const link = document.createElement("a")
-  link.href = URL.createObjectURL(blob)
-  link.download = `area_${Date.now()}.kml`
-  link.click()
+  return Math.abs(area/2)*111139*111139/10000
 }
