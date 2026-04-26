@@ -97,6 +97,7 @@ function calcularDistancia(lat1, lon1, lat2, lon2){
 
 /* ================= 🛰️ RASTRO ================= */
 
+clearInterval(intervaloTempo)
 function controlarRastro(){
   if(!rastroAtivo){
     iniciarRastro()
@@ -125,7 +126,7 @@ function iniciarRastro(){
   watchId = navigator.geolocation.watchPosition((pos)=>{
 
     if(rastroPausado) return
-    if(pos.coords.accuracy > 20) return
+    if(pos.coords.accuracy > 15) return
 
     const lat = pos.coords.latitude
     const lng = pos.coords.longitude
@@ -176,7 +177,7 @@ function marcarPonto(){
   marcadorPonto.bindPopup("📍 Ponto marcado").openPopup()
 }
 /* ================= 📐 ÁREA ================= */
-
+clearInterval(intervaloTempo)
 function iniciarArea(){
 
   console.log("Modo área iniciado")
@@ -223,8 +224,8 @@ function iniciarArea(){
           lng
         )
 
-        if(dist < 0.002) return
-        if(dist > 0.3) return
+        if(dist < 0.005) return   // ignora ruído <5m
+        if(dist > 0.2) return     // ignora salto absurdo
 
         distanciaTotal += dist
       }
@@ -249,10 +250,9 @@ function iniciarArea(){
       maximumAge:1000,
       timeout:15000
     }
-
+mostrarPainelRastro()
   )
-
-  mostrarPainelRastro()
+  
 }
 
 function fecharArea(){
@@ -301,12 +301,21 @@ function calcularAreaHectares(coords){
 
 function pausarRastro(){
   rastroPausado = true
+  clearInterval(intervaloTempo) // 🔴 para o tempo
+}
+
+function pausarRastro(){
+  rastroPausado = true
+  clearInterval(intervaloTempo)
 }
 
 function continuarRastro(){
   rastroPausado = false
-}
 
+  intervaloTempo = setInterval(()=>{
+    atualizarPainelRastro()
+  }, 1000)
+}
 function finalizarRastro(){
 
   navigator.geolocation.clearWatch(watchId)
