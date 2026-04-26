@@ -52,6 +52,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnRastro").onclick = controlarRastro
   document.getElementById("btnArea").onclick = iniciarArea
   document.getElementById("btnMarcarPontoInferior").onclick = marcarPonto
+
+  document.getElementById("btnPausar").onclick = pausarRastro
+  document.getElementById("btnContinuar").onclick = continuarRastro
+  document.getElementById("btnFinalizar").onclick = finalizarRastro
 })
 
 /* ================= 🎯 MIRA ================= */
@@ -174,80 +178,159 @@ function marcarPonto(){
 /* ================= 📐 ÁREA ================= */
 
 function iniciarArea(){
-  mostrarPainel()
-intervaloArea = setInterval(atualizarPainelArea,1000)  
+
+  console.log("Modo área iniciado")
+
   modoArea = true
+
   pontosArea = []
   distanciaTotal = 0
   ultimoPonto = null
-  tempoAreaInicio = new Date()
+  inicioTempo = new Date()
 
-  intervaloArea = setInterval(atualizarPainelArea,1000)
+  intervaloTempo = setInterval(()=>{
+    atualizarPainelRastro()
+  }, 1000)
 
-  watchAreaId = navigator.geolocation.watchPosition((pos)=>{
+  watchAreaId = navigator.geolocation.watchPosition(
 
-    if(!modoArea) return
-    if(areaPausada) return
-    if(pos.coords.accuracy > 20) return
+    (pos)=>{
 
-    const lat = pos.coords.latitude
-    const lng = pos.coords.longitude
+      if(!modoArea || rastroPausado) return
 
-    if(marcadorArea){
-      marcadorArea.setLatLng([lat,lng])
-    }else{
-      marcadorArea = L.circleMarker([lat,lng],{
-        radius:6,color:"#2196f3",fillColor:"#2196f3",fillOpacity:1
+      const lat = pos.coords.latitude
+      const lng = pos.coords.longitude
+
+      if(pos.coords.accuracy > 20) return
+
+      // bolinha
+      if(marcadorArea){
+        marcadorArea.setLatLng([lat,lng])
+      }else{
+        marcadorArea = L.circleMarker([lat,lng],{
+          radius:6,
+          color:"#2196f3",
+          fillColor:"#2196f3",
+          fillOpacity:1
+        }).addTo(map)
+      }
+
+      if(ultimoPonto){
+        const dist = calcularDistancia(
+          ultimoPonto.lat,
+          ultimoPonto.lng,
+          lat,
+          lng
+        )
+
+        if(dist < 0.002) return
+        if(dist > 0.3) return
+
+        distanciaTotal += dist
+      }
+
+      ultimoPonto = {lat,lng}
+      pontosArea.push([lat,lng])
+
+      if(linhaArea) map.removeLayer(linhaArea)
+
+      linhaArea = L.polyline(pontosArea,{
+        color:"red",
+        weight:4,
+        smoothFactor:2
       }).addTo(map)
+
+    },
+
+    (erro)=> console.log("Erro GPS área:", erro),
+
+    {
+      enableHighAccuracy:true,
+      maximumAge:1000,
+      timeout:15000
     }
 
-    if(ultimoPonto){
-      const dist = calcularDistancia(
-        ultimoPonto.lat,ultimoPonto.lng,lat,lng
-      )
-      if(dist < 0.002 || dist > 0.3) return
-      distanciaTotal += dist
-    }
+  )
 
-    ultimoPonto = {lat,lng}
-    pontosArea.push([lat,lng])
-
-    if(linhaArea) map.removeLayer(linhaArea)
-
-    linhaArea = L.polyline(pontosArea,{
-      color:"red",weight:4,smoothFactor:2
-    }).addTo(map)
-
-  })
-
+  mostrarPainelRastro()
 }
 
-/* ================= ⏸️ ÁREA CONTROLE ================= */
-
-function pausarArea(){ areaPausada = true }
-function continuarArea(){ areaPausada = false }
-
-function finalizarArea(){
-
-  navigator.geolocation.clearWatch(watchAreaId)
-  clearInterval(intervaloArea)
+function fecharArea(){
 
   modoArea = false
+
+  navigator.geolocation.clearWatch(watchAreaId)
+  clearInterval(intervaloTempo)
+
+  esconderPainelRastro()
 
   if(pontosArea.length < 3){
     alert("Área inválida")
     return
   }
 
-  if(linhaArea) map.removeLayer(linhaArea)
+  if(poligonoArea) map.removeLayer(poligonoArea)
 
-  poligonoArea = L.polygon(pontosArea,{color:"green"}).addTo(map)
+  poligonoArea = L.polygon(pontosArea,{
+    color:"green"
+  }).addTo(map)
 
   const area = calcularAreaHectares(pontosArea)
 
-  alert("Área: " + area.toFixed(2) + " ha")
+  alert("Área total: " + area.toFixed(2) + " ha")
+
+  gerarKMLArea()
+
+  console.log("Área finalizada")
 }
 
+function calcularAreaHectares(coords){
+
+  let area = 0
+
+  for(let i=0; i < coords.length; i++){
+    const [lat1, lon1] = coords[i]
+    const [lat2, lon2] = coords[(i+1) % coords.length]
+
+    area += (lon2 * lat1) - (lon1 * lat2)
+  }
+
+  return Math.abs(area / 2) * 111139 * 111139 / 10000
+}
+/* ================= ⏸️ ÁREA CONTROLE ================= */
+
+function pausarRastro(){
+  rastroPausado = true
+}
+
+function continuarRastro(){
+  rastroPausado = false
+}
+
+function finalizarRastro(){
+
+  navigator.geolocation.clearWatch(watchId)
+  clearInterval(intervaloTempo)
+
+  rastroAtivo = false
+  rastroPausado = false
+
+  esconderPainelRastro()
+
+  gerarKML()
+
+  if(linhaRastro){
+    map.removeLayer(linhaRastro)
+    linhaRastro = null
+  }
+
+  if(marcadorRastro){
+    map.removeLayer(marcadorRastro)
+    marcadorRastro = null
+  }
+
+  console.log("Rastro finalizado")
+}
 /* ================= 📊 PAINEL ================= */
 function mostrarPainel(){
   document.getElementById("painelRastro").style.display = "block"
