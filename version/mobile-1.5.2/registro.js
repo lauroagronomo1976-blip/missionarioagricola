@@ -28,7 +28,6 @@ let tempoAreaInicio = null
 let intervaloArea = null
 
 /* ================= INIT ================= */
-
 document.addEventListener("DOMContentLoaded", () => {
 
   map = L.map('map', { zoomControl:false }).setView([-15,-47],5)
@@ -52,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnMira").onclick = ativarMira
   document.getElementById("btnRastro").onclick = controlarRastro
   document.getElementById("btnArea").onclick = iniciarArea
-
+  document.getElementById("btnMarcarPontoInferior").onclick = marcarPonto
 })
 
 /* ================= 🎯 MIRA ================= */
@@ -106,12 +105,16 @@ function controlarRastro(){
 
 function iniciarRastro(){
 
+  console.log("Rastro iniciado")
+
   rastroAtivo = true
   rastroPausado = false
   pontosRastro = []
   distanciaTotal = 0
   ultimoPonto = null
   inicioTempo = new Date()
+
+  mostrarPainel()
 
   intervaloTempo = setInterval(atualizarPainelRastro,1000)
 
@@ -145,17 +148,34 @@ function iniciarRastro(){
     if(linhaRastro) map.removeLayer(linhaRastro)
 
     linhaRastro = L.polyline(pontosRastro,{
-      color:"red",weight:4,smoothFactor:2
+      color:"red",weight:4
     }).addTo(map)
 
   })
-
 }
 
+/* =================  Marcar Ponto ================= */
+function marcarPonto(){
+
+  if(!coordenadaAtual){
+    alert("Clique na 🎯 primeiro.")
+    return
+  }
+
+  if(marcadorPonto) map.removeLayer(marcadorPonto)
+
+  marcadorPonto = L.marker([
+    coordenadaAtual.lat,
+    coordenadaAtual.lng
+  ]).addTo(map)
+
+  marcadorPonto.bindPopup("📍 Ponto marcado").openPopup()
+}
 /* ================= 📐 ÁREA ================= */
 
 function iniciarArea(){
-
+  mostrarPainel()
+intervaloArea = setInterval(atualizarPainelArea,1000)  
   modoArea = true
   pontosArea = []
   distanciaTotal = 0
@@ -229,7 +249,13 @@ function finalizarArea(){
 }
 
 /* ================= 📊 PAINEL ================= */
+function mostrarPainel(){
+  document.getElementById("painelRastro").style.display = "block"
+}
 
+function esconderPainel(){
+  document.getElementById("painelRastro").style.display = "none"
+}
 function atualizarPainelRastro(){
   const tempo = Math.floor((new Date()-inicioTempo)/1000)
   const min = Math.floor(tempo/60)
