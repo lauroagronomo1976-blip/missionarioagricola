@@ -143,7 +143,12 @@ function finalizar(){
     const poligono = L.polygon(pontos,{color:"green"}).addTo(map)
 
     const area = calcularArea(pontos)
-    alert("Área: " + area.toFixed(2) + " ha")
+
+// salva para o painel
+areaCalculada = area
+
+// atualiza painel imediatamente
+atualizarPainel()
 
     gerarKMLArea()
   }
