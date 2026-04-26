@@ -16,31 +16,30 @@ let ultimoPonto = null
 let distancia = 0
 let inicioTempo = null
 let timer = null
-texto += `<br><span style="color:#2e7d32;font-weight:bold">Área: ${areaCalculada.toFixed(2)} ha</span>`
+
+let areaCalculada = null
 
 /* ================= INIT ================= */
 document.addEventListener("DOMContentLoaded", () => {
 
   map = L.map('map', { zoomControl:false }).setView([-15,-47],5)
 
-// zoom no canto correto
-L.control.zoom({ position:'bottomright' }).addTo(map)
+  L.control.zoom({ position:'bottomright' }).addTo(map)
 
-// camadas
-const street = L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-).addTo(map)
+  const street = L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+  ).addTo(map)
 
-const satelite = L.tileLayer(
-  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-)
+  const satelite = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+  )
 
-// botão de camadas (topo direita)
-L.control.layers(
-  {"Rua": street, "Satélite": satelite},
-  {},
-  { position: 'topright' }
-).addTo(map)
+  L.control.layers(
+    {"Rua": street, "Satélite": satelite},
+    {},
+    { position: 'topright' }
+  ).addTo(map)
+
   document.getElementById("btnMira").onclick = ativarMira
   document.getElementById("btnRastro").onclick = () => iniciar("rastro")
   document.getElementById("btnArea").onclick = () => iniciar("area")
@@ -78,6 +77,7 @@ function iniciar(tipo){
   distancia = 0
   ultimoPonto = null
   inicioTempo = new Date()
+  areaCalculada = null
 
   mostrarPainel()
   timer = setInterval(atualizarPainel,1000)
@@ -97,10 +97,8 @@ function atualizarGPS(pos){
   const lat = pos.coords.latitude
   const lng = pos.coords.longitude
 
-  // ⚠️ filtro mais leve (antes estava travando tudo)
   if(pos.coords.accuracy > 30) return
 
-  // bolinha azul
   if(marcador){
     marcador.setLatLng([lat,lng])
   }else{
@@ -114,9 +112,7 @@ function atualizarGPS(pos){
       ultimoPonto.lat, ultimoPonto.lng, lat, lng
     )
 
-    // ⚠️ filtros corrigidos
-    if(dist < 0.001) return   // 1 metro
-    if(dist > 1) return       // ignora salto absurdo
+    if(dist < 0.001 || dist > 1) return
 
     distancia += dist
   }
@@ -124,7 +120,6 @@ function atualizarGPS(pos){
   ultimoPonto = {lat,lng}
   pontos.push([lat,lng])
 
-  // desenha linha
   if(linha) map.removeLayer(linha)
 
   linha = L.polyline(pontos,{
@@ -143,13 +138,8 @@ function finalizar(){
 
     const poligono = L.polygon(pontos,{color:"green"}).addTo(map)
 
-    const area = calcularArea(pontos)
-
-// salva para o painel
-areaCalculada = area
-
-// atualiza painel imediatamente
-atualizarPainel()
+    areaCalculada = calcularArea(pontos)
+    atualizarPainel()
 
     gerarKMLArea()
   }
@@ -171,15 +161,16 @@ function esconderPainel(){
 }
 
 function atualizarPainel(){
+
   const tempo = Math.floor((new Date()-inicioTempo)/1000)
   const min = Math.floor(tempo/60)
   const seg = tempo%60
 
   let texto = `Tempo: ${min}m ${seg}s<br>Distância: ${distancia.toFixed(3)} km`
 
-// se for área, mostra hectares
-if(modo === "area" && areaCalculada){
-  texto += `<br><b>Área: ${areaCalculada.toFixed(2)} ha</b>`
+  if(modo === "area" && areaCalculada){
+    texto += `<br><span style="color:#2e7d32;font-weight:bold">Área: ${areaCalculada.toFixed(2)} ha</span>`
+  }
 
   document.getElementById("infoRastro").innerHTML = texto
 }
