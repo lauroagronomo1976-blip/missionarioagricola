@@ -16,7 +16,6 @@ let ultimoPonto = null
 let distancia = 0
 let inicioTempo = null
 let timer = null
-let areaCalculada = null
 texto += `<br><span style="color:#2e7d32;font-weight:bold">Área: ${areaCalculada.toFixed(2)} ha</span>`
 
 /* ================= INIT ================= */
@@ -181,9 +180,8 @@ function atualizarPainel(){
 // se for área, mostra hectares
 if(modo === "area" && areaCalculada){
   texto += `<br><b>Área: ${areaCalculada.toFixed(2)} ha</b>`
-}
 
-document.getElementById("infoRastro").innerHTML = texto
+  document.getElementById("infoRastro").innerHTML = texto
 }
 
 /* ================= DIST ================= */
