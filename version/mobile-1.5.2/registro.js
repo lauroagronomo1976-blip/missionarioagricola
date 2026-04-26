@@ -20,10 +20,26 @@ let timer = null
 /* ================= INIT ================= */
 document.addEventListener("DOMContentLoaded", () => {
 
-  map = L.map('map').setView([-15,-47],5)
+  map = L.map('map', { zoomControl:false }).setView([-15,-47],5)
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)
+// zoom no canto correto
+L.control.zoom({ position:'bottomright' }).addTo(map)
 
+// camadas
+const street = L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+).addTo(map)
+
+const satelite = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+)
+
+// botão de camadas (topo direita)
+L.control.layers(
+  {"Rua": street, "Satélite": satelite},
+  {},
+  { position: 'topright' }
+).addTo(map)
   document.getElementById("btnMira").onclick = ativarMira
   document.getElementById("btnRastro").onclick = () => iniciar("rastro")
   document.getElementById("btnArea").onclick = () => iniciar("area")
