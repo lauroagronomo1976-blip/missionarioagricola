@@ -168,13 +168,13 @@ function atualizarPainel(){
 
   let texto = `Tempo: ${min}m ${seg}s<br>Distância: ${distancia.toFixed(3)} km`
 
-  if(modo === "area" && areaCalculada){
-    texto += `<br><span style="color:#2e7d32;font-weight:bold">Área: ${areaCalculada.toFixed(2)} ha</span>`
+  // 👇 mostra área somente se existir
+  if(modo === "area" && typeof areaCalculada !== "undefined"){
+    
   }
 
   document.getElementById("infoRastro").innerHTML = texto
 }
-
 /* ================= DIST ================= */
 function calcularDistancia(lat1, lon1, lat2, lon2){
   const R = 6371
