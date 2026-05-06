@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnPausar").onclick = () => pausado = true
   document.getElementById("btnContinuar").onclick = () => pausado = false
   document.getElementById("btnFinalizar").onclick = finalizar
+  document.getElementById("btnLimpar").onclick = limparTudo
 })
 
 /* ================= 🎯 ================= */
@@ -239,4 +240,20 @@ function baixar(kml,nome){
   link.href = URL.createObjectURL(blob)
   link.download = nome
   link.click()
+}
+function limparTudo(){
+
+  limpar() // sua função atual
+
+  if(linha) map.removeLayer(linha)
+  if(marcador) map.removeLayer(marcador)
+
+  linha = null
+  marcador = null
+
+  pontos = []
+  distancia = 0
+  areaCalculada = null
+
+  document.getElementById("infoRastro").innerHTML = ""
 }
