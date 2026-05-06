@@ -223,13 +223,42 @@ function limpar(){
 /* ================= LIMPAR TUDO ================= */
 function limparTudo(){
 
-  limpar()
+  // para tudo
+  clearInterval(timer)
+  if(watchId) navigator.geolocation.clearWatch(watchId)
 
+  // remove linha
+  if(linha){
+    map.removeLayer(linha)
+    linha = null
+  }
+
+  // remove marcador
+  if(marcador){
+    map.removeLayer(marcador)
+    marcador = null
+  }
+
+  // remove polígono (área)
+  map.eachLayer(layer=>{
+    if(layer instanceof L.Polygon){
+      map.removeLayer(layer)
+    }
+  })
+
+  // reset geral
   pontos = []
   distancia = 0
   areaCalculada = null
+  ultimoPonto = null
+  modo = null
+  pausado = false
 
+  // limpa painel
   document.getElementById("infoRastro").innerHTML = ""
+
+  // 🔥 ESCONDE painel (remove botões)
+  document.getElementById("painelRastro").style.display = "none"
 }
 
 /* ================= KML ================= */
