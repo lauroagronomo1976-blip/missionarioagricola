@@ -138,9 +138,11 @@ function finalizar(){
 
     const poligono = L.polygon(pontos,{color:"green"}).addTo(map)
 
-    areaCalculada = calcularArea(pontos)
-    atualizarPainel()
+    const area = calcularArea(pontos)
+areaCalculada = area
 
+atualizarPainel() // 🔥 força atualizar na hora
+    
     gerarKMLArea()
   }
 
@@ -148,7 +150,7 @@ function finalizar(){
     gerarKMLRastro()
   }
 
-  esconderPainel()
+  // esconderPainel()  ❌ não esconder mais automaticamente
 }
 
 /* ================= PAINEL ================= */
