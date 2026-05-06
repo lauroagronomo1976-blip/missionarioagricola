@@ -27,8 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
   L.control.zoom({ position:'bottomright' }).addTo(map)
 
   const street = L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-  ).addTo(map)
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  { maxZoom: 19, useCache: true }
+).addTo(map)
 
   const satelite = L.tileLayer(
     'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
@@ -144,8 +145,38 @@ areaCalculada = area
 
 atualizarPainel() // 🔥 força atualizar na hora
     
-    gerarKMLArea()
-  }
+    function gerarKMLArea(){
+
+  const nome = "Área_" + new Date().toLocaleString()
+
+  let kml = `<?xml version="1.0" encoding="UTF-8"?>
+  <kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+  <Placemark>
+  <name>${nome}</name>
+  <description>Área: ${areaCalculada.toFixed(2)} ha</description>
+  <Polygon>
+  <outerBoundaryIs>
+  <LinearRing>
+  <coordinates>`
+
+  pontos.forEach(p=>{
+    kml += `${p[1]},${p[0]},0 `
+  })
+
+  // fecha polígono
+  kml += `${pontos[0][1]},${pontos[0][0]},0 `
+
+  kml += `</coordinates>
+  </LinearRing>
+  </outerBoundaryIs>
+  </Polygon>
+  </Placemark>
+  </Document>
+  </kml>`
+
+  baixar(kml, nome + ".kml")
+}
 
   if(modo === "rastro"){
     gerarKMLRastro()
