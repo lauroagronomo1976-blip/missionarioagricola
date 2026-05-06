@@ -24,23 +24,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   map = L.map('map', { zoomControl:false }).setView([-15,-47],5)
 
+  // zoom correto
   L.control.zoom({ position:'bottomright' }).addTo(map)
 
+  // mapa base
   const street = L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  { maxZoom: 19, useCache: true }
-).addTo(map)
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    { maxZoom: 19 }
+  ).addTo(map)
 
   const satelite = L.tileLayer(
     'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
   )
 
+  // botão camadas
   L.control.layers(
     {"Rua": street, "Satélite": satelite},
     {},
     { position: 'topright' }
   ).addTo(map)
 
+  // botões
   document.getElementById("btnMira").onclick = ativarMira
   document.getElementById("btnRastro").onclick = () => iniciar("rastro")
   document.getElementById("btnArea").onclick = () => iniciar("area")
@@ -101,6 +105,7 @@ function atualizarGPS(pos){
 
   if(pos.coords.accuracy > 30) return
 
+  // bolinha
   if(marcador){
     marcador.setLatLng([lat,lng])
   }else{
@@ -122,6 +127,7 @@ function atualizarGPS(pos){
   ultimoPonto = {lat,lng}
   pontos.push([lat,lng])
 
+  // linha
   if(linha) map.removeLayer(linha)
 
   linha = L.polyline(pontos,{
@@ -134,64 +140,29 @@ function atualizarGPS(pos){
 function finalizar(){
 
   clearInterval(timer)
-  navigator.geolocation.clearWatch(watchId)
+  if(watchId) navigator.geolocation.clearWatch(watchId)
 
+  // AREA
   if(modo === "area" && pontos.length >= 3){
 
-    const poligono = L.polygon(pontos,{color:"green"}).addTo(map)
+    L.polygon(pontos,{color:"green"}).addTo(map)
 
-    const area = calcularArea(pontos)
-areaCalculada = area
+    areaCalculada = calcularArea(pontos)
 
-atualizarPainel() // 🔥 força atualizar na hora
-    
-    function gerarKMLArea(){
+    atualizarPainel()
 
-  const nome = "Área_" + new Date().toLocaleString()
+    gerarKMLArea()
+  }
 
-  let kml = `<?xml version="1.0" encoding="UTF-8"?>
-  <kml xmlns="http://www.opengis.net/kml/2.2">
-  <Document>
-  <Placemark>
-  <name>${nome}</name>
-  <description>Área: ${areaCalculada.toFixed(2)} ha</description>
-  <Polygon>
-  <outerBoundaryIs>
-  <LinearRing>
-  <coordinates>`
-
-  pontos.forEach(p=>{
-    kml += `${p[1]},${p[0]},0 `
-  })
-
-  // fecha polígono
-  kml += `${pontos[0][1]},${pontos[0][0]},0 `
-
-  kml += `</coordinates>
-  </LinearRing>
-  </outerBoundaryIs>
-  </Polygon>
-  </Placemark>
-  </Document>
-  </kml>`
-
-  baixar(kml, nome + ".kml")
-}
-
+  // RASTRO
   if(modo === "rastro"){
     gerarKMLRastro()
   }
-
-  // esconderPainel()  ❌ não esconder mais automaticamente
 }
 
 /* ================= PAINEL ================= */
 function mostrarPainel(){
   document.getElementById("painelRastro").style.display = "block"
-}
-
-function esconderPainel(){
-  document.getElementById("painelRastro").style.display = "none"
 }
 
 function atualizarPainel(){
@@ -202,13 +173,13 @@ function atualizarPainel(){
 
   let texto = `Tempo: ${min}m ${seg}s<br>Distância: ${distancia.toFixed(3)} km`
 
-  // 👇 mostra área somente se existir
-  if(modo === "area" && typeof areaCalculada !== "undefined"){
-    
+  if(modo === "area" && areaCalculada){
+    texto += `<br><span style="color:#2e7d32;font-weight:bold">Área: ${areaCalculada.toFixed(2)} ha</span>`
   }
 
   document.getElementById("infoRastro").innerHTML = texto
 }
+
 /* ================= DIST ================= */
 function calcularDistancia(lat1, lon1, lat2, lon2){
   const R = 6371
@@ -249,20 +220,60 @@ function limpar(){
   marcador = null
 }
 
+/* ================= LIMPAR TUDO ================= */
+function limparTudo(){
+
+  limpar()
+
+  pontos = []
+  distancia = 0
+  areaCalculada = null
+
+  document.getElementById("infoRastro").innerHTML = ""
+}
+
 /* ================= KML ================= */
 function gerarKMLRastro(){
-  let kml = `<?xml version="1.0"?><kml><Document><Placemark><LineString><coordinates>`
-  pontos.forEach(p=> kml += `${p[1]},${p[0]},0 `)
-  kml += `</coordinates></LineString></Placemark></Document></kml>`
-  baixar(kml,"rastro.kml")
+
+  const nome = "Rastro_" + new Date().toLocaleString()
+
+  let kml = `<?xml version="1.0" encoding="UTF-8"?>
+  <kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document><Placemark>
+  <name>${nome}</name>
+  <LineString><coordinates>`
+
+  pontos.forEach(p=>{
+    kml += `${p[1]},${p[0]},0 `
+  })
+
+  kml += `</coordinates></LineString>
+  </Placemark></Document></kml>`
+
+  baixar(kml, nome + ".kml")
 }
 
 function gerarKMLArea(){
-  let kml = `<?xml version="1.0"?><kml><Document><Placemark><Polygon><outerBoundaryIs><LinearRing><coordinates>`
-  pontos.forEach(p=> kml += `${p[1]},${p[0]},0 `)
+
+  const nome = "Area_" + new Date().toLocaleString()
+
+  let kml = `<?xml version="1.0" encoding="UTF-8"?>
+  <kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document><Placemark>
+  <name>${nome}</name>
+  <description>Área: ${areaCalculada.toFixed(2)} ha</description>
+  <Polygon><outerBoundaryIs><LinearRing><coordinates>`
+
+  pontos.forEach(p=>{
+    kml += `${p[1]},${p[0]},0 `
+  })
+
   kml += `${pontos[0][1]},${pontos[0][0]},0 `
-  kml += `</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark></Document></kml>`
-  baixar(kml,"area.kml")
+
+  kml += `</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  </Placemark></Document></kml>`
+
+  baixar(kml, nome + ".kml")
 }
 
 function baixar(kml,nome){
@@ -271,20 +282,4 @@ function baixar(kml,nome){
   link.href = URL.createObjectURL(blob)
   link.download = nome
   link.click()
-}
-function limparTudo(){
-
-  limpar() // sua função atual
-
-  if(linha) map.removeLayer(linha)
-  if(marcador) map.removeLayer(marcador)
-
-  linha = null
-  marcador = null
-
-  pontos = []
-  distancia = 0
-  areaCalculada = null
-
-  document.getElementById("infoRastro").innerHTML = ""
 }
