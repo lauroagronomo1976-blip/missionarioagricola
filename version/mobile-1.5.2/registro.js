@@ -102,24 +102,39 @@ function atualizarGPS(pos){
 
   const lat = pos.coords.latitude
   const lng = pos.coords.longitude
+  const acc = pos.coords.accuracy
 
-  if(pos.coords.accuracy > 30) return
+  // 🔥 filtro mais inteligente
+  if(acc > 25) return
 
-  // bolinha
+  // 🔵 marcador suavizado
   if(marcador){
-    marcador.setLatLng([lat,lng])
+    const atual = marcador.getLatLng()
+
+    const latSuave = atual.lat + (lat - atual.lat) * 0.3
+    const lngSuave = atual.lng + (lng - atual.lng) * 0.3
+
+    marcador.setLatLng([latSuave, lngSuave])
   }else{
     marcador = L.circleMarker([lat,lng],{
-      radius:6,color:"#2196f3",fillColor:"#2196f3",fillOpacity:1
+      radius:6,
+      color:"#2196f3",
+      fillColor:"#2196f3",
+      fillOpacity:1
     }).addTo(map)
   }
 
   if(ultimoPonto){
     const dist = calcularDistancia(
-      ultimoPonto.lat, ultimoPonto.lng, lat, lng
+      ultimoPonto.lat,
+      ultimoPonto.lng,
+      lat,
+      lng
     )
 
-    if(dist < 0.001 || dist > 1) return
+    // 🔥 filtros mais profissionais
+    if(dist < 0.002) return   // < 2m (ruído)
+    if(dist > 0.5) return     // salto GPS
 
     distancia += dist
   }
@@ -127,12 +142,12 @@ function atualizarGPS(pos){
   ultimoPonto = {lat,lng}
   pontos.push([lat,lng])
 
-  // linha
   if(linha) map.removeLayer(linha)
 
   linha = L.polyline(pontos,{
     color:"red",
-    weight:4
+    weight:4,
+    smoothFactor:2
   }).addTo(map)
 }
 
