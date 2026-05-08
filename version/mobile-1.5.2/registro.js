@@ -263,9 +263,11 @@ function limpar(){
 /* ================= LIMPAR TUDO ================= */
 function limparTudo(){
 
-  // para tudo
   clearInterval(timer)
-  if(watchId) navigator.geolocation.clearWatch(watchId)
+
+  if(watchId){
+    navigator.geolocation.clearWatch(watchId)
+  }
 
   // remove linha
   if(linha){
@@ -273,20 +275,30 @@ function limparTudo(){
     linha = null
   }
 
-  // remove marcador
+  // remove marcador GPS
   if(marcador){
     map.removeLayer(marcador)
     marcador = null
   }
 
-  // remove polígono (área)
+  // remove polígonos
   map.eachLayer(layer=>{
+
     if(layer instanceof L.Polygon){
       map.removeLayer(layer)
     }
+
   })
 
-  // reset geral
+  // remove grade
+  marcadoresGrade.forEach(m=>{
+    map.removeLayer(m)
+  })
+
+  marcadoresGrade = []
+  pontosGrade = []
+
+  // reset
   pontos = []
   distancia = 0
   areaCalculada = null
@@ -294,13 +306,10 @@ function limparTudo(){
   modo = null
   pausado = false
 
-  // limpa painel
   document.getElementById("infoRastro").innerHTML = ""
 
-  // 🔥 ESCONDE painel (remove botões)
   document.getElementById("painelRastro").style.display = "none"
 }
-
 /* ================= KML ================= */
 function gerarKMLRastro(){
 
@@ -364,10 +373,10 @@ function gerarGrade(hectares){
   marcadoresGrade = []
   pontosGrade = []
 
-  // metros entre pontos
+  // espaçamento em metros
   const espacamento = Math.sqrt(hectares * 10000)
 
-  // bounds do polígono
+  // bounds da área
   const bounds = L.polygon(pontos).getBounds()
 
   const norte = bounds.getNorth()
@@ -375,33 +384,48 @@ function gerarGrade(hectares){
   const leste = bounds.getEast()
   const oeste = bounds.getWest()
 
-  // conversão metros → graus
+  // metro -> grau
   const passoLat = espacamento / 111320
 
   const passoLng =
     espacamento /
-    (111320 * Math.cos(((norte + sul) / 2) * Math.PI / 180))
+    (111320 * Math.cos(((norte + sul)/2) * Math.PI/180))
+
+  let contador = 1
 
   for(let lat = sul; lat <= norte; lat += passoLat){
 
     for(let lng = oeste; lng <= leste; lng += passoLng){
 
-      const ponto = [lat, lng]
+      const ponto = [lat,lng]
 
-      // verifica se está dentro do polígono
-      if(pontoDentroPoligono(ponto, pontos)){
+      if(pontoDentroPoligono(ponto,pontos)){
 
         pontosGrade.push(ponto)
 
-        const marcadorGrade = L.circleMarker(ponto,{
-          radius:5,
-          color:"#00ff00",
-          fillColor:"#00ff00",
-          fillOpacity:1,
-          weight:1
+        // marcador estilo Google Maps
+        const icone = L.icon({
+          iconUrl:
+            'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
+
+          iconSize:[32,32],
+          iconAnchor:[16,32],
+          popupAnchor:[0,-32]
+        })
+
+        const marcadorGrade = L.marker(ponto,{
+          icon: icone
         }).addTo(map)
 
+        marcadorGrade.bindPopup(
+          "<b>Ponto " + contador + "</b><br>" +
+          "Lat: " + lat.toFixed(6) + "<br>" +
+          "Lng: " + lng.toFixed(6)
+        )
+
         marcadoresGrade.push(marcadorGrade)
+
+        contador++
       }
     }
   }
@@ -413,39 +437,4 @@ function gerarGrade(hectares){
     pontosGrade.length +
     " pontos amostrais"
   )
-}
-
-/* ================= PONTO DENTRO POLÍGONO ================= */
-function pontoDentroPoligono(ponto, poligono){
-
-  const x = ponto[1]
-  const y = ponto[0]
-
-  let dentro = false
-
-  for(
-    let i = 0, j = poligono.length - 1;
-    i < poligono.length;
-    j = i++
-  ){
-
-    const xi = poligono[i][1]
-    const yi = poligono[i][0]
-
-    const xj = poligono[j][1]
-    const yj = poligono[j][0]
-
-    const intersecta =
-      ((yi > y) !== (yj > y)) &&
-      (
-        x <
-        ((xj - xi) * (y - yi)) / (yj - yi) + xi
-      )
-
-    if(intersecta){
-      dentro = !dentro
-    }
-  }
-
-  return dentro
 }
