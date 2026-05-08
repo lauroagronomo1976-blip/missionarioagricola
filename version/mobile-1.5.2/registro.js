@@ -370,10 +370,11 @@ function gerarGrade(hectares){
         pontosGrade.push(ponto)
 
         const marcadorGrade = L.circleMarker(ponto,{
-          radius:4,
-          color:"#00e676",
-          fillColor:"#00e676",
+          radius:7,
+          color:"#ffeb3b",
+          fillColor:"#ffeb3b",
           fillOpacity:1
+          weight:2
         }).addTo(map)
 
         marcadoresGrade.push(marcadorGrade)
@@ -382,6 +383,7 @@ function gerarGrade(hectares){
   }
 
   console.log("Grade criada:", pontosGrade.length, "pontos")
+  alert("Grade criada com " + pontosGrade.length + " pontos")
 }
 function pontoDentroPoligono(ponto, poligono){
 
