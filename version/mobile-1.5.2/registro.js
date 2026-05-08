@@ -157,49 +157,74 @@ function atualizarGPS(pos){
 function finalizar(){
 
   clearInterval(timer)
-  if(watchId) navigator.geolocation.clearWatch(watchId)
 
-  // AREA
-  if(modo === "area" && pontos.length >= 3){
-
-    L.polygon(pontos,{color:"green"}).addTo(map)
-
-    areaCalculada = calcularArea(pontos)
-    // centraliza mapa na área
-map.fitBounds(L.polygon(pontos).getBounds())
-
-// pergunta tamanho da grade
-let tamanhoGrade = prompt(
-  "Tamanho da grade em hectares (0.1 até 100):",
-  "1"
-)
-
-if(!tamanhoGrade) tamanhoGrade = 1
-
-tamanhoGrade = parseFloat(tamanhoGrade)
-
-if(isNaN(tamanhoGrade) || tamanhoGrade < 0.1){
-  tamanhoGrade = 0.1
-}
-
-if(tamanhoGrade > 100){
-  tamanhoGrade = 100
-}
-
-// gera grade
-gerarGrade(tamanhoGrade)
-    
-    atualizarPainel()
-
-    gerarKMLArea()
+  if(watchId){
+    navigator.geolocation.clearWatch(watchId)
   }
 
-  // RASTRO
+  // ================= ÁREA =================
+  if(modo === "area" && pontos.length >= 3){
+
+    // desenha polígono
+    L.polygon(pontos,{
+      color:"green"
+    }).addTo(map)
+
+    // calcula área
+    areaCalculada = calcularArea(pontos)
+
+    // centraliza
+    map.fitBounds(
+      L.polygon(pontos).getBounds()
+    )
+
+    // atualiza painel
+    atualizarPainel()
+
+    // salva KML
+    gerarKMLArea()
+
+    // pergunta grade
+    const desejaGrade = confirm(
+      "Deseja gerar grade amostral?"
+    )
+
+    // se SIM
+    if(desejaGrade){
+
+      let tamanhoGrade = prompt(
+        "Tamanho da grade em hectares (0.1 até 100):",
+        "1"
+      )
+
+      if(!tamanhoGrade){
+        tamanhoGrade = 1
+      }
+
+      tamanhoGrade = parseFloat(tamanhoGrade)
+
+      if(isNaN(tamanhoGrade)){
+        tamanhoGrade = 1
+      }
+
+      if(tamanhoGrade < 0.1){
+        tamanhoGrade = 0.1
+      }
+
+      if(tamanhoGrade > 100){
+        tamanhoGrade = 100
+      }
+
+      gerarGrade(tamanhoGrade)
+    }
+  }
+
+  // ================= RASTRO =================
   if(modo === "rastro"){
+
     gerarKMLRastro()
   }
 }
-
 /* ================= PAINEL ================= */
 function mostrarPainel(){
   document.getElementById("painelRastro").style.display = "block"
