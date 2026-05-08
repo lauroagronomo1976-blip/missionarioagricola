@@ -353,18 +353,21 @@ function baixar(kml,nome){
   link.click()
 }
 
+/* ================= GRADE ================= */
 function gerarGrade(hectares){
 
-  // limpa grade antiga
-  marcadoresGrade.forEach(m=> map.removeLayer(m))
+  // remove grade antiga
+  marcadoresGrade.forEach(m => {
+    map.removeLayer(m)
+  })
 
   marcadoresGrade = []
   pontosGrade = []
 
-  // tamanho aproximado
+  // metros entre pontos
   const espacamento = Math.sqrt(hectares * 10000)
 
-  // limites do polígono
+  // bounds do polígono
   const bounds = L.polygon(pontos).getBounds()
 
   const norte = bounds.getNorth()
@@ -372,27 +375,30 @@ function gerarGrade(hectares){
   const leste = bounds.getEast()
   const oeste = bounds.getWest()
 
-  // conversão aproximada metro → grau
+  // conversão metros → graus
   const passoLat = espacamento / 111320
-  const passoLng = espacamento / (111320 * Math.cos((norte+sul)/2 * Math.PI/180))
+
+  const passoLng =
+    espacamento /
+    (111320 * Math.cos(((norte + sul) / 2) * Math.PI / 180))
 
   for(let lat = sul; lat <= norte; lat += passoLat){
 
     for(let lng = oeste; lng <= leste; lng += passoLng){
 
-      const ponto = [lat,lng]
+      const ponto = [lat, lng]
 
-      // verifica se ponto está dentro
-      if(pontoDentroPoligono(ponto,pontos)){
+      // verifica se está dentro do polígono
+      if(pontoDentroPoligono(ponto, pontos)){
 
         pontosGrade.push(ponto)
 
         const marcadorGrade = L.circleMarker(ponto,{
-          radius:8,
+          radius:5,
           color:"#00ff00",
           fillColor:"#00ff00",
           fillOpacity:1,
-weight:2
+          weight:1
         }).addTo(map)
 
         marcadoresGrade.push(marcadorGrade)
@@ -400,12 +406,16 @@ weight:2
     }
   }
 
-  console.log("Grade criada:", pontosGrade.length, "pontos")
+  console.log("Grade criada:", pontosGrade.length)
+
   alert(
-  "Grade criada com " +
-  pontosGrade.length +
-  " pontos amostrais"
-)
+    "Grade criada com " +
+    pontosGrade.length +
+    " pontos amostrais"
+  )
+}
+
+/* ================= PONTO DENTRO POLÍGONO ================= */
 function pontoDentroPoligono(ponto, poligono){
 
   const x = ponto[1]
@@ -413,7 +423,11 @@ function pontoDentroPoligono(ponto, poligono){
 
   let dentro = false
 
-  for(let i=0, j=poligono.length-1; i<poligono.length; j=i++){
+  for(
+    let i = 0, j = poligono.length - 1;
+    i < poligono.length;
+    j = i++
+  ){
 
     const xi = poligono[i][1]
     const yi = poligono[i][0]
@@ -423,9 +437,14 @@ function pontoDentroPoligono(ponto, poligono){
 
     const intersecta =
       ((yi > y) !== (yj > y)) &&
-      (x < (xj - xi) * (y - yi) / (yj - yi) + xi)
+      (
+        x <
+        ((xj - xi) * (y - yi)) / (yj - yi) + xi
+      )
 
-    if(intersecta) dentro = !dentro
+    if(intersecta){
+      dentro = !dentro
+    }
   }
 
   return dentro
