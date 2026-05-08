@@ -18,6 +18,8 @@ let inicioTempo = null
 let timer = null
 
 let areaCalculada = null
+let pontosGrade = []
+let marcadoresGrade = []
 
 /* ================= INIT ================= */
 document.addEventListener("DOMContentLoaded", () => {
@@ -163,7 +165,8 @@ function finalizar(){
     L.polygon(pontos,{color:"green"}).addTo(map)
 
     areaCalculada = calcularArea(pontos)
-
+    gerarGrade(1) // 1 hectare
+    
     atualizarPainel()
 
     gerarKMLArea()
@@ -326,4 +329,77 @@ function baixar(kml,nome){
   link.href = URL.createObjectURL(blob)
   link.download = nome
   link.click()
+}
+
+function gerarGrade(hectares){
+
+  // limpa grade antiga
+  marcadoresGrade.forEach(m=> map.removeLayer(m))
+
+  marcadoresGrade = []
+  pontosGrade = []
+
+  // tamanho aproximado
+  const espacamento = Math.sqrt(hectares * 10000)
+
+  // limites do polígono
+  const bounds = L.polygon(pontos).getBounds()
+
+  const norte = bounds.getNorth()
+  const sul = bounds.getSouth()
+  const leste = bounds.getEast()
+  const oeste = bounds.getWest()
+
+  // conversão aproximada metro → grau
+  const passoLat = espacamento / 111320
+  const passoLng = espacamento / (111320 * Math.cos((norte+sul)/2 * Math.PI/180))
+
+  for(let lat = sul; lat <= norte; lat += passoLat){
+
+    for(let lng = oeste; lng <= leste; lng += passoLng){
+
+      const ponto = [lat,lng]
+
+      // verifica se ponto está dentro
+      if(pontoDentroPoligono(ponto,pontos)){
+
+        pontosGrade.push(ponto)
+
+        const marcadorGrade = L.circleMarker(ponto,{
+          radius:4,
+          color:"#00e676",
+          fillColor:"#00e676",
+          fillOpacity:1
+        }).addTo(map)
+
+        marcadoresGrade.push(marcadorGrade)
+      }
+    }
+  }
+
+  console.log("Grade criada:", pontosGrade.length, "pontos")
+}
+function pontoDentroPoligono(ponto, poligono){
+
+  const x = ponto[1]
+  const y = ponto[0]
+
+  let dentro = false
+
+  for(let i=0, j=poligono.length-1; i<poligono.length; j=i++){
+
+    const xi = poligono[i][1]
+    const yi = poligono[i][0]
+
+    const xj = poligono[j][1]
+    const yj = poligono[j][0]
+
+    const intersecta =
+      ((yi > y) !== (yj > y)) &&
+      (x < (xj - xi) * (y - yi) / (yj - yi) + xi)
+
+    if(intersecta) dentro = !dentro
+  }
+
+  return dentro
 }
