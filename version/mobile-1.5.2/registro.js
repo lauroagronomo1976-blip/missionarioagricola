@@ -165,7 +165,11 @@ function finalizar(){
     L.polygon(pontos,{color:"green"}).addTo(map)
 
     areaCalculada = calcularArea(pontos)
-    gerarGrade(1) // 1 hectare
+    // centraliza mapa na área
+map.fitBounds(L.polygon(pontos).getBounds())
+
+// gera grade mais densa
+gerarGrade(0.5)
     
     atualizarPainel()
 
