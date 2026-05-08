@@ -168,8 +168,26 @@ function finalizar(){
     // centraliza mapa na área
 map.fitBounds(L.polygon(pontos).getBounds())
 
-// gera grade mais densa
-gerarGrade(0.5)
+// pergunta tamanho da grade
+let tamanhoGrade = prompt(
+  "Tamanho da grade em hectares (0.1 até 100):",
+  "1"
+)
+
+if(!tamanhoGrade) tamanhoGrade = 1
+
+tamanhoGrade = parseFloat(tamanhoGrade)
+
+if(isNaN(tamanhoGrade) || tamanhoGrade < 0.1){
+  tamanhoGrade = 0.1
+}
+
+if(tamanhoGrade > 100){
+  tamanhoGrade = 100
+}
+
+// gera grade
+gerarGrade(tamanhoGrade)
     
     atualizarPainel()
 
@@ -370,11 +388,11 @@ function gerarGrade(hectares){
         pontosGrade.push(ponto)
 
         const marcadorGrade = L.circleMarker(ponto,{
-          radius:7,
-          color:"#ffeb3b",
-          fillColor:"#ffeb3b",
-          fillOpacity:1
-          weight:2
+          radius:8,
+          color:"#00ff00",
+          fillColor:"#00ff00",
+          fillOpacity:1,
+weight:2
         }).addTo(map)
 
         marcadoresGrade.push(marcadorGrade)
@@ -383,8 +401,11 @@ function gerarGrade(hectares){
   }
 
   console.log("Grade criada:", pontosGrade.length, "pontos")
-  alert("Grade criada com " + pontosGrade.length + " pontos")
-}
+  alert(
+  "Grade criada com " +
+  pontosGrade.length +
+  " pontos amostrais"
+)
 function pontoDentroPoligono(ponto, poligono){
 
   const x = ponto[1]
