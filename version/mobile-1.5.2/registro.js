@@ -394,109 +394,128 @@ function baixar(kml,nome){
 function gerarGrade(hectares){
 
   // remove grade antiga
-  marcadoresGrade.forEach(m => {
+  marcadoresGrade.forEach(m=>{
     map.removeLayer(m)
   })
 
   marcadoresGrade = []
   pontosGrade = []
 
-  // espaçamento muito mais denso
-const espacamento =
-  Math.sqrt(hectares * 10000) * 0.25
+  // polígono da área
+  const polygon = L.polygon(pontos)
 
-  // bounds da área
-  const bounds = L.polygon(pontos).getBounds()
+  // limites
+  const bounds = polygon.getBounds()
 
   const norte = bounds.getNorth()
   const sul = bounds.getSouth()
   const leste = bounds.getEast()
   const oeste = bounds.getWest()
 
+  // espaçamento mais denso
+  const espacamento =
+    Math.sqrt(hectares * 10000) * 0.25
+
   // metro -> grau
   const passoLat = espacamento / 111320
 
   const passoLng =
     espacamento /
-    (111320 * Math.cos(((norte + sul)/2) * Math.PI/180))
+    (
+      111320 *
+      Math.cos(
+        ((norte+sul)/2) * Math.PI/180
+      )
+    )
 
-  let contador = 1
-  
-// deslocamento inicial para não cair
-// exatamente nas bordas
-const offsetLat = passoLat / 2
-const offsetLng = passoLng / 2
+  // offsets
+  const offsetLat = passoLat / 2
+  const offsetLng = passoLng / 2
+
   for(
-  let lat = sul + offsetLat;
-  lat <= norte;
-  lat += passoLat
-){
+    let lat = sul + offsetLat;
+    lat <= norte;
+    lat += passoLat
+  ){
 
     for(
-  let lng = oeste + offsetLng;
-  lng <= leste;
-  lng += passoLng
-){
+      let lng = oeste + offsetLng;
+      lng <= leste;
+      lng += passoLng
+    ){
 
       const ponto = [lat,lng]
 
-      if(pontoDentroPoligono(ponto,pontos)){
+      // verifica se está dentro
+      if(
+        pontoDentroPoligono(
+          ponto,
+          pontos
+        )
+      ){
 
         pontosGrade.push(ponto)
 
-        const marcadorGrade = L.circleMarker(ponto,{
-  radius:8,
-  color:"#00c853",
-  fillColor:"#00e676",
-  fillOpacity:1,
-  weight:2
-}).addTo(map)
+        // marcador offline
+        const marcadorGrade =
+          L.circleMarker(ponto,{
+            radius:6,
+            color:"#00c853",
+            fillColor:"#00e676",
+            fillOpacity:1,
+            weight:2
+          }).addTo(map)
 
         marcadorGrade.bindPopup(
-          "<b>Ponto " + contador + "</b><br>" +
-          "Lat: " + lat.toFixed(6) + "<br>" +
-          "Lng: " + lng.toFixed(6)
+          "Ponto Amostral"
         )
 
-        marcadoresGrade.push(marcadorGrade)
-
-        contador++
+        marcadoresGrade.push(
+          marcadorGrade
+        )
       }
     }
   }
-// se não criou nenhum ponto,
-// coloca 1 ponto central automaticamente
-if(pontosGrade.length === 0){
 
-  const centro = bounds.getCenter()
+  // ponto central se vazio
+  if(pontosGrade.length === 0){
 
-  const marcadorCentral = L.circleMarker(
-  [centro.lat, centro.lng],
-  {
-    radius:8,
-    color:"#00c853",
-    fillColor:"#00e676",
-    fillOpacity:1,
-    weight:2
+    const centro = bounds.getCenter()
+
+    const marcadorCentral =
+      L.circleMarker(
+        [centro.lat, centro.lng],
+        {
+          radius:8,
+          color:"#00c853",
+          fillColor:"#00e676",
+          fillOpacity:1,
+          weight:2
+        }
+      ).addTo(map)
+
+    marcadorCentral.bindPopup(
+      "Ponto Central"
+    )
+
+    marcadoresGrade.push(
+      marcadorCentral
+    )
+
+    pontosGrade.push([
+      centro.lat,
+      centro.lng
+    ])
   }
-).addTo(map)
-
-  marcadorCentral.bindPopup(
-    "<b>Ponto Central</b>"
-  )
-
-  marcadoresGrade.push(marcadorCentral)
-
-  pontosGrade.push([
-    centro.lat,
-    centro.lng
-  ])
-}
-  console.log("Grade criada:", pontosGrade.length)
 
   alert(
     "Grade criada com " +
     pontosGrade.length +
-    " pontos amostrais"
+    " pontos"
+  )
+
+  console.log(
+    "Grade criada:",
+    pontosGrade.length
   )
 }
