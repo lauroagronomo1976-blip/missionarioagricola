@@ -210,8 +210,8 @@ if(
         tamanhoGrade = 1
       }
 
-      if(tamanhoGrade < 0.1){
-        tamanhoGrade = 0.1
+      if(tamanhoGrade < 0.01){
+        tamanhoGrade = 0.01
       }
 
       if(tamanhoGrade > 100){
