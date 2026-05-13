@@ -519,3 +519,48 @@ function gerarGrade(hectares){
     pontosGrade.length
   )
 }
+
+/* ================= PONTO DENTRO ================= */
+function pontoDentroPoligono(ponto, poligono){
+
+  const x = ponto[1]
+  const y = ponto[0]
+
+  let dentro = false
+
+  for(
+    let i = 0,
+    j = poligono.length - 1;
+
+    i < poligono.length;
+
+    j = i++
+  ){
+
+    const xi = poligono[i][1]
+    const yi = poligono[i][0]
+
+    const xj = poligono[j][1]
+    const yj = poligono[j][0]
+
+    const intersecta =
+      (
+        (yi > y) !== (yj > y)
+      ) &&
+      (
+        x <
+        (
+          (xj - xi) *
+          (y - yi)
+        ) /
+        (yj - yi) +
+        xi
+      )
+
+    if(intersecta){
+      dentro = !dentro
+    }
+  }
+
+  return dentro
+}
