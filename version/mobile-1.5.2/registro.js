@@ -432,19 +432,13 @@ const espacamento =
 
         pontosGrade.push(ponto)
 
-        // marcador estilo Google Maps
-        const icone = L.icon({
-          iconUrl:
-            'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
-
-          iconSize:[32,32],
-          iconAnchor:[16,32],
-          popupAnchor:[0,-32]
-        })
-
-        const marcadorGrade = L.marker(ponto,{
-          icon: icone
-        }).addTo(map)
+        const marcadorGrade = L.circleMarker(ponto,{
+  radius:8,
+  color:"#00c853",
+  fillColor:"#00e676",
+  fillOpacity:1,
+  weight:2
+}).addTo(map)
 
         marcadorGrade.bindPopup(
           "<b>Ponto " + contador + "</b><br>" +
@@ -464,18 +458,16 @@ if(pontosGrade.length === 0){
 
   const centro = bounds.getCenter()
 
-  const icone = L.icon({
-    iconUrl:
-      'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
-
-    iconSize:[32,32],
-    iconAnchor:[16,32]
-  })
-
-  const marcadorCentral = L.marker(
-    [centro.lat, centro.lng],
-    { icon: icone }
-  ).addTo(map)
+  const marcadorCentral = L.circleMarker(
+  [centro.lat, centro.lng],
+  {
+    radius:8,
+    color:"#00c853",
+    fillColor:"#00e676",
+    fillOpacity:1,
+    weight:2
+  }
+).addTo(map)
 
   marcadorCentral.bindPopup(
     "<b>Ponto Central</b>"
