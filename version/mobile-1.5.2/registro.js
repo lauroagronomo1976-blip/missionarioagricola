@@ -401,9 +401,9 @@ function gerarGrade(hectares){
   marcadoresGrade = []
   pontosGrade = []
 
-  // grade mais densa
+  // espaçamento muito mais denso
 const espacamento =
-  Math.sqrt(hectares * 10000) * 0.6
+  Math.sqrt(hectares * 10000) * 0.25
 
   // bounds da área
   const bounds = L.polygon(pontos).getBounds()
@@ -421,10 +421,22 @@ const espacamento =
     (111320 * Math.cos(((norte + sul)/2) * Math.PI/180))
 
   let contador = 1
+  
+// deslocamento inicial para não cair
+// exatamente nas bordas
+const offsetLat = passoLat / 2
+const offsetLng = passoLng / 2
+  for(
+  let lat = sul + offsetLat;
+  lat <= norte;
+  lat += passoLat
+){
 
-  for(let lat = sul; lat <= norte; lat += passoLat){
-
-    for(let lng = oeste; lng <= leste; lng += passoLng){
+    for(
+  let lng = oeste + offsetLng;
+  lng <= leste;
+  lng += passoLng
+){
 
       const ponto = [lat,lng]
 
