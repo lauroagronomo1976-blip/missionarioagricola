@@ -401,8 +401,9 @@ function gerarGrade(hectares){
   marcadoresGrade = []
   pontosGrade = []
 
-  // espaçamento em metros
-  const espacamento = Math.sqrt(hectares * 10000)
+  // grade mais densa
+const espacamento =
+  Math.sqrt(hectares * 10000) * 0.6
 
   // bounds da área
   const bounds = L.polygon(pontos).getBounds()
