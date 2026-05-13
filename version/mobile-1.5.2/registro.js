@@ -458,7 +458,36 @@ const espacamento =
       }
     }
   }
+// se não criou nenhum ponto,
+// coloca 1 ponto central automaticamente
+if(pontosGrade.length === 0){
 
+  const centro = bounds.getCenter()
+
+  const icone = L.icon({
+    iconUrl:
+      'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
+
+    iconSize:[32,32],
+    iconAnchor:[16,32]
+  })
+
+  const marcadorCentral = L.marker(
+    [centro.lat, centro.lng],
+    { icon: icone }
+  ).addTo(map)
+
+  marcadorCentral.bindPopup(
+    "<b>Ponto Central</b>"
+  )
+
+  marcadoresGrade.push(marcadorCentral)
+
+  pontosGrade.push([
+    centro.lat,
+    centro.lng
+  ])
+}
   console.log("Grade criada:", pontosGrade.length)
 
   alert(
