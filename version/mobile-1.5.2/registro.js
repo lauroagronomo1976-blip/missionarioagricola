@@ -184,13 +184,16 @@ function finalizar(){
     // salva KML
     gerarKMLArea()
 
-    // pergunta grade
-    const desejaGrade = confirm(
-      "Deseja gerar grade amostral?"
-    )
+    // pergunta grade (funciona offline)
+let respostaGrade = prompt(
+  "Deseja gerar grade amostral?\nDigite SIM ou NÃO",
+  "SIM"
+)
 
-    // se SIM
-    if(desejaGrade){
+if(
+  respostaGrade &&
+  respostaGrade.toUpperCase() === "SIM"
+){
 
       let tamanhoGrade = prompt(
         "Tamanho da grade em hectares (0.1 até 100):",
