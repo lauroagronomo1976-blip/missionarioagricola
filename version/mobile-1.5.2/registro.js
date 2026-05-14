@@ -43,7 +43,6 @@ const satelite = L.tileLayer(
     maxZoom:19
   }
 )
-
   // botão camadas
   L.control.layers(
     {"Rua": street, "Satélite": satelite},
