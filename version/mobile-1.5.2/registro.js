@@ -396,6 +396,20 @@ function baixar(kml,nome){
 }
 
 /* ================= GRADE ================= */
+const iconeGrade = L.icon({
+
+  iconUrl:
+    'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+
+  shadowUrl:
+    'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+
+  iconSize: [25,41],
+  iconAnchor: [12,41],
+  popupAnchor: [1,-34],
+  shadowSize: [41,41]
+
+})
 function gerarGrade(hectares){
 
   // remove grade antiga
@@ -463,13 +477,12 @@ function gerarGrade(hectares){
 
         // marcador offline
         const marcadorGrade =
-          L.circleMarker(ponto,{
-            radius:6,
-            color:"#00c853",
-            fillColor:"#00e676",
-            fillOpacity:1,
-            weight:2
-          }).addTo(map)
+  L.marker(
+    ponto,
+    {
+      icon: iconeGrade
+    }
+  ).addTo(map)
 
         marcadorGrade.bindPopup(
           "Ponto Amostral"
