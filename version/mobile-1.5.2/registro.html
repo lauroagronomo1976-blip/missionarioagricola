@@ -1,19 +1,214 @@
 <!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Missionário Agrícola</title>
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<style>
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f4f6f8;
+}
+
+#topoApp{
+  background:#1b5e20;
+  color:white;
+  padding:18px;
+  text-align:center;
+  font-weight:bold;
+}
+
+#mapContainer{
+  position:relative;
+  width:94%;
+  height:60vh;
+  margin:15px auto;
+}
+
+#map{
+  width:100%;
+  height:100%;
+  border-radius:14px;
+  z-index:1;
+}
+
+.painel-controles{
+  position:absolute;
+  top:10px;
+  right:10px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  z-index:9999;
+}
+
+.painel-controles button{
+  width:44px;
+  height:44px;
+  border:none;
+  border-radius:8px;
+  background:white;
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);
+  font-size:20px;
+}
+
+#painelRastro{
+  display:none;
+  position:absolute;
+  bottom:10px;
+  left:10px;
+  background:white;
+  padding:10px;
+  border-radius:10px;
+  z-index:9999;
+  box-shadow:0 2px 10px rgba(0,0,0,0.3);
+}
+
+#painelRastro button{
+  margin-top:5px;
+}
+
+#painelInferior{
+  width:94%;
+  margin:auto;
+  margin-bottom:40px;
+}
+
+#btnMarcarPontoInferior,
+#btnLimpar{
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  margin-top:10px;
+}
+
+#btnMarcarPontoInferior{
+  background:#1b5e20;
+  color:white;
+}
+
+#btnLimpar{
+  background:#c62828;
+  color:white;
+}
+
+#formMissaoContainer{
+  display:none;
+  margin-top:15px;
+  background:white;
+  padding:15px;
+  border-radius:10px;
+}
+
+.form-group{
+  margin-bottom:10px;
+}
+
+.form-row{
+  display:flex;
+  gap:10px;
+}
+
+.form-row .form-group{
+  flex:1;
+}
+
+input,
+select{
+  width:100%;
+  padding:8px;
+  box-sizing:border-box;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="topoApp">
+  Missionário Agrícola
+</div>
+
+<div id="mapContainer">
+
+  <div id="map"></div>
+
+  <div class="painel-controles">
+
+    <button id="btnMira">🎯</button>
+
+    <button id="btnRastro">🛰️</button>
+
+    <button id="btnArea">📐</button>
+
+  </div>
+
+  <div id="painelRastro">
+
+    <div id="infoRastro"></div>
+
+    <button id="btnPausar">⏸️</button>
+
+    <button id="btnContinuar">▶️</button>
+
+    <button id="btnFinalizar">⛔</button>
+
+  </div>
+
+</div>
+
+<div id="painelInferior">
+
+  <button id="btnMarcarPontoInferior">
+    Marcar Ponto
+  </button>
+
+  <button id="btnLimpar">
+    🧹 Limpar
+  </button>
+
+  <div id="formMissaoContainer">
+
+    <h3>Registro</h3>
+
+    <div class="form-group">
+
+      <label>Ocorrência</label>
+
+      <select id="ocorrenciaSelect">
+        <option value="">Selecione</option>
         <option>Praga</option>
         <option>Doença</option>
         <option>Planta Daninha</option>
         <option>Outros</option>
       </select>
+
     </div>
 
     <div class="form-group">
+
       <label>Espécie</label>
+
       <input type="text" id="especieInput">
+
     </div>
 
     <div class="form-row">
 
       <div class="form-group">
+
         <label>Fase</label>
 
         <select id="faseSelect">
@@ -22,18 +217,25 @@
           <option>Ninfa</option>
           <option>Adulto</option>
         </select>
+
       </div>
 
       <div class="form-group">
+
         <label>Nº Indivíduos</label>
+
         <input type="number" id="individuosInput">
+
       </div>
 
     </div>
 
     <div class="form-group">
+
       <label>Severidade (%)</label>
+
       <input type="number" id="severidadeInput">
+
     </div>
 
     <button id="btnSalvarRegistro">
@@ -54,23 +256,16 @@
 
 </div>
 
-<!-- LEAFLET -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<!-- OFFLINE -->
-<script src="https://unpkg.com/leaflet.offline@3.1.0/dist/leaflet.offline.js"></script>
-
-<!-- ROTATE -->
 <script src="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate-src.js"></script>
 
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
-<!-- APP PRINCIPAL -->
 <script src="./app.js"></script>
 
-<!-- REGISTROS -->
 <script src="./registro.js"></script>
 
 </body>
