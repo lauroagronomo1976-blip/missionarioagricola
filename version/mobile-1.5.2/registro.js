@@ -21,12 +21,30 @@ let areaCalculada = null
 let pontosGrade = []
 let marcadoresGrade = []
 let feicoesSalvas = []
+let iconeGrade
 
 /* ================= INIT ================= */
 document.addEventListener("DOMContentLoaded", () => {
 
-  
-  // zoom correto
+  map = L.map('map', {
+    zoomControl:false
+  }).setView([-15,-47],5)
+
+  const iconeGrade = L.icon({
+
+  iconUrl:
+    'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+
+  shadowUrl:
+    'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+
+  iconSize: [25,41],
+  iconAnchor: [12,41],
+  popupAnchor: [1,-34],
+  shadowSize: [41,41]
+
+})
+    // zoom correto
   L.control.zoom({ position:'bottomright' }).addTo(map)
 
   // mapa base
@@ -409,20 +427,7 @@ function baixar(kml,nome){
 }
 
 /* ================= GRADE ================= */
-const iconeGrade = L.icon({
 
-  iconUrl:
-    'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
-
-  shadowUrl:
-    'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-
-  iconSize: [25,41],
-  iconAnchor: [12,41],
-  popupAnchor: [1,-34],
-  shadowSize: [41,41]
-
-})
 function gerarGrade(hectares){
 
   // remove grade antiga
@@ -591,3 +596,4 @@ function pontoDentroPoligono(ponto, poligono){
 
   return dentro
 }
+})
