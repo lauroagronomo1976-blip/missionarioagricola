@@ -25,13 +25,7 @@ let feicoesSalvas = []
 /* ================= INIT ================= */
 document.addEventListener("DOMContentLoaded", () => {
 
-  map = L.map('map', {
-  zoomControl:false,
-  rotate:true,
-  touchRotate:true,
-  rotateControl:true
-}).setView([-15,-47],5)
-
+  
   // zoom correto
   L.control.zoom({ position:'bottomright' }).addTo(map)
 
@@ -41,15 +35,12 @@ document.addEventListener("DOMContentLoaded", () => {
     { maxZoom: 19 }
   ).addTo(map)
 
-  // Lauro - Este Bloco é para funcionar sem interne no campo com Tiles
-  const satelite = L.tileLayer.offline(
+  // camada satélite
+const satelite = L.tileLayer(
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   {
     attribution:'Esri',
-    subdomains:'abc',
-    minZoom:1,
-    maxZoom:19,
-    crossOrigin:true
+    maxZoom:19
   }
 )
 
@@ -524,16 +515,12 @@ function gerarGrade(hectares){
     const centro = bounds.getCenter()
 
     const marcadorCentral =
-      L.circleMarker(
-        [centro.lat, centro.lng],
-        {
-          radius:8,
-          color:"#00c853",
-          fillColor:"#00e676",
-          fillOpacity:1,
-          weight:2
-        }
-      ).addTo(map)
+  L.marker(
+    [centro.lat, centro.lng],
+    {
+      icon: iconeGrade
+    }
+  ).addTo(map)
 
     marcadorCentral.bindPopup(
       "Ponto Central"
