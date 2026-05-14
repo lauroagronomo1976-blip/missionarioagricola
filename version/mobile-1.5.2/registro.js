@@ -24,7 +24,12 @@ let marcadoresGrade = []
 /* ================= INIT ================= */
 document.addEventListener("DOMContentLoaded", () => {
 
-  map = L.map('map', { zoomControl:false }).setView([-15,-47],5)
+  map = L.map('map', {
+  zoomControl:false,
+  rotate:true,
+  touchRotate:true,
+  rotateControl:true
+}).setView([-15,-47],5)
 
   // zoom correto
   L.control.zoom({ position:'bottomright' }).addTo(map)
