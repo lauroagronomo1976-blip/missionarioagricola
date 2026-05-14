@@ -20,6 +20,7 @@ let timer = null
 let areaCalculada = null
 let pontosGrade = []
 let marcadoresGrade = []
+let feicoesSalvas = []
 
 /* ================= INIT ================= */
 document.addEventListener("DOMContentLoaded", () => {
@@ -40,9 +41,17 @@ document.addEventListener("DOMContentLoaded", () => {
     { maxZoom: 19 }
   ).addTo(map)
 
-  const satelite = L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-  )
+  // Lauro - Este Bloco é para funcionar sem interne no campo com Tiles
+  const satelite = L.tileLayer.offline(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  {
+    attribution:'Esri',
+    subdomains:'abc',
+    minZoom:1,
+    maxZoom:19,
+    crossOrigin:true
+  }
+)
 
   // botão camadas
   L.control.layers(
@@ -175,9 +184,16 @@ function finalizar(){
       color:"green"
     }).addTo(map)
 
-    // calcula área
+    // calcula área  e (EU) SALVAR FEIÇÕES
     areaCalculada = calcularArea(pontos)
 
+    feicoesSalvas.push({
+      tipo:"area",
+      pontos:[...pontos],
+      area:areaCalculada,
+      data:new Date()
+    })
+    
     // centraliza
     map.fitBounds(
       L.polygon(pontos).getBounds()
@@ -230,6 +246,13 @@ if(
   // ================= RASTRO =================
   if(modo === "rastro"){
 
+    feicoesSalvas.push({
+  tipo:"rastro",
+  pontos:[...pontos],
+  distancia:distancia,
+  data:new Date()
+})
+    
     gerarKMLRastro()
   }
 }
