@@ -21,7 +21,6 @@ let areaCalculada = null
 let pontosGrade = []
 let marcadoresGrade = []
 let feicoesSalvas = []
-let iconeGrade
 
 /* ================= INIT ================= */
 document.addEventListener("DOMContentLoaded", () => {
@@ -30,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     zoomControl:false
   }).setView([-15,-47],5)
 
-  const iconeGrade = L.icon({
+  iconeGrade = L.icon({
 
   iconUrl:
     'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
@@ -596,4 +595,3 @@ function pontoDentroPoligono(ponto, poligono){
 
   return dentro
 }
-})
