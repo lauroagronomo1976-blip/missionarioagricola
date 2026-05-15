@@ -221,3 +221,7 @@ overflow: visible;
 .painel-controles {
   background: red !important;
 }
+
+.leaflet-control-layers{
+  z-index:10000 !important;
+}
