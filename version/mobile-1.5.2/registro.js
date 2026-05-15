@@ -56,16 +56,24 @@ document.addEventListener("DOMContentLoaded", () => {
 const satelite = L.tileLayer(
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   {
-    attribution:'Esri',
+    attribution:'Tiles © Esri',
     maxZoom:19
   }
 )
   // botão camadas
-  L.control.layers(
-    {"Rua": street, "Satélite": satelite},
-    {},
-    { position: 'topright' }
-  ).addTo(map)
+  const baseMaps = {
+  "Rua": street,
+  "Satélite": satelite
+}
+
+L.control.layers(
+  baseMaps,
+  null,
+  {
+    position:'topright',
+    collapsed:false
+  }
+).addTo(map)
 
   // botões
   document.getElementById("btnMira").onclick = ativarMira
