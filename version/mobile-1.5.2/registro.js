@@ -71,7 +71,7 @@ L.control.layers(
   null,
   {
     position:'topright',
-    collapsed:false
+    collapsed:true
   }
 ).addTo(map)
 
