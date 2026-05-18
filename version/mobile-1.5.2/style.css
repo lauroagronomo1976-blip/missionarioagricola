@@ -78,14 +78,26 @@ PAINEL DE BOTÕES (MIRA / RASTRO)
   z-index:9999;
 }
 
-.painel-controles button {
-width: 36px;
-height: 36px;
-background: white;
-border: 2px solid #ccc;
-border-radius: 4px;
-cursor: pointer;
-font-size: 18px;
+.painel-controles button{
+  width:48px;
+  height:48px;
+
+  background:white;
+
+  border:none;
+  border-radius:14px;
+
+  font-size:20px;
+
+  cursor:pointer;
+
+  box-shadow:0 3px 10px rgba(0,0,0,0.25);
+
+  transition:0.2s;
+}
+
+.painel-controles button:active{
+  transform:scale(0.95);
 }
 
 .painel-controles button:hover {
