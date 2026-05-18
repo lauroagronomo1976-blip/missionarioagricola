@@ -66,14 +66,16 @@ font-size: 12px !important;
 /* ===============================
 PAINEL DE BOTÕES (MIRA / RASTRO)
 =============================== */
-.painel-controles {
-  position: absolute;
-  top: 80px;
-  right: 10px;
-  z-index: 99999;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.painel-controles{
+  position:absolute;
+  top:140px;
+  right:12px;
+
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+
+  z-index:9999;
 }
 
 .painel-controles button {
