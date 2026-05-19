@@ -201,3 +201,19 @@ REGISTROS
 #listaRegistros{
   margin-top:10px;
 }
+
+
+body{
+  background:red !important;
+}
+
+#topoApp{
+  background:black !important;
+}
+
+.painel-controles{
+  left:10px !important;
+  right:auto !important;
+  top:200px !important;
+  background:yellow !important;
+}
