@@ -69,12 +69,9 @@ const satelite = L.tileLayer(
 L.control.layers(
   {"Rua": street, "Satélite": satelite},
   {},
-  {
-    position:'topright',
-    collapsed:true
-  }
+  { position:'topleft' }
 ).addTo(map)
-
+  
   // botões
   document.getElementById("btnMira").onclick = ativarMira
   document.getElementById("btnRastro").onclick = () => iniciar("rastro")
