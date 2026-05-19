@@ -67,13 +67,20 @@ font-size: 12px !important;
 PAINEL DE BOTÕES (MIRA / RASTRO)
 =============================== */
 .painel-controles{
-  position:absolute;
-  top:160px;
-  right:10px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  z-index:9999;
+
+  position:absolute !important;
+
+  top:170px !important;
+
+  right:15px !important;
+
+  display:flex !important;
+
+  flex-direction:column !important;
+
+  gap:12px !important;
+
+  z-index:99999 !important;
 }
 
 .painel-controles button{
@@ -241,4 +248,8 @@ overflow: visible;
 .leaflet-top.leaflet-right{
   top:10px;
   right:10px;
+}
+
+.leaflet-control-layers{
+  margin-top:10px !important;
 }
