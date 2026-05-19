@@ -251,3 +251,7 @@ overflow: visible;
 .leaflet-control-layers{
   margin-top:10px !important;
 }
+
+.leaflet-top.leaflet-right{
+  top:10px;
+}
