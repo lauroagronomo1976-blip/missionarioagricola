@@ -249,8 +249,8 @@ LAYER CONTROL
 /* aumenta caixa do layer */
 
 .leaflet-control-layers-expanded{
-  width:160px !important;
-  min-width:160px !important;
+  width:180px !important;
+  min-width:180px !important;
 
   padding:10px !important;
 }
