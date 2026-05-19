@@ -54,15 +54,6 @@ LEAFLET
   z-index:1000;
 }
 
-.leaflet-top.leaflet-right{
-  top:10px;
-  right:10px;
-}
-
-.leaflet-control-layers{
-  margin-top:0 !important;
-}
-
 /* ===============================
 BOTÕES FLUTUANTES
 =============================== */
@@ -70,7 +61,7 @@ BOTÕES FLUTUANTES
 .painel-controles{
   position:absolute;
 
-  top:70px;
+  top:90px;
 
   right:10px;
 
@@ -79,7 +70,7 @@ BOTÕES FLUTUANTES
 
   gap:10px;
 
-  z-index:800;
+  z-index:9999;
 }
 
 .painel-controles button{
