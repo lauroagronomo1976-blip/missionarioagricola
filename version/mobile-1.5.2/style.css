@@ -70,7 +70,7 @@ BOTÕES FLUTUANTES
 .painel-controles{
   position:absolute;
 
-  top:60px;
+  top:70px;
 
   right:10px;
 
@@ -79,7 +79,7 @@ BOTÕES FLUTUANTES
 
   gap:10px;
 
-  z-index:900;
+  z-index:800;
 }
 
 .painel-controles button{
