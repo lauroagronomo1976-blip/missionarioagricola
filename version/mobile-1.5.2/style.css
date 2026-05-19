@@ -68,9 +68,7 @@ PAINEL DE BOTÕES (MIRA / RASTRO)
 =============================== */
 .painel-controles{
   position:absolute;
-
   top:70px;
-
   right:10px;
 
   display:flex;
@@ -203,11 +201,6 @@ color: #2e7d32;
 CORREÇÕES IMPORTANTES
 =============================== */
 
-/* evita sobreposição */
-.leaflet-control-container {
-z-index: 500;
-}
-
 /* garante que nada corte os botões */
 #mapContainer {
 overflow: visible;
@@ -221,23 +214,6 @@ overflow: visible;
   z-index: 999999; /* 🔥 bem acima */
 }
 
-/* força Leaflet ficar abaixo */
-.leaflet-control-container {
-  z-index: 1000 !important;
-}
-
-#btnMira {
-  background: red !important;
-}
-
-.painel-controles {
-  background: yellow !important;
-  padding: 5px;
-}
-
-.painel-controles {
-  background: red !important;
-}
 
 .leaflet-control-layers{
   z-index:10000 !important;
