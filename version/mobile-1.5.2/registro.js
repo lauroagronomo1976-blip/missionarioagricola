@@ -67,8 +67,8 @@ const satelite = L.tileLayer(
 }
 
 L.control.layers(
-  baseMaps,
-  null,
+  {"Rua": street, "Satélite": satelite},
+  {},
   {
     position:'topright',
     collapsed:true
