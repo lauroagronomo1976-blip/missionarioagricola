@@ -216,26 +216,9 @@ AJUSTE TEXTO DO LAYER
   padding:4px 8px !important;
 }
 
-.leaflet-control-layers span{
-  margin-left:4px !important;
-}
-
 /* ===============================
 LAYER CONTROL
 =============================== */
-
-.leaflet-control-layers-expanded{
-  width:140px !important;
-}
-
-.leaflet-control-layers-list{
-  width:100% !important;
-}
-
-.leaflet-control-layers label{
-  white-space:nowrap !important;
-  font-size:14px !important;
-}
 
 /* aumenta caixa do layer */
 
@@ -244,4 +227,28 @@ LAYER CONTROL
   min-width:180px !important;
 
   padding:10px !important;
+}
+
+/* ===============================
+CORREÇÃO DEFINITIVA LAYER
+=============================== */
+
+.leaflet-control-layers{
+  font-size:14px !important;
+}
+
+.leaflet-control-layers label{
+  display:block !important;
+
+  width:auto !important;
+
+  white-space:normal !important;
+
+  line-height:20px !important;
+
+  margin:4px 0 !important;
+}
+
+.leaflet-control-layers-selector{
+  margin-right:6px !important;
 }
