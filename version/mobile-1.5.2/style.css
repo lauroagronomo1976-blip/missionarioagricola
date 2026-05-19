@@ -245,3 +245,12 @@ LAYER CONTROL
   white-space:nowrap !important;
   font-size:14px !important;
 }
+
+/* aumenta caixa do layer */
+
+.leaflet-control-layers-expanded{
+  width:160px !important;
+  min-width:160px !important;
+
+  padding:10px !important;
+}
