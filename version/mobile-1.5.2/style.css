@@ -197,11 +197,6 @@ REGISTROS
 AJUSTE TEXTO DO LAYER
 =============================== */
 
-.leaflet-control-layers{
-  min-width:120px;
-  padding:6px;
-}
-
 .leaflet-control-layers-list{
   white-space:nowrap;
 }
@@ -274,4 +269,65 @@ CORREÇÃO DEFINITIVA DO LAYER
   white-space:nowrap !important;
 
   gap:6px;
+}
+
+
+/* ===============================
+LAYER DIREITA CORRIGIDO
+=============================== */
+
+.leaflet-top,
+.leaflet-right{
+  right:10px !important;
+  left:auto !important;
+}
+
+.leaflet-control-layers{
+  position:relative;
+
+  min-width:140px !important;
+
+  background:#fff !important;
+
+  border-radius:12px !important;
+
+  overflow:hidden !important;
+
+  box-shadow:0 3px 12px rgba(0,0,0,0.25) !important;
+}
+
+/* conteúdo do popup */
+
+.leaflet-control-layers-expanded{
+  padding:10px !important;
+}
+
+/* labels */
+
+.leaflet-control-layers label{
+  display:flex !important;
+
+  align-items:center !important;
+
+  gap:10px !important;
+
+  white-space:nowrap !important;
+
+  font-size:18px !important;
+
+  margin:8px 0 !important;
+}
+
+/* radio */
+
+.leaflet-control-layers input{
+  width:auto !important;
+
+  margin:0 !important;
+}
+
+/* evita quebra */
+
+.leaflet-control-layers-base{
+  width:100% !important;
 }
