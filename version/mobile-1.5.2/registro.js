@@ -52,47 +52,28 @@ document.addEventListener("DOMContentLoaded", () => {
     { maxZoom: 19 }
   ).addTo(map)
 
-  setTimeout(() => {
+  /* força layer fechado no mobile */
 
-  const layerControl =
-    document.querySelector(
-      '.leaflet-control-layers'
+setTimeout(() => {
+
+  const layer = document.querySelector(
+    '.leaflet-control-layers'
+  )
+
+  if(layer){
+
+    layer.classList.remove(
+      'leaflet-control-layers-expanded'
     )
 
-  if(layerControl){
+    layer.addEventListener('click', e => {
 
-    layerControl.style.width = "260px"
+      e.stopPropagation()
 
-    layerControl.style.minWidth = "260px"
+    })
   }
 
-},1000)
-  
-  // camada satélite
-const satelite = L.tileLayer(
-  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-  {
-    attribution:'Tiles © Esri',
-    maxZoom:19
-  }
-)
-  // botão camadas
-  const baseMaps = {
-  "Rua": street,
-  "Satélite": satelite
-}
-
-const controleLayers = L.control.layers(
-  {
-    "Rua": street,
-    "Satélite": satelite
-  },
-  {},
-  {
-    position:'topright',
-    collapsed:true
-  }
-).addTo(map)
+},500)
   
   // botões
   document.getElementById("btnMira").onclick = ativarMira
