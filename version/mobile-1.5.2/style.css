@@ -190,95 +190,56 @@ REGISTROS
 }
 
 /* ===============================
-LAYER LIMPO E COMPACTO
+LAYER CONTROL NORMAL
 =============================== */
 
-.leaflet-control-layers-expanded{
-
-  margin-right:60px !important;
-
-  margin-top:0 !important;
-
-  width:120px !important;
-
-  background:white !important;
-
-  border-radius:12px !important;
-
-  padding:8px !important;
-
-  box-shadow:0 3px 10px rgba(0,0,0,0.25) !important;
-}
-
-.leaflet-control-layers-list label{
-
-  display:flex !important;
-
-  align-items:center !important;
-
-  gap:6px !important;
-
-  white-space:nowrap !important;
-
-  font-size:14px !important;
-
-  margin:6px 0 !important;
-}
-
-.leaflet-control-layers-selector{
-  width:auto !important;
-}
-
-
-/* ===============================
-LAYER CONTROL AJUSTADO
-=============================== */
-
-/* posição do botão layer */
 .leaflet-top.leaflet-right{
-  top: 12px !important;
-  right: 12px !important;
+  top:10px !important;
+  right:10px !important;
 }
 
 /* botão pequeno */
 .leaflet-control-layers{
-  border-radius:12px !important;
-  overflow:hidden;
+  margin:0 !important;
+  border:none !important;
+  box-shadow:none !important;
+  background:transparent !important;
+}
+
+/* botão da pilha */
+.leaflet-control-layers-toggle{
+  width:48px !important;
+  height:48px !important;
+  border-radius:14px !important;
+  background-size:24px 24px !important;
+  background-color:white !important;
+  box-shadow:0 3px 10px rgba(0,0,0,0.25) !important;
 }
 
 /* popup compacto */
 .leaflet-control-layers-expanded{
-  padding:10px 12px !important;
-
-  min-width:120px !important;
-  width:auto !important;
-
-  max-width:140px !important;
-
-  background:#fff !important;
-
+  width:140px !important;
+  padding:10px !important;
   border-radius:12px !important;
-
-  box-shadow:0 3px 12px rgba(0,0,0,0.25);
-}
-
-/* texto alinhado */
-.leaflet-control-layers-list label{
-  display:flex !important;
-  align-items:center !important;
-
-  gap:8px !important;
-
-  margin:6px 0 !important;
-
-  white-space:nowrap !important;
-
+  background:white !important;
   font-size:16px !important;
 }
 
-/* evita quebra */
-.leaflet-control-layers-base{
+/* textos */
+.leaflet-control-layers label{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  margin:6px 0 !important;
+}
+
+/* distância dos botões da direita */
+.painel-controles{
+  position:absolute;
+  top:80px;
+  right:10px;
   display:flex;
   flex-direction:column;
-  gap:6px;
+  gap:10px;
+  z-index:9999;
 }
