@@ -52,6 +52,22 @@ document.addEventListener("DOMContentLoaded", () => {
     { maxZoom: 19 }
   ).addTo(map)
 
+  setTimeout(() => {
+
+  const layerControl =
+    document.querySelector(
+      '.leaflet-control-layers'
+    )
+
+  if(layerControl){
+
+    layerControl.style.width = "260px"
+
+    layerControl.style.minWidth = "260px"
+  }
+
+},1000)
+  
   // camada satélite
 const satelite = L.tileLayer(
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
