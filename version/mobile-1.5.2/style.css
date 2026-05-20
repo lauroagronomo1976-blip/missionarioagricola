@@ -331,3 +331,66 @@ LAYER DIREITA CORRIGIDO
 .leaflet-control-layers-base{
   width:100% !important;
 }
+
+
+/* ===============================
+LAYER HORIZONTAL PROFISSIONAL
+=============================== */
+
+/* posição do botão layer */
+.leaflet-top.leaflet-right{
+  top:10px !important;
+  right:10px !important;
+}
+
+/* container principal */
+.leaflet-control-layers{
+  position:relative !important;
+
+  border:none !important;
+
+  background:transparent !important;
+
+  box-shadow:none !important;
+}
+
+/* painel expandido */
+.leaflet-control-layers-expanded{
+  position:absolute !important;
+
+  top:0 !important;
+
+  right:60px !important;
+
+  width:150px !important;
+
+  background:white !important;
+
+  border-radius:14px !important;
+
+  padding:12px !important;
+
+  box-shadow:0 4px 14px rgba(0,0,0,0.25) !important;
+}
+
+/* linhas */
+.leaflet-control-layers label{
+  display:flex !important;
+
+  align-items:center !important;
+
+  gap:10px !important;
+
+  margin:10px 0 !important;
+
+  white-space:nowrap !important;
+
+  font-size:18px !important;
+}
+
+/* radios */
+.leaflet-control-layers input{
+  width:auto !important;
+
+  margin:0 !important;
+}
