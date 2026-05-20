@@ -200,29 +200,23 @@ LAYER CONTROL NORMAL
 
 /* botão pequeno */
 .leaflet-control-layers{
-  margin:0 !important;
   border:none !important;
-  box-shadow:none !important;
   background:transparent !important;
+  box-shadow:none !important;
 }
 
 /* botão da pilha */
 .leaflet-control-layers-toggle{
   width:48px !important;
   height:48px !important;
-  border-radius:14px !important;
-  background-size:24px 24px !important;
-  background-color:white !important;
-  box-shadow:0 3px 10px rgba(0,0,0,0.25) !important;
-}
 
-/* popup compacto */
-.leaflet-control-layers-expanded{
-  width:140px !important;
-  padding:10px !important;
-  border-radius:12px !important;
-  background:white !important;
-  font-size:16px !important;
+  border-radius:14px !important;
+
+  background-size:24px 24px !important;
+
+  background-color:white !important;
+
+  box-shadow:0 3px 10px rgba(0,0,0,0.25) !important;
 }
 
 /* textos */
