@@ -60,19 +60,15 @@ BOTÕES FLUTUANTES
 
 .painel-controles{
   position:absolute;
-
   top:90px;
-
-  right:10px;
+  right:12px;
 
   display:flex;
   flex-direction:column;
-
-  gap:10px;
+  gap:12px;
 
   z-index:9999;
 }
-
 .painel-controles button{
   width:48px;
   height:48px;
@@ -231,4 +227,58 @@ LAYER LIMPO E COMPACTO
 
 .leaflet-control-layers-selector{
   width:auto !important;
+}
+
+
+/* ===============================
+LAYER CONTROL AJUSTADO
+=============================== */
+
+/* posição do botão layer */
+.leaflet-top.leaflet-right{
+  top: 12px !important;
+  right: 12px !important;
+}
+
+/* botão pequeno */
+.leaflet-control-layers{
+  border-radius:12px !important;
+  overflow:hidden;
+}
+
+/* popup compacto */
+.leaflet-control-layers-expanded{
+  padding:10px 12px !important;
+
+  min-width:120px !important;
+  width:auto !important;
+
+  max-width:140px !important;
+
+  background:#fff !important;
+
+  border-radius:12px !important;
+
+  box-shadow:0 3px 12px rgba(0,0,0,0.25);
+}
+
+/* texto alinhado */
+.leaflet-control-layers-list label{
+  display:flex !important;
+  align-items:center !important;
+
+  gap:8px !important;
+
+  margin:6px 0 !important;
+
+  white-space:nowrap !important;
+
+  font-size:16px !important;
+}
+
+/* evita quebra */
+.leaflet-control-layers-base{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
 }
