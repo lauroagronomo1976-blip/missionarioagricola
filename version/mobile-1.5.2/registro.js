@@ -90,7 +90,7 @@ const controleLayers = L.control.layers(
   {},
   {
     position:'topright',
-    collapsed:false
+    collapsed:true
   }
 ).addTo(map)
   
