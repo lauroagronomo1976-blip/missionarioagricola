@@ -82,7 +82,7 @@ const satelite = L.tileLayer(
   "Satélite": satelite
 }
 
-L.control.layers(
+const controleLayers = L.control.layers(
   {
     "Rua": street,
     "Satélite": satelite
@@ -90,7 +90,7 @@ L.control.layers(
   {},
   {
     position:'topright',
-    collapsed:true
+    collapsed:false
   }
 ).addTo(map)
   
