@@ -67,9 +67,15 @@ const satelite = L.tileLayer(
 }
 
 L.control.layers(
-  {"Rua": street, "Satélite": satelite},
+  {
+    "Rua": street,
+    "Satélite": satelite
+  },
   {},
-  { position:'topleft' }
+  {
+    position:'topright',
+    collapsed:true
+  }
 ).addTo(map)
   
   // botões
