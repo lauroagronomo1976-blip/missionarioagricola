@@ -23,6 +23,8 @@ let marcadoresGrade = []
 let feicoesSalvas = []
 
 let iconeGrade
+let anguloGrade = 0
+let touchInicial = null
 
 /* =========================================
 INIT
@@ -200,6 +202,120 @@ function iniciar(tipo){
 
   )
 
+}
+
+/* ================= ROTACIONAR GRADE ================= */
+
+let rotacaoAtiva = false
+let anguloAtual = 0
+
+function habilitarRotacaoGrade(){
+
+  if(rotacaoAtiva) return
+
+  rotacaoAtiva = true
+
+  let toqueInicial = null
+  let anguloInicial = 0
+
+  map.getContainer().addEventListener("touchstart", e=>{
+
+    if(e.touches.length === 2){
+
+      toqueInicial = calcularAnguloToque(
+        e.touches[0],
+        e.touches[1]
+      )
+
+      anguloInicial = anguloAtual
+    }
+
+  }, { passive:false })
+
+  map.getContainer().addEventListener("touchmove", e=>{
+
+    if(e.touches.length !== 2) return
+
+    e.preventDefault()
+
+    const novoAngulo = calcularAnguloToque(
+      e.touches[0],
+      e.touches[1]
+    )
+
+    const diferenca =
+      novoAngulo - toqueInicial
+
+    anguloAtual =
+      anguloInicial + diferenca
+
+    rotacionarGrade(anguloAtual)
+
+  }, { passive:false })
+
+}
+
+function calcularAnguloToque(t1, t2){
+
+  return Math.atan2(
+    t2.clientY - t1.clientY,
+    t2.clientX - t1.clientX
+  ) * 180 / Math.PI
+
+}
+
+function rotacionarGrade(angulo){
+
+  marcadoresGrade.forEach(m=>{
+    map.removeLayer(m)
+  })
+
+  marcadoresGrade = []
+
+  const polygon = L.polygon(pontos)
+
+  const centro = polygon.getBounds().getCenter()
+
+  pontosGrade = pontosGrade.map(p=>{
+
+    const rotacionado =
+      rotacionarPonto(
+        p,
+        centro,
+        angulo
+      )
+
+    const marcador =
+      L.marker(rotacionado,{
+        icon: iconeGrade
+      }).addTo(map)
+
+    marcadoresGrade.push(marcador)
+
+    return rotacionado
+  })
+
+}
+
+function rotacionarPonto(ponto, centro, angulo){
+
+  const rad = angulo * Math.PI / 180
+
+  const lat = ponto[0] - centro.lat
+  const lng = ponto[1] - centro.lng
+
+  const novoLat =
+    lat * Math.cos(rad) -
+    lng * Math.sin(rad)
+
+  const novoLng =
+    lat * Math.sin(rad) +
+    lng * Math.cos(rad)
+
+  return [
+    novoLat + centro.lat,
+    novoLng + centro.lng
+  ]
 }
 
 /* =========================================
@@ -683,6 +799,37 @@ function baixar(kml,nome){
   link.click()
 
 }
+/* =========================================
+ROTACIONAR PONTO
+========================================= */
+
+function rotacionarPonto(
+  lat,
+  lng,
+  centroLat,
+  centroLng,
+  angulo
+){
+
+  const rad = angulo * Math.PI / 180
+
+  const y = lat - centroLat
+  const x = lng - centroLng
+
+  const novoX =
+    x * Math.cos(rad) -
+    y * Math.sin(rad)
+
+  const novoY =
+    x * Math.sin(rad) +
+    y * Math.cos(rad)
+
+  return [
+    centroLat + novoY,
+    centroLng + novoX
+  ]
+
+}
 
 /* =========================================
 GRADE
@@ -737,7 +884,15 @@ function gerarGrade(hectares){
       lng += passoLng
     ){
 
-      const ponto = [lat,lng]
+      const centro = bounds.getCenter()
+
+const ponto = rotacionarPonto(
+  lat,
+  lng,
+  centro.lat,
+  centro.lng,
+  anguloGrade
+)
 
       if(
         pontoDentroPoligono(
@@ -769,7 +924,7 @@ function gerarGrade(hectares){
     }
 
   }
-
+habilitarRotacaoGrade()
 }
 
 /* =========================================
@@ -825,4 +980,117 @@ function pontoDentroPoligono(
 
   return dentro
 
+}
+/* ================= ROTACIONAR GRADE ================= */
+
+let rotacaoAtiva = false
+let anguloAtual = 0
+
+function habilitarRotacaoGrade(){
+
+  if(rotacaoAtiva) return
+
+  rotacaoAtiva = true
+
+  let toqueInicial = null
+  let anguloInicial = 0
+
+  map.getContainer().addEventListener("touchstart", e=>{
+
+    if(e.touches.length === 2){
+
+      toqueInicial = calcularAnguloToque(
+        e.touches[0],
+        e.touches[1]
+      )
+
+      anguloInicial = anguloAtual
+    }
+
+  }, { passive:false })
+
+  map.getContainer().addEventListener("touchmove", e=>{
+
+    if(e.touches.length !== 2) return
+
+    e.preventDefault()
+
+    const novoAngulo = calcularAnguloToque(
+      e.touches[0],
+      e.touches[1]
+    )
+
+    const diferenca =
+      novoAngulo - toqueInicial
+
+    anguloAtual =
+      anguloInicial + diferenca
+
+    rotacionarGrade(anguloAtual)
+
+  }, { passive:false })
+
+}
+
+function calcularAnguloToque(t1, t2){
+
+  return Math.atan2(
+    t2.clientY - t1.clientY,
+    t2.clientX - t1.clientX
+  ) * 180 / Math.PI
+
+}
+
+function rotacionarGrade(angulo){
+
+  marcadoresGrade.forEach(m=>{
+    map.removeLayer(m)
+  })
+
+  marcadoresGrade = []
+
+  const polygon = L.polygon(pontos)
+
+  const centro = polygon.getBounds().getCenter()
+
+  pontosGrade = pontosGrade.map(p=>{
+
+    const rotacionado =
+      rotacionarPonto(
+        p,
+        centro,
+        angulo
+      )
+
+    const marcador =
+      L.marker(rotacionado,{
+        icon: iconeGrade
+      }).addTo(map)
+
+    marcadoresGrade.push(marcador)
+
+    return rotacionado
+  })
+
+}
+
+function rotacionarPonto(ponto, centro, angulo){
+
+  const rad = angulo * Math.PI / 180
+
+  const lat = ponto[0] - centro.lat
+  const lng = ponto[1] - centro.lng
+
+  const novoLat =
+    lat * Math.cos(rad) -
+    lng * Math.sin(rad)
+
+  const novoLng =
+    lat * Math.sin(rad) +
+    lng * Math.cos(rad)
+
+  return [
+    novoLat + centro.lat,
+    novoLng + centro.lng
+  ]
 }
