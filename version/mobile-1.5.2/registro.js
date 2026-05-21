@@ -204,10 +204,11 @@ function iniciar(tipo){
 
 }
 
-/* ================= ROTACIONAR GRADE ================= */
+/* =========================================
+ROTACIONAR GRADE
+========================================= */
 
 let rotacaoAtiva = false
-let anguloAtual = 0
 
 function habilitarRotacaoGrade(){
 
@@ -218,44 +219,55 @@ function habilitarRotacaoGrade(){
   let toqueInicial = null
   let anguloInicial = 0
 
-  map.getContainer().addEventListener("touchstart", e=>{
+  map.getContainer().addEventListener(
+    "touchstart",
+    e => {
 
-    if(e.touches.length === 2){
+      if(e.touches.length === 2){
 
-      toqueInicial = calcularAnguloToque(
-        e.touches[0],
-        e.touches[1]
-      )
+        toqueInicial = calcularAnguloToque(
+          e.touches[0],
+          e.touches[1]
+        )
 
-      anguloInicial = anguloAtual
-    }
+        anguloInicial = anguloGrade
+      }
 
-  }, { passive:false })
+    },
+    { passive:false }
+  )
 
-  map.getContainer().addEventListener("touchmove", e=>{
+  map.getContainer().addEventListener(
+    "touchmove",
+    e => {
 
-    if(e.touches.length !== 2) return
+      if(e.touches.length !== 2) return
 
-    e.preventDefault()
+      e.preventDefault()
 
-    const novoAngulo = calcularAnguloToque(
-      e.touches[0],
-      e.touches[1]
-    )
+      const novoAngulo =
+        calcularAnguloToque(
+          e.touches[0],
+          e.touches[1]
+        )
 
-    const diferenca =
-      novoAngulo - toqueInicial
+      anguloGrade =
+        anguloInicial +
+        (novoAngulo - toqueInicial)
 
-    anguloAtual =
-      anguloInicial + diferenca
+      atualizarRotacaoGrade()
 
-    rotacionarGrade(anguloAtual)
-
-  }, { passive:false })
+    },
+    { passive:false }
+  )
 
 }
 
-function calcularAnguloToque(t1, t2){
+/* =========================================
+ÂNGULO TOQUE
+========================================= */
+
+function calcularAnguloToque(t1,t2){
 
   return Math.atan2(
     t2.clientY - t1.clientY,
@@ -264,7 +276,11 @@ function calcularAnguloToque(t1, t2){
 
 }
 
-function rotacionarGrade(angulo){
+/* =========================================
+ATUALIZAR ROTAÇÃO
+========================================= */
+
+function atualizarRotacaoGrade(){
 
   marcadoresGrade.forEach(m=>{
     map.removeLayer(m)
@@ -274,531 +290,39 @@ function rotacionarGrade(angulo){
 
   const polygon = L.polygon(pontos)
 
-  const centro = polygon.getBounds().getCenter()
+  const bounds = polygon.getBounds()
 
-  pontosGrade = pontosGrade.map(p=>{
+  const centro = bounds.getCenter()
 
-    const rotacionado =
+  pontosGrade.forEach(p=>{
+
+    const pontoRotacionado =
       rotacionarPonto(
-        p,
-        centro,
-        angulo
+        p[0],
+        p[1],
+        centro.lat,
+        centro.lng,
+        anguloGrade
       )
 
     const marcador =
-      L.marker(rotacionado,{
-        icon: iconeGrade
-      }).addTo(map)
+      L.marker(
+        pontoRotacionado,
+        {
+          icon:iconeGrade
+        }
+      ).addTo(map)
+
+    marcador.bindPopup(
+      "Ponto Amostral"
+    )
 
     marcadoresGrade.push(marcador)
 
-    return rotacionado
   })
 
 }
 
-function rotacionarPonto(ponto, centro, angulo){
-
-  const rad = angulo * Math.PI / 180
-
-  const lat = ponto[0] - centro.lat
-  const lng = ponto[1] - centro.lng
-
-  const novoLat =
-    lat * Math.cos(rad) -
-    lng * Math.sin(rad)
-
-  const novoLng =
-    lat * Math.sin(rad) +
-    lng * Math.cos(rad)
-
-  return [
-    novoLat + centro.lat,
-    novoLng + centro.lng
-  ]
-}
-
-/* =========================================
-GPS
-========================================= */
-
-function atualizarGPS(pos){
-
-  if(pausado) return
-
-  const lat = pos.coords.latitude
-  const lng = pos.coords.longitude
-  const acc = pos.coords.accuracy
-
-  if(acc > 25) return
-
-  if(marcador){
-
-    const atual = marcador.getLatLng()
-
-    const latSuave =
-      atual.lat + (lat - atual.lat) * 0.3
-
-    const lngSuave =
-      atual.lng + (lng - atual.lng) * 0.3
-
-    marcador.setLatLng([
-      latSuave,
-      lngSuave
-    ])
-
-  }else{
-
-    marcador = L.circleMarker([lat,lng],{
-
-      radius:6,
-
-      color:"#2196f3",
-
-      fillColor:"#2196f3",
-
-      fillOpacity:1
-
-    }).addTo(map)
-
-  }
-
-  if(ultimoPonto){
-
-    const dist = calcularDistancia(
-      ultimoPonto.lat,
-      ultimoPonto.lng,
-      lat,
-      lng
-    )
-
-    if(dist < 0.002) return
-
-    if(dist > 0.5) return
-
-    distancia += dist
-
-  }
-
-  ultimoPonto = {lat,lng}
-
-  pontos.push([lat,lng])
-
-  if(linha){
-    map.removeLayer(linha)
-  }
-
-  linha = L.polyline(pontos,{
-
-    color:"red",
-
-    weight:4,
-
-    smoothFactor:2
-
-  }).addTo(map)
-
-}
-
-/* =========================================
-FINALIZAR
-========================================= */
-
-function finalizar(){
-
-  clearInterval(timer)
-
-  if(watchId){
-    navigator.geolocation.clearWatch(watchId)
-  }
-
-  /* =========================================
-  ÁREA
-  ========================================= */
-
-  if(modo === "area" && pontos.length >= 3){
-
-    L.polygon(pontos,{
-      color:"green"
-    }).addTo(map)
-
-    areaCalculada = calcularArea(pontos)
-
-    feicoesSalvas.push({
-
-      tipo:"area",
-
-      pontos:[...pontos],
-
-      area:areaCalculada,
-
-      data:new Date()
-
-    })
-
-    map.fitBounds(
-      L.polygon(pontos).getBounds()
-    )
-
-    atualizarPainel()
-
-    gerarKMLArea()
-
-    let respostaGrade = prompt(
-      "Deseja gerar grade amostral?\nDigite SIM ou NÃO",
-      "SIM"
-    )
-
-    if(
-      respostaGrade &&
-      respostaGrade.toUpperCase() === "SIM"
-    ){
-
-      let tamanhoGrade = prompt(
-        "Tamanho da grade em hectares:",
-        "1"
-      )
-
-      if(!tamanhoGrade){
-        tamanhoGrade = 1
-      }
-
-      tamanhoGrade = parseFloat(tamanhoGrade)
-
-      if(isNaN(tamanhoGrade)){
-        tamanhoGrade = 1
-      }
-
-      gerarGrade(tamanhoGrade)
-
-    }
-
-  }
-
-  /* =========================================
-  RASTRO
-  ========================================= */
-
-  if(modo === "rastro"){
-
-    feicoesSalvas.push({
-
-      tipo:"rastro",
-
-      pontos:[...pontos],
-
-      distancia:distancia,
-
-      data:new Date()
-
-    })
-
-    gerarKMLRastro()
-
-  }
-
-}
-
-/* =========================================
-PAINEL
-========================================= */
-
-function mostrarPainel(){
-
-  document.getElementById(
-    "painelRastro"
-  ).style.display = "block"
-
-}
-
-function atualizarPainel(){
-
-  const tempo =
-    Math.floor(
-      (new Date()-inicioTempo)/1000
-    )
-
-  const min = Math.floor(tempo/60)
-
-  const seg = tempo % 60
-
-  let texto =
-    `Tempo: ${min}m ${seg}s<br>
-     Distância: ${distancia.toFixed(3)} km`
-
-  if(modo === "area" && areaCalculada){
-
-    texto +=
-      `<br>
-      <span style="color:#2e7d32;font-weight:bold">
-      Área: ${areaCalculada.toFixed(2)} ha
-      </span>`
-
-  }
-
-  document.getElementById(
-    "infoRastro"
-  ).innerHTML = texto
-
-}
-
-/* =========================================
-DISTÂNCIA
-========================================= */
-
-function calcularDistancia(
-  lat1,
-  lon1,
-  lat2,
-  lon2
-){
-
-  const R = 6371
-
-  const dLat =
-    (lat2-lat1) * Math.PI/180
-
-  const dLon =
-    (lon2-lon1) * Math.PI/180
-
-  const a =
-
-    Math.sin(dLat/2)**2 +
-
-    Math.cos(lat1*Math.PI/180) *
-
-    Math.cos(lat2*Math.PI/180) *
-
-    Math.sin(dLon/2)**2
-
-  return 2 * R *
-    Math.atan2(
-      Math.sqrt(a),
-      Math.sqrt(1-a)
-    )
-
-}
-
-/* =========================================
-ÁREA
-========================================= */
-
-function calcularArea(coords){
-
-  let area = 0
-
-  for(let i=0;i<coords.length;i++){
-
-    const [lat1,lon1] = coords[i]
-
-    const [lat2,lon2] =
-      coords[(i+1)%coords.length]
-
-    area +=
-      (lon2*lat1) -
-      (lon1*lat2)
-
-  }
-
-  return Math.abs(area/2)
-    *111139
-    *111139
-    /10000
-
-}
-
-/* =========================================
-LIMPAR
-========================================= */
-
-function limpar(){
-
-  clearInterval(timer)
-
-  if(watchId){
-    navigator.geolocation.clearWatch(watchId)
-  }
-
-  if(linha){
-    map.removeLayer(linha)
-  }
-
-  if(marcador){
-    map.removeLayer(marcador)
-  }
-
-  linha = null
-  marcador = null
-
-}
-
-/* =========================================
-LIMPAR TUDO
-========================================= */
-
-function limparTudo(){
-
-  clearInterval(timer)
-
-  if(watchId){
-    navigator.geolocation.clearWatch(watchId)
-  }
-
-  if(linha){
-    map.removeLayer(linha)
-    linha = null
-  }
-
-  if(marcador){
-    map.removeLayer(marcador)
-    marcador = null
-  }
-
-  map.eachLayer(layer=>{
-
-    if(layer instanceof L.Polygon){
-      map.removeLayer(layer)
-    }
-
-  })
-
-  marcadoresGrade.forEach(m=>{
-
-    map.removeLayer(m)
-
-  })
-
-  marcadoresGrade = []
-
-  pontosGrade = []
-
-  pontos = []
-
-  distancia = 0
-
-  areaCalculada = null
-
-  ultimoPonto = null
-
-  modo = null
-
-  pausado = false
-
-  document.getElementById(
-    "infoRastro"
-  ).innerHTML = ""
-
-  document.getElementById(
-    "painelRastro"
-  ).style.display = "none"
-
-}
-
-/* =========================================
-KML RASTRO
-========================================= */
-
-function gerarKMLRastro(){
-
-  const nome =
-    "Rastro_" +
-    new Date().toLocaleString()
-
-  let kml =
-`<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
-<Document>
-<Placemark>
-<name>${nome}</name>
-<LineString>
-<coordinates>`
-
-  pontos.forEach(p=>{
-
-    kml += `${p[1]},${p[0]},0 `
-
-  })
-
-  kml +=
-`</coordinates>
-</LineString>
-</Placemark>
-</Document>
-</kml>`
-
-  baixar(kml,nome + ".kml")
-
-}
-
-/* =========================================
-KML ÁREA
-========================================= */
-
-function gerarKMLArea(){
-
-  const nome =
-    "Area_" +
-    new Date().toLocaleString()
-
-  let kml =
-`<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
-<Document>
-<Placemark>
-<name>${nome}</name>
-<description>
-Área: ${areaCalculada.toFixed(2)} ha
-</description>
-<Polygon>
-<outerBoundaryIs>
-<LinearRing>
-<coordinates>`
-
-  pontos.forEach(p=>{
-
-    kml += `${p[1]},${p[0]},0 `
-
-  })
-
-  kml += `${pontos[0][1]},${pontos[0][0]},0 `
-
-  kml +=
-`</coordinates>
-</LinearRing>
-</outerBoundaryIs>
-</Polygon>
-</Placemark>
-</Document>
-</kml>`
-
-  baixar(kml,nome + ".kml")
-
-}
-
-/* =========================================
-DOWNLOAD
-========================================= */
-
-function baixar(kml,nome){
-
-  const blob = new Blob(
-    [kml],
-    {
-      type:"application/vnd.google-earth.kml+xml"
-    }
-  )
-
-  const link =
-    document.createElement("a")
-
-  link.href =
-    URL.createObjectURL(blob)
-
-  link.download = nome
-
-  link.click()
-
-}
 /* =========================================
 ROTACIONAR PONTO
 ========================================= */
@@ -811,7 +335,8 @@ function rotacionarPonto(
   angulo
 ){
 
-  const rad = angulo * Math.PI / 180
+  const rad =
+    angulo * Math.PI / 180
 
   const y = lat - centroLat
   const x = lng - centroLng
@@ -829,268 +354,4 @@ function rotacionarPonto(
     centroLng + novoX
   ]
 
-}
-
-/* =========================================
-GRADE
-========================================= */
-
-function gerarGrade(hectares){
-
-  marcadoresGrade.forEach(m=>{
-    map.removeLayer(m)
-  })
-
-  marcadoresGrade = []
-
-  pontosGrade = []
-
-  const polygon = L.polygon(pontos)
-
-  const bounds = polygon.getBounds()
-
-  const norte = bounds.getNorth()
-  const sul = bounds.getSouth()
-  const leste = bounds.getEast()
-  const oeste = bounds.getWest()
-
-  const espacamento =
-    Math.sqrt(hectares * 10000) * 0.25
-
-  const passoLat =
-    espacamento / 111320
-
-  const passoLng =
-    espacamento /
-    (
-      111320 *
-      Math.cos(
-        ((norte+sul)/2) * Math.PI/180
-      )
-    )
-
-  const offsetLat = passoLat / 2
-  const offsetLng = passoLng / 2
-
-  for(
-    let lat = sul + offsetLat;
-    lat <= norte;
-    lat += passoLat
-  ){
-
-    for(
-      let lng = oeste + offsetLng;
-      lng <= leste;
-      lng += passoLng
-    ){
-
-      const centro = bounds.getCenter()
-
-const ponto = rotacionarPonto(
-  lat,
-  lng,
-  centro.lat,
-  centro.lng,
-  anguloGrade
-)
-
-      if(
-        pontoDentroPoligono(
-          ponto,
-          pontos
-        )
-      ){
-
-        pontosGrade.push(ponto)
-
-        const marcadorGrade =
-          L.marker(
-            ponto,
-            {
-              icon:iconeGrade
-            }
-          ).addTo(map)
-
-        marcadorGrade.bindPopup(
-          "Ponto Amostral"
-        )
-
-        marcadoresGrade.push(
-          marcadorGrade
-        )
-
-      }
-
-    }
-
-  }
-habilitarRotacaoGrade()
-}
-
-/* =========================================
-PONTO DENTRO
-========================================= */
-
-function pontoDentroPoligono(
-  ponto,
-  poligono
-){
-
-  const x = ponto[1]
-  const y = ponto[0]
-
-  let dentro = false
-
-  for(
-    let i = 0,
-    j = poligono.length - 1;
-
-    i < poligono.length;
-
-    j = i++
-  ){
-
-    const xi = poligono[i][1]
-    const yi = poligono[i][0]
-
-    const xj = poligono[j][1]
-    const yj = poligono[j][0]
-
-    const intersecta =
-
-      (
-        (yi > y) !== (yj > y)
-      ) &&
-
-      (
-        x <
-        (
-          (xj - xi) *
-          (y - yi)
-        ) /
-        (yj - yi) +
-        xi
-      )
-
-    if(intersecta){
-      dentro = !dentro
-    }
-
-  }
-
-  return dentro
-
-}
-/* ================= ROTACIONAR GRADE ================= */
-
-let rotacaoAtiva = false
-let anguloAtual = 0
-
-function habilitarRotacaoGrade(){
-
-  if(rotacaoAtiva) return
-
-  rotacaoAtiva = true
-
-  let toqueInicial = null
-  let anguloInicial = 0
-
-  map.getContainer().addEventListener("touchstart", e=>{
-
-    if(e.touches.length === 2){
-
-      toqueInicial = calcularAnguloToque(
-        e.touches[0],
-        e.touches[1]
-      )
-
-      anguloInicial = anguloAtual
-    }
-
-  }, { passive:false })
-
-  map.getContainer().addEventListener("touchmove", e=>{
-
-    if(e.touches.length !== 2) return
-
-    e.preventDefault()
-
-    const novoAngulo = calcularAnguloToque(
-      e.touches[0],
-      e.touches[1]
-    )
-
-    const diferenca =
-      novoAngulo - toqueInicial
-
-    anguloAtual =
-      anguloInicial + diferenca
-
-    rotacionarGrade(anguloAtual)
-
-  }, { passive:false })
-
-}
-
-function calcularAnguloToque(t1, t2){
-
-  return Math.atan2(
-    t2.clientY - t1.clientY,
-    t2.clientX - t1.clientX
-  ) * 180 / Math.PI
-
-}
-
-function rotacionarGrade(angulo){
-
-  marcadoresGrade.forEach(m=>{
-    map.removeLayer(m)
-  })
-
-  marcadoresGrade = []
-
-  const polygon = L.polygon(pontos)
-
-  const centro = polygon.getBounds().getCenter()
-
-  pontosGrade = pontosGrade.map(p=>{
-
-    const rotacionado =
-      rotacionarPonto(
-        p,
-        centro,
-        angulo
-      )
-
-    const marcador =
-      L.marker(rotacionado,{
-        icon: iconeGrade
-      }).addTo(map)
-
-    marcadoresGrade.push(marcador)
-
-    return rotacionado
-  })
-
-}
-
-function rotacionarPonto(ponto, centro, angulo){
-
-  const rad = angulo * Math.PI / 180
-
-  const lat = ponto[0] - centro.lat
-  const lng = ponto[1] - centro.lng
-
-  const novoLat =
-    lat * Math.cos(rad) -
-    lng * Math.sin(rad)
-
-  const novoLng =
-    lat * Math.sin(rad) +
-    lng * Math.cos(rad)
-
-  return [
-    novoLat + centro.lat,
-    novoLng + centro.lng
-  ]
 }
