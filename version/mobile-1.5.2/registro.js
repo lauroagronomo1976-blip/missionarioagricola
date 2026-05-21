@@ -52,29 +52,31 @@ document.addEventListener("DOMContentLoaded", () => {
     { maxZoom: 19 }
   ).addTo(map)
 
-  /* força layer fechado no mobile */
+  /* ================= SATÉLITE ================= */
 
-setTimeout(() => {
-
-  const layer = document.querySelector(
-    '.leaflet-control-layers'
-  )
-
-  if(layer){
-
-    layer.classList.remove(
-      'leaflet-control-layers-expanded'
-    )
-
-    layer.addEventListener('click', e => {
-
-      e.stopPropagation()
-
-    })
+const satelite = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  {
+    attribution:'Esri',
+    maxZoom:19
   }
+)
 
-},500)
+/* ================= LAYERS ================= */
+
+L.control.layers(
+  {
+    "Rua": street,
+    "Satélite": satelite
+  },
+  {},
+  {
+    position:'topright',
+    collapsed:true
+  }
+).addTo(map)
   
+    
   // botões
   document.getElementById("btnMira").onclick = ativarMira
   document.getElementById("btnRastro").onclick = () => iniciar("rastro")
