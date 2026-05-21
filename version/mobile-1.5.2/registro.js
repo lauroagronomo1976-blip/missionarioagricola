@@ -30,90 +30,73 @@ document.addEventListener("DOMContentLoaded", () => {
     zoomControl:false
   }).setView([-15,-47],5)
 
+  // ícone da grade
   iconeGrade = L.icon({
 
-  iconUrl:
-    'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+    iconUrl:
+      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
 
-  shadowUrl:
-    'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    shadowUrl:
+      'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 
-  iconSize: [25,41],
-  iconAnchor: [12,41],
-  popupAnchor: [1,-34],
-  shadowSize: [41,41]
+    iconSize:[25,41],
+    iconAnchor:[12,41],
+    popupAnchor:[1,-34],
+    shadowSize:[41,41]
 
-})
-    // zoom correto
-  L.control.zoom({ position:'bottomright' }).addTo(map)
+  })
 
-  // mapa base
+  // zoom
+  L.control.zoom({
+    position:'bottomright'
+  }).addTo(map)
+
+  // mapa rua
   const street = L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    { maxZoom: 19 }
+    {
+      maxZoom:19
+    }
   ).addTo(map)
 
-  /* ================= SATÉLITE ================= */
+  // mapa satélite
+  const satelite = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    {
+      attribution:'Esri',
+      maxZoom:19
+    }
+  )
 
-const satelite = L.tileLayer(
-  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-  {
-    attribution:'Esri',
-    maxZoom:19
-  }
-)
+  // controle de layers
+  L.control.layers(
+    {
+      "Rua": street,
+      "Satélite": satelite
+    },
+    {},
+    {
+      position:'topright',
+      collapsed:true
+    }
+  ).addTo(map)
 
-/* ================= LAYERS ================= */
-
-// ================= LAYERS =================
-
-const baseMaps = {
-  "Rua": street,
-  "Satélite": satelite
-}
-
-L.control.layers(
-  baseMaps,
-  {},
-  {
-    position: 'topright',
-    collapsed: true
-  }
-).addTo(map)
-
-  // camada satélite
-const satelite = L.tileLayer(
-  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-  {
-    attribution:'Esri',
-    maxZoom:19
-  }
-)
-
-// controle de layers
-L.control.layers(
-  {
-    "Rua": street,
-    "Satélite": satelite
-  },
-  {},
-  {
-    position:'topright',
-    collapsed:true
-  }
-).addTo(map)
-  
   // botões
   document.getElementById("btnMira").onclick = ativarMira
+
   document.getElementById("btnRastro").onclick = () => iniciar("rastro")
+
   document.getElementById("btnArea").onclick = () => iniciar("area")
 
   document.getElementById("btnPausar").onclick = () => pausado = true
-  document.getElementById("btnContinuar").onclick = () => pausado = false
-  document.getElementById("btnFinalizar").onclick = finalizar
-  document.getElementById("btnLimpar").onclick = limparTudo
-})
 
+  document.getElementById("btnContinuar").onclick = () => pausado = false
+
+  document.getElementById("btnFinalizar").onclick = finalizar
+
+  document.getElementById("btnLimpar").onclick = limparTudo
+
+})
 /* ================= 🎯 ================= */
 function ativarMira(){
   navigator.geolocation.getCurrentPosition(pos=>{
