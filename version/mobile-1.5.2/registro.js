@@ -81,34 +81,28 @@ L.control.layers(
   }
 ).addTo(map)
 
-  // força layer fechado no mobile
-setTimeout(() => {
-
-  const layerControl = document.querySelector(
-    '.leaflet-control-layers'
-  )
-
-  if(layerControl){
-
-    // remove expansão automática
-    layerControl.classList.remove(
-      'leaflet-control-layers-expanded'
-    )
-
-    // impede abrir sozinho
-    layerControl.addEventListener(
-      'mouseover',
-      e => e.stopPropagation()
-    )
-
-    layerControl.addEventListener(
-      'mouseout',
-      e => e.stopPropagation()
-    )
+  // camada satélite
+const satelite = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  {
+    attribution:'Esri',
+    maxZoom:19
   }
+)
 
-},500)
-    
+// controle de layers
+L.control.layers(
+  {
+    "Rua": street,
+    "Satélite": satelite
+  },
+  {},
+  {
+    position:'topright',
+    collapsed:true
+  }
+).addTo(map)
+  
   // botões
   document.getElementById("btnMira").onclick = ativarMira
   document.getElementById("btnRastro").onclick = () => iniciar("rastro")
