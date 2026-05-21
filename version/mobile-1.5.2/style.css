@@ -264,3 +264,50 @@ LAYER LIMPA DEFINITIVA
 
   box-shadow:0 3px 10px rgba(0,0,0,0.25) !important;
 }
+
+
+/* ===============================
+LAYER CONTROL CORRETO
+=============================== */
+
+.leaflet-control-layers{
+  width:auto !important;
+  min-width:120px !important;
+
+  max-width:140px !important;
+
+  overflow:hidden !important;
+
+  border-radius:10px !important;
+}
+
+/* popup interno */
+.leaflet-control-layers-expanded{
+  padding:10px !important;
+
+  width:120px !important;
+
+  box-sizing:border-box !important;
+}
+
+/* lista */
+.leaflet-control-layers-list{
+  width:100% !important;
+}
+
+/* textos */
+.leaflet-control-layers label{
+  display:flex !important;
+  align-items:center !important;
+
+  gap:6px !important;
+
+  white-space:nowrap !important;
+
+  font-size:14px !important;
+}
+
+/* checkbox */
+.leaflet-control-layers input{
+  margin:0 !important;
+}
