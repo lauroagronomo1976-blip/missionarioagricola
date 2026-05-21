@@ -230,37 +230,29 @@ LAYER FINAL LIMPA
   right:10px !important;
 }
 
-/* botão layers */
+.leaflet-control-layers{
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
+}
+
 .leaflet-control-layers-toggle{
-  width:46px !important;
-  height:46px !important;
+  width:48px !important;
+  height:48px !important;
 
-  border-radius:12px !important;
+  border-radius:14px !important;
 
-  background-size:22px 22px !important;
-  background-position:center !important;
+  background-size:24px 24px !important;
 
   background-color:white !important;
 
-  box-shadow:0 2px 8px rgba(0,0,0,0.25) !important;
+  box-shadow:0 3px 10px rgba(0,0,0,0.25) !important;
 }
 
-
-/* linhas */
 .leaflet-control-layers label{
   display:flex !important;
   align-items:center !important;
-
-  gap:6px !important;
-
-  margin:6px 0 !important;
-
+  gap:8px !important;
+  padding:4px 8px !important;
   white-space:nowrap !important;
-
-  font-size:14px !important;
-}
-
-/* checkbox */
-.leaflet-control-layers input{
-  margin:0 !important;
 }
