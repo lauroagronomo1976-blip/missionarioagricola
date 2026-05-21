@@ -353,3 +353,66 @@ REGISTROS
 #listaRegistros{
   margin-top:10px;
 }
+
+/* ===============================
+LAYER CONTROL
+=============================== */
+
+.leaflet-top.leaflet-right{
+  top:10px !important;
+  right:10px !important;
+}
+
+.leaflet-control-layers{
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
+}
+
+.leaflet-control-layers-toggle{
+  width:44px !important;
+  height:44px !important;
+
+  border-radius:12px !important;
+
+  background-size:22px 22px !important;
+  background-color:white !important;
+
+  box-shadow:0 2px 8px rgba(0,0,0,0.25) !important;
+}
+
+/* popup */
+
+.leaflet-control-layers-expanded{
+  width:130px !important;
+
+  padding:10px !important;
+
+  background:white !important;
+
+  border-radius:12px !important;
+
+  box-shadow:0 3px 12px rgba(0,0,0,0.25) !important;
+}
+
+/* lista */
+
+.leaflet-control-layers-list{
+  margin:0 !important;
+  padding:0 !important;
+}
+
+/* linhas */
+
+.leaflet-control-layers label{
+  display:flex !important;
+  align-items:center !important;
+
+  gap:8px !important;
+
+  margin:8px 0 !important;
+
+  white-space:nowrap !important;
+
+  font-size:14px !important;
+}
