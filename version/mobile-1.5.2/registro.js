@@ -1,3 +1,4 @@
+alert("APP JS NOVO CARREGADO")
 console.log("JS carregou")
 
 let map
