@@ -1,6 +1,6 @@
-/* ===============================
+/* =========================================
 RESET
-=============================== */
+========================================= */
 
 html,
 body{
@@ -11,9 +11,9 @@ body{
   background:#f4f6f8;
 }
 
-/* ===============================
+/* =========================================
 TOPO
-=============================== */
+========================================= */
 
 #topoApp{
   background:#1b5e20;
@@ -22,11 +22,12 @@ TOPO
   text-align:center;
   font-size:22px;
   font-weight:bold;
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);
 }
 
-/* ===============================
+/* =========================================
 MAPA
-=============================== */
+========================================= */
 
 #mapContainer{
   position:relative;
@@ -38,38 +39,174 @@ MAPA
 
   border-radius:14px;
 
-  overflow:visible;
+  overflow:hidden;
 }
 
 #map{
   width:100%;
   height:100%;
+
+  border-radius:14px;
+
+  z-index:1;
 }
 
-/* ===============================
-LEAFLET
-=============================== */
+/* =========================================
+LEAFLET BASE
+========================================= */
+
+.leaflet-container{
+  font-family:Arial,sans-serif !important;
+}
 
 .leaflet-control-container{
-  z-index:1000;
+  z-index:900 !important;
 }
 
-/* ===============================
+/* =========================================
+ZOOM
+========================================= */
+
+.leaflet-control-zoom{
+  border:none !important;
+  box-shadow:none !important;
+}
+
+.leaflet-control-zoom a{
+  width:42px !important;
+  height:42px !important;
+
+  line-height:42px !important;
+
+  border:none !important;
+
+  font-size:18px !important;
+
+  background:white !important;
+
+  color:#333 !important;
+
+  box-shadow:0 2px 8px rgba(0,0,0,0.25) !important;
+}
+
+/* =========================================
+LAYER CONTROL
+========================================= */
+
+/* posição fixa direita */
+.leaflet-top.leaflet-right{
+  top:12px !important;
+  right:12px !important;
+}
+
+/* container principal */
+.leaflet-control-layers{
+  position:relative !important;
+
+  width:auto !important;
+  height:auto !important;
+
+  border:none !important;
+
+  background:transparent !important;
+
+  box-shadow:none !important;
+
+  overflow:visible !important;
+}
+
+/* botão layer */
+.leaflet-control-layers-toggle{
+
+  width:46px !important;
+  height:46px !important;
+
+  border-radius:12px !important;
+
+  background-size:22px 22px !important;
+  background-position:center !important;
+
+  background-color:white !important;
+
+  box-shadow:0 2px 8px rgba(0,0,0,0.25) !important;
+}
+
+/* remove expansão automática absurda */
+.leaflet-control-layers-expanded{
+  padding:0 !important;
+}
+
+/* popup lateral */
+.leaflet-control-layers-list{
+
+  position:absolute !important;
+
+  top:0 !important;
+
+  right:58px !important;
+
+  width:120px !important;
+
+  padding:10px !important;
+
+  background:white !important;
+
+  border-radius:12px !important;
+
+  box-shadow:0 3px 12px rgba(0,0,0,0.25) !important;
+
+  display:none;
+}
+
+/* mostra popup apenas ao hover/click */
+.leaflet-control-layers-expanded .leaflet-control-layers-list{
+  display:block !important;
+}
+
+/* linhas */
+.leaflet-control-layers label{
+
+  display:flex !important;
+
+  align-items:center !important;
+
+  gap:8px !important;
+
+  margin:8px 0 !important;
+
+  white-space:nowrap !important;
+
+  font-size:14px !important;
+
+  color:#333 !important;
+}
+
+/* radio */
+.leaflet-control-layers input{
+  margin:0 !important;
+}
+
+/* =========================================
 BOTÕES FLUTUANTES
-=============================== */
+========================================= */
 
 .painel-controles{
+
   position:absolute;
-  top:90px;
+
+  top:70px;
   right:12px;
 
   display:flex;
   flex-direction:column;
+
   gap:12px;
 
   z-index:9999;
 }
+
 .painel-controles button{
+
   width:48px;
   height:48px;
 
@@ -83,38 +220,45 @@ BOTÕES FLUTUANTES
   cursor:pointer;
 
   box-shadow:0 2px 8px rgba(0,0,0,0.25);
+
+  transition:0.2s;
+}
+
+.painel-controles button:hover{
+  transform:scale(1.03);
 }
 
 .painel-controles button:active{
   transform:scale(0.95);
 }
 
-/* ===============================
+/* =========================================
 PAINEL RASTRO
-=============================== */
+========================================= */
 
 #painelRastro{
+
   display:none;
 
   position:absolute;
 
-  bottom:10px;
   left:10px;
+  bottom:10px;
 
   background:white;
 
-  padding:10px;
+  padding:12px;
 
-  border-radius:10px;
+  border-radius:12px;
 
   z-index:950;
 
-  box-shadow:0 2px 10px rgba(0,0,0,0.3);
+  box-shadow:0 3px 12px rgba(0,0,0,0.25);
 }
 
-/* ===============================
-FORMULÁRIO
-=============================== */
+/* =========================================
+PAINEL INFERIOR
+========================================= */
 
 #painelInferior{
   width:94%;
@@ -122,7 +266,46 @@ FORMULÁRIO
   margin-bottom:40px;
 }
 
+/* =========================================
+BOTÕES
+========================================= */
+
+#btnMarcarPontoInferior,
+#btnLimpar{
+
+  width:100%;
+
+  padding:12px;
+
+  border:none;
+
+  border-radius:10px;
+
+  margin-top:10px;
+
+  cursor:pointer;
+
+  font-size:15px;
+
+  font-weight:bold;
+}
+
+#btnMarcarPontoInferior{
+  background:#1b5e20;
+  color:white;
+}
+
+#btnLimpar{
+  background:#c62828;
+  color:white;
+}
+
+/* =========================================
+FORMULÁRIO
+========================================= */
+
 #formMissaoContainer{
+
   display:none;
 
   margin-top:15px;
@@ -131,11 +314,13 @@ FORMULÁRIO
 
   padding:15px;
 
-  border-radius:10px;
+  border-radius:12px;
+
+  box-shadow:0 2px 10px rgba(0,0,0,0.1);
 }
 
 .form-group{
-  margin-bottom:10px;
+  margin-bottom:12px;
 }
 
 .form-row{
@@ -149,104 +334,22 @@ FORMULÁRIO
 
 input,
 select{
+
   width:100%;
-  padding:8px;
-  box-sizing:border-box;
-}
 
-/* ===============================
-BOTÕES
-=============================== */
+  padding:10px;
 
-#btnMarcarPontoInferior,
-#btnLimpar{
-  padding:12px;
-
-  border:none;
+  border:1px solid #ccc;
 
   border-radius:8px;
 
-  margin-top:10px;
-
-  cursor:pointer;
+  box-sizing:border-box;
 }
 
-#btnMarcarPontoInferior{
-  background:#1b5e20;
-  color:white;
-}
-
-#btnLimpar{
-  background:#1b5e20;
-  color:white;
-}
-
-/* ===============================
+/* =========================================
 REGISTROS
-=============================== */
+========================================= */
 
 #listaRegistros{
   margin-top:10px;
-}
-
-/* ===============================
-LAYER DEFINITIVA LIMPA
-=============================== */
-
-.leaflet-top.leaflet-right{
-  top:10px !important;
-  right:10px !important;
-}
-
-.leaflet-control-layers{
-  border:none !important;
-  background:transparent !important;
-  box-shadow:none !important;
-}
-
-.leaflet-control-layers-toggle{
-  width:44px !important;
-  height:44px !important;
-
-  border-radius:12px !important;
-
-  background-size:22px 22px !important;
-  background-color:white !important;
-
-  box-shadow:0 2px 8px rgba(0,0,0,0.25) !important;
-}
-
-/* popup */
-.leaflet-control-layers-expanded{
-  background:white !important;
-
-  padding:10px !important;
-
-  border-radius:12px !important;
-
-  min-width:110px !important;
-
-  width:auto !important;
-
-  box-shadow:0 3px 12px rgba(0,0,0,0.25) !important;
-}
-
-/* linhas */
-.leaflet-control-layers label{
-  display:flex !important;
-  align-items:center !important;
-
-  gap:6px !important;
-
-  margin:6px 0 !important;
-
-  white-space:nowrap !important;
-
-  font-size:14px !important;
-}
-
-/* lista */
-.leaflet-control-layers-list{
-  margin:0 !important;
-  padding:0 !important;
 }
