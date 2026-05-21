@@ -65,18 +65,49 @@ const satelite = L.tileLayer(
 
 /* ================= LAYERS ================= */
 
+// ================= LAYERS =================
+
+const baseMaps = {
+  "Rua": street,
+  "Satélite": satelite
+}
+
 L.control.layers(
-  {
-    "Rua": street,
-    "Satélite": satelite
-  },
+  baseMaps,
   {},
   {
-    position:'topright',
-    collapsed:true
+    position: 'topright',
+    collapsed: true
   }
 ).addTo(map)
-  
+
+  // força layer fechado no mobile
+setTimeout(() => {
+
+  const layerControl = document.querySelector(
+    '.leaflet-control-layers'
+  )
+
+  if(layerControl){
+
+    // remove expansão automática
+    layerControl.classList.remove(
+      'leaflet-control-layers-expanded'
+    )
+
+    // impede abrir sozinho
+    layerControl.addEventListener(
+      'mouseover',
+      e => e.stopPropagation()
+    )
+
+    layerControl.addEventListener(
+      'mouseout',
+      e => e.stopPropagation()
+    )
+  }
+
+},500)
     
   // botões
   document.getElementById("btnMira").onclick = ativarMira
