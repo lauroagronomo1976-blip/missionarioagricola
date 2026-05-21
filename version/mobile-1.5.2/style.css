@@ -230,13 +230,6 @@ LAYER FINAL LIMPA
   right:10px !important;
 }
 
-/* container layer */
-.leaflet-control-layers{
-  background:transparent !important;
-  border:none !important;
-  box-shadow:none !important;
-}
-
 /* botão layers */
 .leaflet-control-layers-toggle{
   width:46px !important;
@@ -252,24 +245,6 @@ LAYER FINAL LIMPA
   box-shadow:0 2px 8px rgba(0,0,0,0.25) !important;
 }
 
-/* popup aberto */
-.leaflet-control-layers-expanded{
-  background:white !important;
-
-  width:115px !important;
-
-  padding:8px 10px !important;
-
-  border-radius:10px !important;
-
-  box-shadow:0 2px 10px rgba(0,0,0,0.25) !important;
-}
-
-/* lista interna */
-.leaflet-control-layers-list{
-  margin:0 !important;
-  padding:0 !important;
-}
 
 /* linhas */
 .leaflet-control-layers label{
