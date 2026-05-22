@@ -843,10 +843,10 @@ function habilitarRotacaoGrade() {
         )
 
       anguloGrade =
-        anguloInicial +
-        (novoAngulo - toqueInicial)
+  anguloInicial +
+  (toqueInicial - novoAngulo)
 
-      atualizarRotacaoGrade()
+      requestAnimationFrame(atualizarRotacaoGrade)
 
     },
     { passive: false }
