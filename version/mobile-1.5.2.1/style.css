@@ -415,3 +415,45 @@ BOTÃO SALVAR
   background:#2e7d32;
 
 }
+
+/* =========================================
+BOTTOM CONTROLS
+========================================= */
+
+.bottom-controls{
+
+  position:absolute;
+
+  bottom:20px;
+
+  left:50%;
+
+  transform:translateX(-50%);
+
+  display:flex;
+
+  gap:12px;
+
+  z-index:999;
+
+}
+
+.bottom-controls button{
+
+  width:52px;
+
+  height:52px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:#263238;
+
+  color:white;
+
+  font-size:22px;
+
+  box-shadow:0 2px 8px rgba(0,0,0,0.35);
+
+}
