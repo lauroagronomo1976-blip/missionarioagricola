@@ -144,9 +144,6 @@ if(dadosSalvos){
 
   document.getElementById("btnContinuar").onclick =
     () => pausado = false
-
-  document.getElementById("btnFinalizar").onclick =
-    finalizar
   
   document.getElementById("btnSalvarFeicao").onclick =
   salvarFeicao
