@@ -360,8 +360,60 @@ BOTÃO SALVAR
 
 }
 
-.btn-save:active{
+/* =========================================
+PAINEL AÇÕES
+========================================= */
+
+.acoesPainel{
+
+  display:flex;
+
+  gap:10px;
+
+  margin-top:10px;
+
+  justify-content:center;
+
+}
+
+/* =========================================
+BOTÕES PAINEL
+========================================= */
+
+.acoesPainel button{
+
+  width:42px;
+
+  height:42px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:#263238;
+
+  color:white;
+
+  font-size:18px;
+
+  cursor:pointer;
+
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);
+
+}
+
+.acoesPainel button:active{
 
   transform:scale(0.95);
+
+}
+
+/* =========================================
+BOTÃO SALVAR
+========================================= */
+
+#btnSalvarFeicao{
+
+  background:#2e7d32;
 
 }
