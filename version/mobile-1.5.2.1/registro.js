@@ -151,6 +151,12 @@ if(dadosSalvos){
   document.getElementById("btnLimpar").onclick =
     limparTudo
 
+  document.getElementById("btnMarcarPonto").onclick =
+  marcarPontoManual
+
+document.getElementById("btnLimparMapa").onclick =
+  limparTudo
+
 })
 
 /* =========================================
@@ -1162,5 +1168,20 @@ ${p[1]},${p[0]},0
     kml,
     feicao.nome + ".kml"
   )
+
+}
+
+/* =========================================
+MARCAR PONTO MANUAL
+========================================= */
+
+function marcarPontoManual(){
+
+  if(!coordenadaAtual) return
+
+  L.marker([
+    coordenadaAtual.lat,
+    coordenadaAtual.lng
+  ]).addTo(map)
 
 }
