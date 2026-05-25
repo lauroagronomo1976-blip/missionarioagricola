@@ -48,6 +48,18 @@ document.addEventListener("DOMContentLoaded", () => {
     zoomControl: false
   }).setView([-15, -47], 5)
 
+  const dadosSalvos =
+  localStorage.getItem(
+    "bibliotecaFeicoes"
+  )
+
+if(dadosSalvos){
+
+  bibliotecaFeicoes =
+    JSON.parse(dadosSalvos)
+
+}
+  
   /* =========================================
   ÍCONE GRADE
   ========================================= */
@@ -135,7 +147,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("btnFinalizar").onclick =
     finalizar
-
+  
+  document.getElementById("btnSalvarFeicao").onclick =
+  salvarFeicao
+  
   document.getElementById("btnLimpar").onclick =
     limparTudo
 
@@ -1016,5 +1031,139 @@ function pontoDentroPoligono(
   }
 
   return dentro
+
+}
+
+/* =========================================
+SALVAR FEIÇÃO
+========================================= */
+
+function salvarFeicao(){
+
+  if(
+    pontos.length === 0 &&
+    pontosGrade.length === 0
+  ){
+    alert("Nada para salvar")
+    return
+  }
+
+  const nome = prompt(
+    "Nome da feição:",
+    "Talhao_A1"
+  )
+
+  if(!nome) return
+
+  const feicao = {
+
+    nome:nome,
+
+    data:new Date(),
+
+    tipo:modo,
+
+    pontos:[...pontos],
+
+    grade:[...pontosGrade],
+
+    area:areaCalculada,
+
+    angulo:anguloGrade
+
+  }
+
+  bibliotecaFeicoes.push(feicao)
+
+  localStorage.setItem(
+    "bibliotecaFeicoes",
+    JSON.stringify(bibliotecaFeicoes)
+  )
+
+  gerarKMLFeicao(feicao)
+
+  alert("Feição salva com sucesso")
+
+}
+/* =========================================
+KML FEIÇÃO
+========================================= */
+
+function gerarKMLFeicao(feicao){
+
+  let kml =
+`<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+
+<name>${feicao.nome}</name>
+
+`
+
+  /* ================= POLÍGONO ================= */
+
+  if(feicao.pontos.length >= 3){
+
+    kml +=
+`
+<Placemark>
+
+<name>${feicao.nome}</name>
+
+<Polygon>
+<outerBoundaryIs>
+<LinearRing>
+<coordinates>
+`
+
+    feicao.pontos.forEach(p=>{
+
+      kml += `${p[1]},${p[0]},0 `
+
+    })
+
+    kml +=
+`${feicao.pontos[0][1]},
+${feicao.pontos[0][0]},0
+
+</coordinates>
+</LinearRing>
+</outerBoundaryIs>
+</Polygon>
+
+</Placemark>
+`
+  }
+
+  /* ================= GRADE ================= */
+
+  feicao.grade.forEach((p,i)=>{
+
+    kml +=
+`
+<Placemark>
+
+<name>P${i+1}</name>
+
+<Point>
+<coordinates>
+${p[1]},${p[0]},0
+</coordinates>
+</Point>
+
+</Placemark>
+`
+  })
+
+  kml +=
+`
+</Document>
+</kml>
+`
+
+  baixar(
+    kml,
+    feicao.nome + ".kml"
+  )
 
 }
