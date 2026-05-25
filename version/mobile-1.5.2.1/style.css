@@ -208,6 +208,10 @@ PAINEL RASTRO
 
 #painelRastro{
 
+  position:relative;
+
+}
+
   display:none;
 
   position:absolute;
@@ -322,4 +326,42 @@ REGISTROS
 
 #listaRegistros{
   margin-top:10px;
+}
+
+/* =========================================
+BOTÃO SALVAR
+========================================= */
+
+.btn-save{
+
+  position:absolute;
+
+  right:10px;
+
+  bottom:10px;
+
+  width:42px;
+
+  height:42px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:#2e7d32;
+
+  color:white;
+
+  font-size:20px;
+
+  cursor:pointer;
+
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);
+
+}
+
+.btn-save:active{
+
+  transform:scale(0.95);
+
 }
