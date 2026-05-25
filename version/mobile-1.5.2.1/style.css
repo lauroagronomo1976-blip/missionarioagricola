@@ -483,3 +483,49 @@ BOTTOM CONTROLS
 
   z-index:9999;
 }
+
+/* =========================================
+BARRA INFERIOR
+========================================= */
+
+.barra-inferior{
+
+  position:absolute;
+
+  bottom:20px;
+
+  left:50%;
+
+  transform:translateX(-50%);
+
+  display:flex;
+
+  gap:14px;
+
+  z-index:99999;
+
+}
+
+/* =========================================
+BOTÕES INFERIORES
+========================================= */
+
+.barra-inferior button{
+
+  width:54px;
+
+  height:54px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:#263238;
+
+  color:white;
+
+  font-size:24px;
+
+  box-shadow:0 2px 8px rgba(0,0,0,0.35);
+
+}
