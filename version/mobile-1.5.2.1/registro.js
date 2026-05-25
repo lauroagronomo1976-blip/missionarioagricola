@@ -31,6 +31,7 @@ let pontosGradeOriginais = []
 let marcadoresGrade = []
 
 let feicoesSalvas = []
+let bibliotecaFeicoes = []
 
 let iconeGrade
 
