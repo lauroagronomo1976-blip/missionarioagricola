@@ -451,9 +451,35 @@ BOTTOM CONTROLS
   background:#263238;
 
   color:white;
-
+  
   font-size:22px;
 
   box-shadow:0 2px 8px rgba(0,0,0,0.35);
 
+}
+
+
+.acoes-rastro{
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  margin-top:8px;
+}
+
+
+.barra-inferior{
+
+  position:absolute;
+
+  bottom:10px;
+
+  left:50%;
+
+  transform:translateX(-50%);
+
+  display:flex;
+
+  gap:12px;
+
+  z-index:9999;
 }
