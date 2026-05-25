@@ -1178,7 +1178,12 @@ MARCAR PONTO MANUAL
 
 function marcarPontoManual(){
 
-  if(!coordenadaAtual) return
+  if(!coordenadaAtual){
+
+    alert("Ative a mira primeiro")
+
+    return
+  }
 
   L.marker([
     coordenadaAtual.lat,
