@@ -148,14 +148,20 @@ if(dadosSalvos){
   document.getElementById("btnSalvarFeicao").onclick =
   salvarFeicao
   
-  document.getElementById("btnLimpar").onclick =
-    limparTudo
+  document.getElementById("btnLimparInferior").onclick =
+  limparTudo
 
   document.getElementById("btnMarcarPonto").onclick =
   marcarPontoManual
 
-document.getElementById("btnLimparMapa").onclick =
+  document.getElementById("btnLimparMapa").onclick =
   limparTudo
+
+  document.getElementById("btnFinalizar").onclick =
+  finalizar
+  
+  document.getElementById("btnSalvar").onclick =
+  salvarFeicao
 
 })
 
@@ -653,11 +659,14 @@ function gerarKMLRastro() {
 KML ÁREA
 ========================================= */
 
-function gerarKMLArea() {
+function gerarKMLArea(nomePersonalizado){
 
   const nome =
+  nomePersonalizado ||
+  (
     "Area_" +
     new Date().toLocaleString()
+  )
 
   let kml =
 `<?xml version="1.0" encoding="UTF-8"?>
@@ -1190,4 +1199,30 @@ function marcarPontoManual(){
     coordenadaAtual.lng
   ]).addTo(map)
 
+}
+
+/* =========================================
+SALVAR FEIÇÃO
+========================================= */
+
+function salvarFeicao(){
+
+  if(pontos.length < 3){
+
+    alert("Nenhuma área finalizada.")
+
+    return
+  }
+
+  let nome = prompt(
+    "Nome da área:"
+  )
+
+  if(!nome){
+    nome = "Area_" + Date.now()
+  }
+
+  gerarKMLArea(nome)
+
+  alert("Área salva com sucesso.")
 }
