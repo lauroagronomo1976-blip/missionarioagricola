@@ -127,36 +127,41 @@ if(dadosSalvos){
   ).addTo(map)
 
   /* =========================================
-  BOTÕES
-  ========================================= */
+                    BOTÕES
+========================================= */
 
-  document.getElementById("btnMira").onclick =
-    ativarMira
+document.getElementById("btnMira").onclick =
+  ativarMira
 
-  document.getElementById("btnRastro").onclick =
-    () => iniciar("rastro")
+document.getElementById("btnRastro").onclick =
+  () => iniciar("rastro")
 
-  document.getElementById("btnArea").onclick =
-    () => iniciar("area")
+document.getElementById("btnArea").onclick =
+  () => iniciar("area")
 
-  document.getElementById("btnPausar").onclick =
-    () => pausado = true
+document.getElementById("btnPausar").onclick =
+  () => pausado = true
 
-  document.getElementById("btnContinuar").onclick =
-    () => pausado = false
-  
-  document.getElementById("btnSalvarFeicao").onclick =
+document.getElementById("btnContinuar").onclick =
+  () => pausado = false
+
+document.getElementById("btnFinalizar").onclick =
+  finalizar
+
+document.getElementById("btnSalvar").onclick =
   salvarFeicao
-  
-  document.getElementById("btnLimparInferior").onclick =
+
+document.getElementById("btnLimparInferior").onclick =
   limparTudo
 
-  document.getElementById("btnMarcarPonto").onclick =
-  marcarPontoManual
+document.getElementById("btnMarcarPontoInferior").onclick =
+  () => {
 
-  document.getElementById("btnLimparMapa").onclick =
-  limparTudo
+    document.getElementById(
+      "formMissaoContainer"
+    ).style.display = "block"
 
+  }
   document.getElementById("btnFinalizar").onclick =
   finalizar
   
