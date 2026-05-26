@@ -530,38 +530,3 @@ BOTÕES INFERIORES
 
 }
 
-#acoesMapa{
-
-  position:absolute;
-
-  bottom:15px;
-
-  left:50%;
-
-  transform:translateX(-50%);
-
-  display:flex;
-
-  gap:12px;
-
-  z-index:9999;
-}
-
-#acoesMapa button{
-
-  width:52px;
-
-  height:52px;
-
-  border:none;
-
-  border-radius:50%;
-
-  background:#1e88e5;
-
-  color:white;
-
-  font-size:22px;
-
-  box-shadow:0 2px 6px rgba(0,0,0,.3);
-}
