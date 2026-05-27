@@ -44,9 +44,15 @@ INIT
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  map = L.map("map", {
-    zoomControl: false
-  }).setView([-15, -47], 5)
+  map = L.map('map', {
+
+  zoomControl:false,
+
+  maxZoom:24,
+
+  minZoom:3
+
+}).setView([-15,-47],5)
 
   const dadosSalvos =
   localStorage.getItem(
@@ -88,6 +94,18 @@ if(dadosSalvos){
   }).addTo(map)
 
   /* =========================================
+ESCALA
+========================================= */
+
+L.control.scale({
+
+  metric:true,
+  imperial:false,
+  position:'bottomleft'
+
+}).addTo(map)
+  
+  /* =========================================
   MAPA RUA
   ========================================= */
 
@@ -103,12 +121,17 @@ if(dadosSalvos){
   ========================================= */
 
   const satelite = L.tileLayer(
-    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    {
-      attribution: "Esri",
-      maxZoom: 19
-    }
-  )
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  {
+
+    attribution:'Esri',
+
+    maxZoom:24,
+
+    maxNativeZoom:19
+
+  }
+)
 
   /* =========================================
   CONTROLE DE CAMADAS
