@@ -49,8 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
   zoomControl:false,
 
   maxZoom:24,
-  maxNativeZoom:19
-  
+   
     minZoom:3
 
 }).setView([-15,-47],5)
