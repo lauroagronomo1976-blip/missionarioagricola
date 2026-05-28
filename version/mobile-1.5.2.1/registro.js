@@ -45,13 +45,8 @@ INIT
 document.addEventListener("DOMContentLoaded", () => {
 
   map = L.map('map', {
-
   zoomControl:false,
-
-  maxZoom:24,
-   
-    minZoom:3
-
+  maxZoom:22
 }).setView([-15,-47],5)
 
   const dadosSalvos =
@@ -89,9 +84,10 @@ if(dadosSalvos){
   CONTROLE ZOOM
   ========================================= */
 
-  L.control.zoom({
-    position: "bottomright"
-  }).addTo(map)
+  L.control.scale({
+  imperial:false,
+  position:'bottomleft'
+}).addTo(map)
 
   /* =========================================
 ESCALA
@@ -110,11 +106,12 @@ L.control.scale({
   ========================================= */
 
   const street = L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {
-      maxZoom: 19
-    }
-  ).addTo(map)
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    maxZoom:22,
+    maxNativeZoom:19
+  }
+).addTo(map)
 
   /* =========================================
   MAPA SATÉLITE
@@ -123,13 +120,9 @@ L.control.scale({
   const satelite = L.tileLayer(
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   {
-
     attribution:'Esri',
-
-    maxZoom:24,
-
+    maxZoom:22,
     maxNativeZoom:19
-
   }
 )
 
