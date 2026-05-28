@@ -16,13 +16,20 @@ TOPO
 ========================================= */
 
 #topoApp{
+
+  position:relative;
+
   background:#1b5e20;
+
   color:white;
+
   padding:14px;
+
   text-align:center;
+
   font-size:22px;
+
   font-weight:bold;
-  box-shadow:0 2px 8px rgba(0,0,0,0.15);
 }
 
 /* =========================================
@@ -535,21 +542,26 @@ BOTÕES INFERIORES
   position:absolute;
 
   left:10px;
-  top:10px;
+
+  top:50%;
+
+  transform:translateY(-50%);
 
   width:42px;
+
   height:42px;
 
   border:none;
+
   border-radius:10px;
 
   background:white;
 
-  font-size:22px;
+  font-size:24px;
+
+  cursor:pointer;
 
   z-index:2000;
-
-  box-shadow:0 2px 8px rgba(0,0,0,0.3);
 }
 
 #menuLateral{
@@ -627,9 +639,11 @@ MENU LATERAL
   position:fixed;
 
   top:0;
+
   left:-260px;
 
   width:240px;
+
   height:100%;
 
   background:white;
