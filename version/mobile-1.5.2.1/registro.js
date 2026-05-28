@@ -45,8 +45,16 @@ INIT
 document.addEventListener("DOMContentLoaded", () => {
 
   map = L.map('map', {
-  zoomControl:true
+
+  zoomControl:false,
+
+  maxZoom:22,
+  minZoom:3,
+
+  preferCanvas:true
+
 }).setView([-15,-47],5)
+  
 
   const dadosSalvos =
   localStorage.getItem(
@@ -101,22 +109,23 @@ if(dadosSalvos){
 ).addTo(map)
 
   /* =========================================
-  MAPA SATÉLITE
-  ========================================= */
+MAPA SATÉLITE
+========================================= */
 
-  const satelite = L.tileLayer(
+const satelite = L.tileLayer(
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   {
     attribution:'Esri',
+
     maxZoom:22,
-    maxNativeZoom:19
+    maxNativeZoom:19,
+
+    updateWhenZooming:false,
+    updateWhenIdle:true,
+
+    keepBuffer:8
   }
 )
-  
-L.control.scale({
-  imperial:false,
-  maxWidth:120
-}).addTo(map)
   
   /* =========================================
   CONTROLE DE CAMADAS
