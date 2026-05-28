@@ -264,6 +264,8 @@ function iniciar(tipo) {
     }
 
   )
+  
+iniciarMenu()
 
 }
 
