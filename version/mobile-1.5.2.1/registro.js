@@ -46,9 +46,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   map = L.map('map', {
 
-  zoomControl:false,
+  zoomControl:true,
 
-  maxZoom:22,
+  maxZoom:19,
   minZoom:3,
 
   preferCanvas:true
@@ -115,15 +115,17 @@ MAPA SATÉLITE
 const satelite = L.tileLayer(
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   {
+
     attribution:'Esri',
 
-    maxZoom:22,
+    maxZoom:19,
+
     maxNativeZoom:19,
 
-    updateWhenZooming:false,
     updateWhenIdle:true,
 
-    keepBuffer:8
+    keepBuffer:4
+
   }
 )
   
