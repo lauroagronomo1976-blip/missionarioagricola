@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   zoomControl:true,
 
-  maxZoom:19,
+  maxZoom:22,
   minZoom:3,
 
   preferCanvas:true
@@ -112,21 +112,24 @@ if(dadosSalvos){
 MAPA SATÉLITE
 ========================================= */
 
+/* =========================================
+MAPA SATÉLITE GOOGLE
+========================================= */
+
 const satelite = L.tileLayer(
-  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+
+  'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+
   {
 
-    attribution:'Esri',
+    attribution:'Google',
 
-    maxZoom:19,
+    maxZoom:22,
 
-    maxNativeZoom:19,
-
-    updateWhenIdle:true,
-
-    keepBuffer:4
+    subdomains:['mt0','mt1','mt2','mt3']
 
   }
+
 )
   
   /* =========================================
