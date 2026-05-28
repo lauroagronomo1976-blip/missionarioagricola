@@ -551,3 +551,47 @@ BOTÕES INFERIORES
 
   box-shadow:0 2px 8px rgba(0,0,0,0.3);
 }
+
+#menuLateral{
+
+  position:fixed;
+
+  top:0;
+  left:-280px;
+
+  width:260px;
+  height:100%;
+
+  background:white;
+
+  z-index:3000;
+
+  transition:0.3s;
+
+  box-shadow:2px 0 10px rgba(0,0,0,0.3);
+
+  padding:20px;
+}
+
+#menuLateral.aberto{
+  left:0;
+}
+
+#menuLateral button{
+
+  width:100%;
+
+  margin-top:10px;
+
+  padding:12px;
+
+  border:none;
+
+  border-radius:10px;
+
+  background:#1b5e20;
+
+  color:white;
+
+  font-size:16px;
+}
