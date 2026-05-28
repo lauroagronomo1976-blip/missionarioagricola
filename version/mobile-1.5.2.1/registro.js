@@ -45,8 +45,7 @@ INIT
 document.addEventListener("DOMContentLoaded", () => {
 
   map = L.map('map', {
-  zoomControl:false,
-  maxZoom:22
+  zoomControl:true
 }).setView([-15,-47],5)
 
   const dadosSalvos =
@@ -87,21 +86,9 @@ if(dadosSalvos){
   L.control.scale({
   imperial:false,
   position:'bottomleft'
-}).addTo(map)
+  }).addTo(map)
 
-  /* =========================================
-ESCALA
-========================================= */
-
-L.control.scale({
-
-  metric:true,
-  imperial:false,
-  position:'bottomleft'
-
-}).addTo(map)
-  
-  /* =========================================
+    /* =========================================
   MAPA RUA
   ========================================= */
 
@@ -125,7 +112,12 @@ L.control.scale({
     maxNativeZoom:19
   }
 )
-
+  
+L.control.scale({
+  imperial:false,
+  maxWidth:120
+}).addTo(map)
+  
   /* =========================================
   CONTROLE DE CAMADAS
   ========================================= */
