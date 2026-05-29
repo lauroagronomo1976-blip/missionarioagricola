@@ -1234,23 +1234,6 @@ function marcarPontoManual(){
 SALVAR FEIÇÃO
 ========================================= */
 
-function salvarFeicao(){
-
-  if(pontos.length < 3){
-
-    alert("Nenhuma área finalizada.")
-
-    return
-  }
-
-  let nome = prompt(
-    "Nome da área:"
-  )
-
-  if(!nome){
-    nome = "Area_" + Date.now()
-  }
-
   gerarKMLArea(nome)
 
   alert("Área salva com sucesso.")
