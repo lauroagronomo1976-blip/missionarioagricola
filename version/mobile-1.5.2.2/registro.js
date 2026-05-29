@@ -1209,32 +1209,3 @@ ${p[1]},${p[0]},0
   )
 
 }
-
-/* =========================================
-MARCAR PONTO MANUAL
-========================================= */
-
-function marcarPontoManual(){
-
-  if(!coordenadaAtual){
-
-    alert("Ative a mira primeiro")
-
-    return
-  }
-
-  L.marker([
-    coordenadaAtual.lat,
-    coordenadaAtual.lng
-  ]).addTo(map)
-
-}
-
-/* =========================================
-SALVAR FEIÇÃO
-========================================= */
-
-  gerarKMLArea(nome)
-
-  alert("Área salva com sucesso.")
-}
