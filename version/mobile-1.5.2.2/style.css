@@ -569,20 +569,18 @@ BOTÕES INFERIORES
   position:fixed;
 
   top:0;
-  left:-280px;
 
-  width:260px;
+  left:-260px;
+
+  width:240px;
+
   height:100%;
 
   background:white;
 
-  z-index:3000;
-
   transition:0.3s;
 
-  box-shadow:2px 0 10px rgba(0,0,0,0.3);
-
-  padding:20px;
+  z-index:3000;
 }
 
 #menuLateral.aberto{
