@@ -556,21 +556,17 @@ MENU LATERAL
 
   background:white;
 
-  box-shadow:2px 0 10px rgba(0,0,0,0.3);
+  transition:0.3s;
 
   z-index:3000;
 
-  transition:0.3s;
-
-  padding:20px;
-
-  box-sizing:border-box;
 }
 
 #menuLateral.aberto{
-  left:0;
-}
 
+  left:0;
+
+}
 #menuLateral h3{
   margin-top:0;
   color:#1b5e20;
