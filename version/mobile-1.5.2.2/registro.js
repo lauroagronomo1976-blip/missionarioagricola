@@ -37,6 +37,7 @@ let iconeGrade
 
 let anguloGrade = 0
 let rotacaoAtiva = false
+let pontoGeo = null
 
 /* =========================================
 INIT
@@ -189,7 +190,10 @@ document.getElementById("btnMarcarPontoInferior").onclick =
   
   document.getElementById("btnSalvar").onclick =
   salvarFeicao
-
+  
+  document.getElementById("btnPonto").onclick =
+  iniciarPonto
+  
 })
 
 /* =========================================
@@ -1206,6 +1210,83 @@ ${p[1]},${p[0]},0
   baixar(
     kml,
     feicao.nome + ".kml"
+  )
+
+}
+
+function iniciarPonto(){
+
+  navigator.geolocation.getCurrentPosition(
+
+    pos => {
+
+      const lat =
+        pos.coords.latitude
+
+      const lng =
+        pos.coords.longitude
+
+      const altitude =
+        pos.coords.altitude
+
+      const precisao =
+        pos.coords.accuracy
+
+      pontoGeo = {
+
+        lat,
+        lng,
+        altitude,
+        precisao
+
+      }
+
+      document.getElementById(
+        "painelRastro"
+      ).style.display = "block"
+
+      document.getElementById(
+        "infoRastro"
+      ).innerHTML =
+
+      `
+      <b>Latitude</b><br>
+      ${lat.toFixed(6)}
+
+      <br><br>
+
+      <b>Longitude</b><br>
+      ${lng.toFixed(6)}
+
+      <br><br>
+
+      <b>Altitude</b><br>
+      ${
+        altitude
+        ? altitude.toFixed(1)
+        : "N/D"
+      } m
+
+      <br><br>
+
+      <b>Precisão GPS</b><br>
+      ${precisao.toFixed(1)} m
+      `
+
+    },
+
+    erro => {
+
+      alert(
+        "Não foi possível obter GPS."
+      )
+
+    },
+
+    {
+      enableHighAccuracy:true
+    }
+
   )
 
 }
