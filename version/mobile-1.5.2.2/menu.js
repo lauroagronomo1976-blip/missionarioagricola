@@ -32,26 +32,61 @@ document.addEventListener(
 MENU
 ========================= */
 
+function fecharMenu(){
+
+  const menu =
+    document.getElementById("menuLateral")
+
+  document.getElementById(
+  "btnFecharMenu"
+).onclick = () => {
+
+  document
+    .getElementById("menuLateral")
+    .classList.remove("aberto")
+
+}
+  
+  menu.classList.remove("aberto")
+
+}
+
 function abrirFeicoes(){
 
-  alert("Feições Salvas")
+  fecharMenu()
+
+  alert("Abrir Feições")
 
 }
 
 function abrirGrades(){
 
-  alert("Grades Salvas")
+  fecharMenu()
+
+  alert("Abrir Grades")
 
 }
 
 function abrirRastros(){
 
-  alert("Rastros Salvos")
+  fecharMenu()
+
+  alert("Abrir Rastros")
 
 }
 
 function exportarTudo(){
 
+  fecharMenu()
+
   alert("Exportar Tudo")
+
+}
+
+function abrirFeicoes(){
+
+  fecharMenu()
+
+  carregarFeicoesSalvas()
 
 }
