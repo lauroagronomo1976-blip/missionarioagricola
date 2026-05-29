@@ -4,10 +4,7 @@ document.addEventListener(
   "DOMContentLoaded",
   () => {
 
-    const btnMenu =
-      document.getElementById("btnMenu")
-
-    const menuLateral =
+      const menuLateral =
       document.getElementById("menuLateral")
 
     if(btnMenu && menuLateral){
@@ -37,17 +34,9 @@ function fecharMenu(){
   const menu =
     document.getElementById("menuLateral")
 
-  document.getElementById(
-  "btnFecharMenu"
-).onclick = () => {
-
-  document
-    .getElementById("menuLateral")
-    .classList.remove("aberto")
-
-}
-  
-  menu.classList.remove("aberto")
+  if(menu){
+    menu.classList.remove("aberto")
+  }
 
 }
 
@@ -55,15 +44,11 @@ function abrirFeicoes(){
 
   fecharMenu()
 
-  alert("Abrir Feições")
-
 }
 
 function abrirGrades(){
 
   fecharMenu()
-
-  alert("Abrir Grades")
 
 }
 
@@ -71,15 +56,11 @@ function abrirRastros(){
 
   fecharMenu()
 
-  alert("Abrir Rastros")
-
 }
 
 function exportarTudo(){
 
   fecharMenu()
-
-  alert("Exportar Tudo")
 
 }
 
@@ -88,5 +69,22 @@ function abrirFeicoes(){
   fecharMenu()
 
   carregarFeicoesSalvas()
+
+}
+
+
+window.onload = () => {
+
+  const btn =
+    document.getElementById("btnMenu")
+
+  const menu =
+    document.getElementById("menuLateral")
+
+  btn.onclick = () => {
+
+    menu.classList.toggle("aberto")
+
+  }
 
 }
