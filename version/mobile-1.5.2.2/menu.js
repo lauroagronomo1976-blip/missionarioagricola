@@ -1,52 +1,52 @@
-function iniciarMenu(){
-
-  const btn =
-    document.getElementById("btnMenu")
-
-  const menu =
-    document.getElementById("menuLateral")
-
-  btn.onclick = () => {
-
-    menu.classList.toggle("aberto")
-
-  }
-
-}
-
 console.log("menu.js carregado")
 
-const btnMenu =
-  document.getElementById("btnMenu")
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
 
-const menuLateral =
-  document.getElementById("menuLateral")
+    const btnMenu =
+      document.getElementById("btnMenu")
 
-btnMenu.onclick = () => {
+    const menuLateral =
+      document.getElementById("menuLateral")
 
-  menuLateral.classList.toggle("aberto")
+    if(btnMenu && menuLateral){
 
-}
+      btnMenu.addEventListener(
+        "click",
+        () => {
+
+          menuLateral.classList.toggle(
+            "aberto"
+          )
+
+        }
+      )
+
+    }
+
+  }
+)
 
 /* =========================
-FUNÇÕES MENU
+MENU
 ========================= */
 
 function abrirFeicoes(){
 
-  alert("Abrir Feições")
+  alert("Feições Salvas")
 
 }
 
 function abrirGrades(){
 
-  alert("Abrir Grades")
+  alert("Grades Salvas")
 
 }
 
 function abrirRastros(){
 
-  alert("Abrir Rastros")
+  alert("Rastros Salvos")
 
 }
 
