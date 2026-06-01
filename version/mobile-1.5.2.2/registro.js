@@ -38,6 +38,7 @@ let iconeGrade
 let anguloGrade = 0
 let rotacaoAtiva = false
 let pontoGeo = null
+let pontosGeorreferenciados = []
 
 /* =========================================
 INIT
