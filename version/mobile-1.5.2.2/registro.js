@@ -1295,9 +1295,6 @@ function iniciarPonto(){
 /* =========================================
 PONTO GEOREFERENCIADO
 ========================================= */
-
-let pontosGeorreferenciados = []
-
 function iniciarPonto(){
 
   navigator.geolocation.getCurrentPosition(
