@@ -158,10 +158,10 @@ document.getElementById("btnMira").onclick =
   ativarMira
 
 document.getElementById("btnRastro").onclick =
-  () => escolherOrigem("rastro")
+  () => abrirPopupMetodo("rastro")
 
 document.getElementById("btnArea").onclick =
-  () => escolherOrigem("area")
+  () => abrirPopupMetodo("area")
 
 document.getElementById("btnPausar").onclick =
   () => pausado = true
@@ -193,7 +193,7 @@ document.getElementById("btnMarcarPontoInferior").onclick =
   salvarFeicao
   
   document.getElementById("btnPonto").onclick =
-  () => escolherOrigem("ponto")
+  () => abrirPopupMetodo("ponto")
   
 })
 
