@@ -150,7 +150,7 @@ const satelite = L.tileLayer(
     }
   ).addTo(map)
 
-  /* =========================================
+/* =========================================
                     BOTÕES
 ========================================= */
 
@@ -1281,6 +1281,96 @@ function iniciarPonto(){
       alert(
         "Não foi possível obter GPS."
       )
+
+    },
+
+    {
+      enableHighAccuracy:true
+    }
+
+  )
+
+}
+
+/* =========================================
+PONTO GEOREFERENCIADO
+========================================= */
+
+let pontosGeorreferenciados = []
+
+function iniciarPonto(){
+
+  navigator.geolocation.getCurrentPosition(
+
+    pos => {
+
+      const lat = pos.coords.latitude
+      const lng = pos.coords.longitude
+
+      const alt =
+        pos.coords.altitude || 0
+
+      const precisao =
+        pos.coords.accuracy || 0
+
+      const ponto = {
+
+        id: Date.now(),
+
+        latitude: lat,
+
+        longitude: lng,
+
+        altitude: alt,
+
+        precisao: precisao,
+
+        data: new Date()
+      }
+
+      pontosGeorreferenciados.push(ponto)
+
+      const marcador =
+        L.marker([lat,lng])
+        .addTo(map)
+
+      marcador.bindPopup(
+
+        `
+        <b>Ponto GPS</b><br>
+
+        Lat:
+        ${lat.toFixed(6)}<br>
+
+        Lng:
+        ${lng.toFixed(6)}<br>
+
+        Alt:
+        ${alt.toFixed(1)} m<br>
+
+        Precisão:
+        ${precisao.toFixed(1)} m
+        `
+      )
+
+      map.setView(
+        [lat,lng],
+        18
+      )
+
+      alert(
+        "Ponto georreferenciado salvo."
+      )
+
+    },
+
+    erro => {
+
+      alert(
+        "Erro ao obter GPS."
+      )
+
+      console.log(erro)
 
     },
 
