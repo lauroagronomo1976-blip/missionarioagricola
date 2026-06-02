@@ -592,3 +592,75 @@ MENU LATERAL
 
   cursor:pointer;
 }
+
+
+/* =========================================
+POPUP MÉTODO DE COLETA
+========================================= */
+
+.popupMetodo{
+
+  display:none;
+
+  position:fixed;
+
+  top:0;
+  left:0;
+
+  width:100%;
+  height:100%;
+
+  background:rgba(0,0,0,0.45);
+
+  z-index:99999;
+
+  justify-content:center;
+  align-items:center;
+
+}
+
+.popupConteudo{
+
+  background:white;
+
+  width:280px;
+
+  padding:20px;
+
+  border-radius:12px;
+
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
+
+  text-align:center;
+
+}
+
+.popupConteudo h3{
+
+  margin-top:0;
+
+  color:#1b5e20;
+
+}
+
+.popupConteudo button{
+
+  width:100%;
+
+  padding:12px;
+
+  margin-top:10px;
+
+  border:none;
+
+  border-radius:10px;
+
+  background:#1b5e20;
+
+  color:white;
+
+  font-size:15px;
+
+  cursor:pointer;
+
+}
