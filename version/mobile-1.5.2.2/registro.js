@@ -1378,3 +1378,76 @@ function iniciarPonto(){
   )
 
 }
+
+/* =========================================
+ESCOLHER ORIGEM
+========================================= */
+
+function escolherOrigem(tipo){
+
+  const opcao = prompt(
+
+`Como deseja criar?
+
+1 - GPS
+
+2 - Manual
+
+3 - Feição Salva`
+
+  )
+
+  if(!opcao) return
+
+  /* =========================
+  GPS
+  ========================= */
+
+  if(opcao === "1"){
+
+    if(tipo === "rastro"){
+      iniciar("rastro")
+      return
+    }
+
+    if(tipo === "area"){
+      iniciar("area")
+      return
+    }
+
+    if(tipo === "ponto"){
+      iniciarPonto()
+      return
+    }
+
+  }
+
+  /* =========================
+  MANUAL
+  ========================= */
+
+  if(opcao === "2"){
+
+    alert(
+      "Modo Manual será implementado na próxima etapa."
+    )
+
+    return
+
+  }
+
+  /* =========================
+  FEIÇÕES SALVAS
+  ========================= */
+
+  if(opcao === "3"){
+
+    alert(
+      "Importação de Feições Salvas será implementada na próxima etapa."
+    )
+
+    return
+
+  }
+
+}
