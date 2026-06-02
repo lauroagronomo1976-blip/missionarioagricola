@@ -257,6 +257,34 @@ href="./style.css"
 
 </div>
 
+  <!-- POPUP MÉTODO DE COLETA -->
+
+<div id="popupMetodo" class="popupMetodo">
+
+  <div class="popupConteudo">
+
+    <h3>Como deseja coletar?</h3>
+
+    <button onclick="selecionarMetodo('gps')">
+      📡 Usando GPS
+    </button>
+
+    <button onclick="selecionarMetodo('manual')">
+      ✍️ Medição Manual
+    </button>
+
+    <button onclick="selecionarMetodo('importar')">
+      📂 Importar Feição
+    </button>
+
+    <button onclick="fecharPopupMetodo()">
+      ❌ Cancelar
+    </button>
+
+  </div>
+
+</div>
+  
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script src="./storage.js"></script>
