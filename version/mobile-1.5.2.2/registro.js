@@ -1451,3 +1451,82 @@ function escolherOrigem(tipo){
   }
 
 }
+
+
+/* =========================================
+POPUP MÉTODO DE COLETA
+========================================= */
+
+let acaoSelecionada = null
+
+function abrirPopupMetodo(tipo){
+
+  acaoSelecionada = tipo
+
+  document.getElementById(
+    "popupMetodo"
+  ).style.display = "flex"
+
+}
+
+function fecharPopupMetodo(){
+
+  document.getElementById(
+    "popupMetodo"
+  ).style.display = "none"
+
+}
+
+function selecionarMetodo(metodo){
+
+  fecharPopupMetodo()
+
+  if(acaoSelecionada === "rastro"){
+
+    if(metodo === "gps"){
+      iniciar("rastro")
+    }
+
+    if(metodo === "manual"){
+      alert("Rastro manual em desenvolvimento")
+    }
+
+    if(metodo === "importar"){
+      abrirFeicoes()
+    }
+
+  }
+
+  if(acaoSelecionada === "area"){
+
+    if(metodo === "gps"){
+      iniciar("area")
+    }
+
+    if(metodo === "manual"){
+      alert("Área manual em desenvolvimento")
+    }
+
+    if(metodo === "importar"){
+      abrirFeicoes()
+    }
+
+  }
+
+  if(acaoSelecionada === "ponto"){
+
+    if(metodo === "gps"){
+      iniciarPonto()
+    }
+
+    if(metodo === "manual"){
+      alert("Ponto manual em desenvolvimento")
+    }
+
+    if(metodo === "importar"){
+      abrirFeicoes()
+    }
+
+  }
+
+}
