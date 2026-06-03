@@ -1531,37 +1531,25 @@ function selecionarMetodo(metodo){
 
 }
 
-function abrirFeicoes(){
+/* =========================
+BIBLIOTECA
+========================= */
+
+function abrirBiblioteca(){
 
   fecharMenu()
 
-  const janela =
-    document.getElementById(
-      "janelaFeicoes"
-    )
+  abrirJanelaBiblioteca()
 
-  const lista =
-    document.getElementById(
-      "listaFeicoes"
-    )
+}
 
-  lista.innerHTML = ""
+function abrirJanelaBiblioteca(){
 
-  const biblioteca = JSON.parse(
-
-    localStorage.getItem(
-      "bibliotecaFeicoes"
-    ) || "[]"
-
+  alert(
+    "Biblioteca em desenvolvimento"
   )
 
-  if(biblioteca.length === 0){
-
-    lista.innerHTML =
-      "<p>Nenhuma feição salva.</p>"
-
-  }
-
+}
   biblioteca.forEach(
 
     (f,index)=>{
