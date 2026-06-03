@@ -1530,3 +1530,121 @@ function selecionarMetodo(metodo){
   }
 
 }
+
+function abrirFeicoes(){
+
+  fecharMenu()
+
+  const janela =
+    document.getElementById(
+      "janelaFeicoes"
+    )
+
+  const lista =
+    document.getElementById(
+      "listaFeicoes"
+    )
+
+  lista.innerHTML = ""
+
+  const biblioteca = JSON.parse(
+
+    localStorage.getItem(
+      "bibliotecaFeicoes"
+    ) || "[]"
+
+  )
+
+  if(biblioteca.length === 0){
+
+    lista.innerHTML =
+      "<p>Nenhuma feição salva.</p>"
+
+  }
+
+  biblioteca.forEach(
+
+    (f,index)=>{
+
+      lista.innerHTML += `
+
+      <div class="itemFeicao">
+
+        <strong>${f.nome}</strong>
+
+        <br>
+
+        Tipo:
+        ${f.tipo}
+
+        <br>
+
+        <button
+          onclick="excluirFeicao(${index})"
+        >
+          Excluir
+        </button>
+
+      </div>
+
+      `
+
+    }
+
+  )
+
+  janela.style.display = "block"
+
+}
+
+function excluirFeicao(index){
+
+  const biblioteca = JSON.parse(
+
+    localStorage.getItem(
+      "bibliotecaFeicoes"
+    ) || "[]"
+
+  )
+
+  biblioteca.splice(index,1)
+
+  localStorage.setItem(
+
+    "bibliotecaFeicoes",
+
+    JSON.stringify(biblioteca)
+
+  )
+
+  abrirFeicoes()
+
+}
+
+document.addEventListener(
+
+  "DOMContentLoaded",
+
+  ()=>{
+
+    const btnFechar =
+
+      document.getElementById(
+        "btnFecharFeicoes"
+      )
+
+    if(btnFechar){
+
+      btnFechar.onclick = ()=>{
+
+        document.getElementById(
+          "janelaFeicoes"
+        ).style.display = "none"
+
+      }
+
+    }
+
+  }
+
+)
