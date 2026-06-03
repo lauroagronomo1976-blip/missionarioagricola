@@ -1580,10 +1580,16 @@ function abrirFeicoes(){
         <br>
 
         <button
-          onclick="excluirFeicao(${index})"
-        >
-          Excluir
-        </button>
+  onclick="visualizarFeicao(${index})"
+>
+  👁 Ver
+</button>
+
+<button
+  onclick="excluirFeicao(${index})"
+>
+  🗑 Excluir
+</button>
 
       </div>
 
@@ -1597,7 +1603,7 @@ function abrirFeicoes(){
 
 }
 
-function excluirFeicao(index){
+function visualizarFeicao(index){
 
   const biblioteca = JSON.parse(
 
@@ -1607,44 +1613,60 @@ function excluirFeicao(index){
 
   )
 
-  biblioteca.splice(index,1)
+  const f = biblioteca[index]
 
-  localStorage.setItem(
+  document.getElementById(
+    "janelaFeicoes"
+  ).style.display = "none"
 
-    "bibliotecaFeicoes",
+  if(!f) return
 
-    JSON.stringify(biblioteca)
+  if(f.tipo === "ponto"){
 
-  )
+    const p = f.pontos[0]
 
-  abrirFeicoes()
+    const marker =
+      L.marker(p).addTo(map)
 
-}
+    marker.bindPopup(
+      f.nome
+    ).openPopup()
 
-document.addEventListener(
-
-  "DOMContentLoaded",
-
-  ()=>{
-
-    const btnFechar =
-
-      document.getElementById(
-        "btnFecharFeicoes"
-      )
-
-    if(btnFechar){
-
-      btnFechar.onclick = ()=>{
-
-        document.getElementById(
-          "janelaFeicoes"
-        ).style.display = "none"
-
-      }
-
-    }
+    map.setView(p,18)
 
   }
 
-)
+  if(f.tipo === "rastro"){
+
+    const linha =
+      L.polyline(
+        f.pontos,
+        {
+          color:"red",
+          weight:4
+        }
+      ).addTo(map)
+
+    map.fitBounds(
+      linha.getBounds()
+    )
+
+  }
+
+  if(f.tipo === "area"){
+
+    const poligono =
+      L.polygon(
+        f.pontos,
+        {
+          color:"green"
+        }
+      ).addTo(map)
+
+    map.fitBounds(
+      poligono.getBounds()
+    )
+
+  }
+
+}
