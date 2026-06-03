@@ -1550,47 +1550,7 @@ function abrirJanelaBiblioteca(){
   )
 
 }
-  biblioteca.forEach(
-
-    (f,index)=>{
-
-      lista.innerHTML += `
-
-      <div class="itemFeicao">
-
-        <strong>${f.nome}</strong>
-
-        <br>
-
-        Tipo:
-        ${f.tipo}
-
-        <br>
-
-        <button
-  onclick="visualizarFeicao(${index})"
->
-  👁 Ver
-</button>
-
-<button
-  onclick="excluirFeicao(${index})"
->
-  🗑 Excluir
-</button>
-
-      </div>
-
-      `
-
-    }
-
-  )
-
-  janela.style.display = "block"
-
-}
-
+  
 function visualizarFeicao(index){
 
   const biblioteca = JSON.parse(
