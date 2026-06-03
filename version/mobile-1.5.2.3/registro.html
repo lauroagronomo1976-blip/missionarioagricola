@@ -1,1 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+/>
+
+<title>
+Missionário Agrícola
+</title>
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<link
+rel="stylesheet"
+href="./style.css"
+/>
+
+</head>
+
+<body>
+
+<!-- MENU LATERAL -->
+
+<div id="menuLateral">
+
+  <h3>Missionário Agrícola</h3>
+
+  <button onclick="abrirBiblioteca()">
+  📚 Biblioteca
+</button>
+
+  <button onclick="abrirGrades()">
+    Grades
+  </button>
+
+  <button onclick="abrirRastros()">
+    Rastros
+  </button>
+
+  <button onclick="exportarTudo()">
+    Exportar Tudo
+  </button>
+
+</div>
+
+<!-- TOPO -->
+
+<div id="topoApp">
+
+  <button id="btnMenu">
+    ☰
+  </button>
+
+  Missionário Agrícola
+
+</div>
+<!-- MAPA -->
+
+<div id="mapContainer">
+
+  <div id="map"></div>
+
+  <!-- CONTROLES -->
+
+  <div class="painel-controles">
+
+    <button id="btnMira">
+      🎯
+    </button>
+
+    <button id="btnRastro">
+      🛰️
+    </button>
+
+    <button id="btnArea">
+      📐
+    </button>
+<button id="btnPonto">
+      📍</button>
+    
+  </div>
+
+  <!-- PAINEL RASTRO -->
+
+  <div id="painelRastro">
+
+    <div id="infoRastro"></div>
+
+    <div class="acoesRastro">
+
+      <button id="btnPausar">
+        ⏸
+      </button>
+
+      <button id="btnContinuar">
+        ▶
+      </button>
+
+      <button id="btnFinalizar">
+        ✔
+      </button>
+
+      <button id="btnSalvar">
+        💾
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- PAINEL INFERIOR -->
+
+<div id="painelInferior">
+
+  <button id="btnMarcarPontoInferior">
+
+    📍 Marcar Ponto
+
+  </button>
+
+  <button id="btnLimparInferior">
+
+    🧹 Limpar
+
+  </button>
+
+  <div id="formMissaoContainer">
+
+    <h3>
+      Registro
+    </h3>
+
+    <div class="form-group">
+
+      <label>
+        Ocorrência
+      </label>
+
+      <select id="ocorrenciaSelect">
+
+        <option value="">
+          Selecione
+        </option>
+
+        <option>
+          Praga
+        </option>
+
+        <option>
+          Doença
+        </option>
+
+        <option>
+          Planta Daninha
+        </option>
+
+        <option>
+          Outros
+        </option>
+
+      </select>
+
+    </div>
+
+    <div class="form-group">
+
+      <label>
+        Espécie
+      </label>
+
+      <input
+      type="text"
+      id="especieInput"
+      />
+
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label>
+          Fase
+        </label>
+
+        <select id="faseSelect">
+
+          <option>Ovo</option>
+          <option>Larva</option>
+          <option>Ninfa</option>
+          <option>Adulto</option>
+
+        </select>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>
+          Nº Indivíduos
+        </label>
+
+        <input
+        type="number"
+        id="individuosInput"
+        />
+
+      </div>
+
+    </div>
+
+    <div class="form-group">
+
+      <label>
+        Severidade (%)
+      </label>
+
+      <input
+      type="number"
+      id="severidadeInput"
+      />
+
+    </div>
+
+    <button id="btnSalvarRegistro">
+
+      Salvar Registro
+
+    </button>
+
+    <button id="btnConcluirPonto">
+
+      Concluir Ponto
+
+    </button>
+
+    <button id="btnFecharArea">
+
+      Fechar Área
+
+    </button>
+
+    <div id="listaRegistros"></div>
+
+  </div>
+
+</div>
+
+  <!-- POPUP MÉTODO DE COLETA -->
+
+<div id="popupMetodo" class="popupMetodo">
+
+  <div class="popupConteudo">
+
+    <h3>Como deseja coletar?</h3>
+
+    <button onclick="selecionarMetodo('gps')">
+      📡 Usando GPS
+    </button>
+
+    <button onclick="selecionarMetodo('manual')">
+      ✍️ Medição Manual
+    </button>
+
+    <button onclick="selecionarMetodo('importar')">
+      📂 Importar Feição
+    </button>
+
+    <button onclick="fecharPopupMetodo()">
+      ❌ Cancelar
+    </button>
+
+  </div>
+
+</div>
+  
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- BIBLIOTECA DE FEIÇÕES -->
+
+<div id="janelaFeicoes">
+
+  <div id="janelaFeicoesConteudo">
+
+    <h2>Feições Salvas</h2>
+
+    <div id="listaFeicoes"></div>
+
+    <button id="btnFecharFeicoes">
+      Fechar
+    </button>
+
+  </div>
+
+</div>
+
+<script src="./storage.js"></script>
+
+<script src="./kml.js"></script>
+
+<script src="./grade.js"></script>
+
+<script src="./mapa.js"></script>
+
+<script src="./menu.js"></script>
+
+<script src="./registro.js"></script>
+
+</body>
+
+</html>
