@@ -1618,11 +1618,3 @@ function visualizarFeicao(index){
   }
 
 }
-
-{
-  nome:"Talhao_01",
-  tipo:"area",
-  formato:"kml",
-  data:"2026-06-05",
-  area:124.5
-}
