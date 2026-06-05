@@ -1619,4 +1619,74 @@ function visualizarFeicao(index){
 
 }
 
-console.log("FIM DO ARQUIVO")
+/* =========================
+BIBLIOTECA
+========================= */
+
+function abrirBiblioteca(){
+
+  fecharMenu()
+
+  carregarBiblioteca()
+
+}
+
+function fecharBiblioteca(){
+
+  document.getElementById(
+    "janelaBiblioteca"
+  ).style.display = "none"
+
+}
+
+function carregarBiblioteca(){
+
+  const lista =
+    document.getElementById(
+      "listaBiblioteca"
+    )
+
+  lista.innerHTML = ""
+
+  const biblioteca = JSON.parse(
+
+    localStorage.getItem(
+      "bibliotecaFeicoes"
+    ) || "[]"
+
+  )
+
+  biblioteca.forEach((f,index)=>{
+
+    let icone = "📍"
+
+    if(f.tipo === "area"){
+      icone = "📐"
+    }
+
+    if(f.tipo === "rastro"){
+      icone = "🛰️"
+    }
+
+    if(f.tipo === "grade"){
+      icone = "🔲"
+    }
+
+    lista.innerHTML += `
+
+      <div class="itemBiblioteca">
+
+        ${icone}
+        <strong>${f.nome}</strong>
+
+      </div>
+
+    `
+
+  })
+
+  document.getElementById(
+    "janelaBiblioteca"
+  ).style.display = "block"
+
+}
