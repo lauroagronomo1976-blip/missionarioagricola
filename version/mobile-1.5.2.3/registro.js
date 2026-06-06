@@ -1103,21 +1103,30 @@ function salvarFeicao(){
 
   const feicao = {
 
-    nome:nome,
+  nome:nome,
 
-    data:new Date(),
+  data:new Date().toLocaleString(),
 
-    tipo:modo,
+  tipo:modo,
 
-    pontos:[...pontos],
+  formato:"kml",
 
-    grade:[...pontosGrade],
+  pontos:[...pontos],
 
-    area:areaCalculada,
+  grade:[...pontosGrade],
 
-    angulo:anguloGrade
+  area:areaCalculada || 0,
 
-  }
+  distancia:distancia || 0,
+
+  quantidadePontos:
+    pontos.length,
+
+  altitudeMedia:0,
+
+  angulo:anguloGrade
+
+}
 
   bibliotecaFeicoes.push(feicao)
 
@@ -1646,43 +1655,58 @@ function carregarBiblioteca(){
       "listaBiblioteca"
     )
 
-  lista.innerHTML = ""
+  lista.innerHTML += `
 
-  const biblioteca = JSON.parse(
+<div
+  class="itemBiblioteca"
+  onclick="visualizarFeicao(${i})"
+>
 
-    localStorage.getItem(
-      "bibliotecaFeicoes"
-    ) || "[]"
+  <div>
 
-  )
+    ${icone}
 
-  biblioteca.forEach((f,index)=>{
+    <strong>
+      ${f.nome}
+    </strong>
 
-    let icone = "📍"
+  </div>
 
-    if(f.tipo === "area"){
-      icone = "📐"
+  <div
+    style="
+      font-size:12px;
+      color:#666;
+      margin-top:4px;
+    "
+  >
+
+    Tipo: ${f.tipo}
+
+    <br>
+
+    Data: ${f.data || "-"}
+
+    ${
+      f.area
+      ?
+      `<br>Área: ${Number(f.area).toFixed(2)} ha`
+      :
+      ""
     }
 
-    if(f.tipo === "rastro"){
-      icone = "🛰️"
+    ${
+      f.distancia
+      ?
+      `<br>Distância: ${Number(f.distancia).toFixed(2)} km`
+      :
+      ""
     }
 
-    if(f.tipo === "grade"){
-      icone = "🔲"
-    }
+  </div>
 
-    lista.innerHTML += `
+</div>
 
-      <div class="itemBiblioteca">
-
-        ${icone}
-        <strong>${f.nome}</strong>
-
-      </div>
-
-    `
-
+`
   })
 
   document.getElementById(
