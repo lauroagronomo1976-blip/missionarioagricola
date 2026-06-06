@@ -56,28 +56,27 @@ href="./style.css"
 
 <div id="janelaBiblioteca">
 
-  <div class="cabecalhoBiblioteca">
+  <h3>
+    Biblioteca
+  </h3>
 
-    <span>📚 Biblioteca</span>
+  <div class="pesquisaBiblioteca">
 
-    <button onclick="fecharBiblioteca()">
-      ✖
-    </button>
+    <span>🔍</span>
+
+    <input
+      id="pesquisaFeicao"
+      placeholder="Pesquisar..."
+      onkeyup="filtrarFeicoes()"
+    >
 
   </div>
 
-  <input
-    type="text"
-    id="buscaBiblioteca"
-    placeholder="Pesquisar feição..."
-    onkeyup="filtrarBiblioteca()"
-  >
-
-  <div id="listaBiblioteca">
-  </div>
+  <div id="listaBiblioteca"></div>
 
 </div>
-
+  
+</div>
 
   <!-- TOPO -->
 
