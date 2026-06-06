@@ -318,17 +318,24 @@ href="./style.css"
 
 <div id="janelaFeicoes">
 
-  <div id="janelaFeicoesConteudo">
-
-    <h2>Feições Salvas</h2>
-
-    <div id="listaFeicoes"></div>
-
-    <button id="btnFecharFeicoes">
-      Fechar
-    </button>
-
+  <div class="tituloBiblioteca">
+    📚 Biblioteca
   </div>
+
+  <input
+    type="text"
+    id="pesquisaFeicao"
+    placeholder="Pesquisar..."
+    onkeyup="filtrarFeicoes()"
+  >
+
+  <div id="listaFeicoes"></div>
+
+  <button onclick="fecharJanelaFeicoes()">
+    Fechar
+  </button>
+
+</div>
 
 </div>
 
