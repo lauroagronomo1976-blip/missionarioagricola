@@ -1690,3 +1690,36 @@ function carregarBiblioteca(){
   ).style.display = "block"
 
 }
+
+function filtrarFeicoes(){
+
+  const termo =
+    document
+      .getElementById("pesquisaFeicao")
+      .value
+      .toLowerCase()
+
+  const itens =
+    document.querySelectorAll(
+      ".itemFeicao"
+    )
+
+  itens.forEach(item=>{
+
+    if(
+      item.innerText
+      .toLowerCase()
+      .includes(termo)
+    ){
+
+      item.style.display = "block"
+
+    }else{
+
+      item.style.display = "none"
+
+    }
+
+  })
+
+}
