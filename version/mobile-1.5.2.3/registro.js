@@ -1655,10 +1655,30 @@ function carregarBiblioteca(){
       "listaBiblioteca"
     )
 
-  lista.innerHTML += `
+  lista.innerHTML = ""
+
+  const biblioteca = JSON.parse(
+    localStorage.getItem(
+      "bibliotecaFeicoes"
+    ) || "[]"
+  )
+
+  biblioteca.forEach((f,i)=>{
+
+    let icone = "📍"
+
+    if(f.tipo === "area"){
+      icone = "📐"
+    }
+
+    if(f.tipo === "rastro"){
+      icone = "🛰️"
+    }
+
+    lista.innerHTML += `
 
 <div
-  class="itemBiblioteca"
+  class="itemFeicao"
   onclick="visualizarFeicao(${i})"
 >
 
@@ -1686,64 +1706,16 @@ function carregarBiblioteca(){
 
     Data: ${f.data || "-"}
 
-    ${
-      f.area
-      ?
-      `<br>Área: ${Number(f.area).toFixed(2)} ha`
-      :
-      ""
-    }
-
-    ${
-      f.distancia
-      ?
-      `<br>Distância: ${Number(f.distancia).toFixed(2)} km`
-      :
-      ""
-    }
-
   </div>
 
 </div>
 
 `
+
   })
 
   document.getElementById(
     "janelaBiblioteca"
   ).style.display = "block"
-
-}
-
-function filtrarFeicoes(){
-
-  const termo =
-    document
-      .getElementById("pesquisaFeicao")
-      .value
-      .toLowerCase()
-
-  const itens =
-    document.querySelectorAll(
-      ".itemFeicao"
-    )
-
-  itens.forEach(item=>{
-
-    if(
-      item.innerText
-      .toLowerCase()
-      .includes(termo)
-    ){
-
-      item.style.display = "block"
-
-    }else{
-
-      item.style.display = "none"
-
-    }
-
-  })
 
 }
