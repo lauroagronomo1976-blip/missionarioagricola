@@ -858,3 +858,77 @@ BIBLIOTECA
   margin-bottom:8px;
 
 }
+
+#janelaFeicoes{
+
+  display:none;
+
+  position:fixed;
+
+  top:5%;
+  left:5%;
+
+  width:90%;
+  height:85%;
+
+  background:white;
+
+  z-index:99999;
+
+  border-radius:12px;
+
+  padding:12px;
+
+  box-shadow:0 4px 20px rgba(0,0,0,0.30);
+
+}
+
+.tituloBiblioteca{
+
+  font-size:18px;
+
+  font-weight:bold;
+
+  color:#1b5e20;
+
+  margin-bottom:10px;
+
+}
+
+#pesquisaFeicao{
+
+  width:100%;
+
+  padding:10px;
+
+  border:1px solid #ccc;
+
+  border-radius:8px;
+
+  margin-bottom:10px;
+
+}
+
+#listaFeicoes{
+
+  height:calc(100% - 120px);
+
+  overflow-y:auto;
+
+}
+
+.itemFeicao{
+
+  padding:10px;
+
+  border-bottom:1px solid #ddd;
+
+  cursor:pointer;
+
+}
+
+.itemFeicao:hover{
+
+  background:#f5f5f5;
+
+}
