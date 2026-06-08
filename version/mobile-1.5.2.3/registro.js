@@ -1732,17 +1732,7 @@ const grades =
   id="grupo_grades"
   class="conteudoGrupo"
 ></div>
-`
-<div
-  class="itemFeicao"
-  onclick="visualizarFeicao(${i})"
->
 
-  ${f.nome}
-
-</div>
-
-`
   })
 
   document.getElementById(
