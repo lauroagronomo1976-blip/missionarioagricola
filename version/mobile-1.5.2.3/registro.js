@@ -1662,21 +1662,77 @@ function carregarBiblioteca(){
       "bibliotecaFeicoes"
     ) || "[]"
   )
+const areas =
+  biblioteca.filter(
+    f => f.tipo === "area"
+  )
 
-  biblioteca.forEach((f,i)=>{
+const rastros =
+  biblioteca.filter(
+    f => f.tipo === "rastro"
+  )
 
-    let icone = "📍"
+const pontos =
+  biblioteca.filter(
+    f => f.tipo === "ponto"
+  )
 
-    if(f.tipo === "area"){
-      icone = "📐"
-    }
+const grades =
+  biblioteca.filter(
+    f => f.tipo === "grade"
+  )
+  
+  lista.innerHTML = `
 
-    if(f.tipo === "rastro"){
-      icone = "🛰️"
-    }
+  
+<div
+  class="grupoBiblioteca"
+  onclick="alternarGrupo('areas')"
+>
+📂 ÁREAS (${areas.length})
+</div>
 
-    lista.innerHTML += `
+<div
+  id="grupo_areas"
+  class="conteudoGrupo"
+></div>
 
+<div
+  class="grupoBiblioteca"
+  onclick="alternarGrupo('rastros')"
+>
+📂 RASTROS (${rastros.length})
+</div>
+
+<div
+  id="grupo_rastros"
+  class="conteudoGrupo"
+></div>
+
+<div
+  class="grupoBiblioteca"
+  onclick="alternarGrupo('pontos')"
+>
+📂 PONTOS (${pontos.length})
+</div>
+
+<div
+  id="grupo_pontos"
+  class="conteudoGrupo"
+></div>
+
+<div
+  class="grupoBiblioteca"
+  onclick="alternarGrupo('grades')"
+>
+📂 GRADES (${grades.length})
+</div>
+
+<div
+  id="grupo_grades"
+  class="conteudoGrupo"
+></div>
+`
 <div
   class="itemFeicao"
   onclick="visualizarFeicao(${i})"
@@ -1692,5 +1748,26 @@ function carregarBiblioteca(){
   document.getElementById(
     "janelaBiblioteca"
   ).style.display = "block"
+
+}
+
+function alternarGrupo(nome){
+
+  const grupo =
+    document.getElementById(
+      "grupo_" + nome
+    )
+
+  if(
+    grupo.style.display === "block"
+  ){
+
+    grupo.style.display = "none"
+
+  }else{
+
+    grupo.style.display = "block"
+
+  }
 
 }
