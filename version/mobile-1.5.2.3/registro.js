@@ -1682,36 +1682,11 @@ function carregarBiblioteca(){
   onclick="visualizarFeicao(${i})"
 >
 
-  <div>
-
-    ${icone}
-
-    <strong>
-      ${f.nome}
-    </strong>
-
-  </div>
-
-  <div
-    style="
-      font-size:12px;
-      color:#666;
-      margin-top:4px;
-    "
-  >
-
-    Tipo: ${f.tipo}
-
-    <br>
-
-    Data: ${f.data || "-"}
-
-  </div>
+  ${f.nome}
 
 </div>
 
 `
-
   })
 
   document.getElementById(
