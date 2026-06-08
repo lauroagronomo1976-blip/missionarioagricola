@@ -1224,33 +1224,6 @@ ${p[1]},${p[0]},0
 
 }
 
-function iniciarPonto(){
-
-  navigator.geolocation.getCurrentPosition(
-
-    pos => {
-
-      const lat =
-        pos.coords.latitude
-
-      const lng =
-        pos.coords.longitude
-
-      const altitude =
-        pos.coords.altitude
-
-      const precisao =
-        pos.coords.accuracy
-
-      pontoGeo = {
-
-        lat,
-        lng,
-        altitude,
-        precisao
-
-      }
-
       document.getElementById(
         "painelRastro"
       ).style.display = "block"
@@ -1543,23 +1516,6 @@ function selecionarMetodo(metodo){
 /* =========================
 BIBLIOTECA
 ========================= */
-
-function abrirBiblioteca(){
-
-  fecharMenu()
-
-  abrirJanelaBiblioteca()
-
-}
-
-function abrirJanelaBiblioteca(){
-
-  alert(
-    "Biblioteca em desenvolvimento"
-  )
-
-}
-  
 function visualizarFeicao(index){
 
   const biblioteca = JSON.parse(
@@ -1733,9 +1689,7 @@ const grades =
   class="conteudoGrupo"
 ></div>
 
-  })
-
-  document.getElementById(
+document.getElementById(
     "janelaBiblioteca"
   ).style.display = "block"
 
