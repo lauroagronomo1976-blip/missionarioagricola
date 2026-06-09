@@ -1224,56 +1224,6 @@ ${p[1]},${p[0]},0
 
 }
 
-      document.getElementById(
-        "painelRastro"
-      ).style.display = "block"
-
-      document.getElementById(
-        "infoRastro"
-      ).innerHTML =
-
-      `
-      <b>Latitude</b><br>
-      ${lat.toFixed(6)}
-
-      <br><br>
-
-      <b>Longitude</b><br>
-      ${lng.toFixed(6)}
-
-      <br><br>
-
-      <b>Altitude</b><br>
-      ${
-        altitude
-        ? altitude.toFixed(1)
-        : "N/D"
-      } m
-
-      <br><br>
-
-      <b>Precisão GPS</b><br>
-      ${precisao.toFixed(1)} m
-      `
-
-    },
-
-    erro => {
-
-      alert(
-        "Não foi possível obter GPS."
-      )
-
-    },
-
-    {
-      enableHighAccuracy:true
-    }
-
-  )
-
-}
-
 /* =========================================
 PONTO GEOREFERENCIADO
 ========================================= */
