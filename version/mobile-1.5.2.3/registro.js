@@ -1707,6 +1707,8 @@ function alternarGrupo(nome){
     grupo.style.display = "block"
 
   }
+}   // <- ESTA CHAVE ESTÁ FALTANDO
+  
 function popularGrupo(
   nomeGrupo,
   listaFeicoes
@@ -1719,10 +1721,9 @@ function popularGrupo(
 
   grupo.innerHTML = ""
 
-  listaFeicoes.forEach(
-    (f,index)=>{
+  listaFeicoes.forEach((f,index)=>{
 
-      grupo.innerHTML += `
+  grupo.innerHTML += `
 
 <div
   class="arquivoBiblioteca"
@@ -1734,8 +1735,6 @@ ${f.nome}
 
 `
 
-    }
-
-  )
+})
 
 }
