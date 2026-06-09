@@ -1639,6 +1639,8 @@ const grades =
   class="conteudoGrupo"
 ></div>
 
+'
+
 document.getElementById(
     "janelaBiblioteca"
   ).style.display = "block"
