@@ -1587,9 +1587,32 @@ const grades =
   biblioteca.filter(
     f => f.tipo === "grade"
   )
+
+  areas.sort(
+  (a,b)=>
+  new Date(b.data) -
+  new Date(a.data)
+)
+
+rastros.sort(
+  (a,b)=>
+  new Date(b.data) -
+  new Date(a.data)
+)
+
+pontos.sort(
+  (a,b)=>
+  new Date(b.data) -
+  new Date(a.data)
+)
+
+grades.sort(
+  (a,b)=>
+  new Date(b.data) -
+  new Date(a.data)
+)
   
   lista.innerHTML = `
-
   
 <div
   class="grupoBiblioteca"
@@ -1644,7 +1667,26 @@ const grades =
 document.getElementById(
     "janelaBiblioteca"
   ).style.display = "block"
+popularGrupo(
+  "areas",
+  areas
+)
 
+popularGrupo(
+  "rastros",
+  rastros
+)
+
+popularGrupo(
+  "pontos",
+  pontos
+)
+
+popularGrupo(
+  "grades",
+  grades
+)
+  
 }
 
 function alternarGrupo(nome){
@@ -1665,5 +1707,35 @@ function alternarGrupo(nome){
     grupo.style.display = "block"
 
   }
+function popularGrupo(
+  nomeGrupo,
+  listaFeicoes
+){
+
+  const grupo =
+    document.getElementById(
+      "grupo_" + nomeGrupo
+    )
+
+  grupo.innerHTML = ""
+
+  listaFeicoes.forEach(
+    (f,index)=>{
+
+      grupo.innerHTML += `
+
+<div
+  class="arquivoBiblioteca"
+>
+
+${f.nome}
+
+</div>
+
+`
+
+    }
+
+  )
 
 }
