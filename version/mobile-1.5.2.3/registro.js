@@ -1568,6 +1568,12 @@ function carregarBiblioteca(){
       "bibliotecaFeicoes"
     ) || "[]"
   )
+
+  console.log(
+  "BIBLIOTECA:",
+  biblioteca
+)
+  
 const areas =
   biblioteca.filter(
     f => f.tipo === "area"
