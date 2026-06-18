@@ -1732,7 +1732,8 @@ function popularGrupo(
   grupo.innerHTML += `
 
 <div
-  class="arquivoBiblioteca"
+    class="arquivoBiblioteca"
+    onclick="abrirFeicaoBiblioteca('${f.nome}')"
 >
 
 ${f.nome}
@@ -1742,5 +1743,24 @@ ${f.nome}
 `
 
 })
+
+}
+
+function abrirFeicaoBiblioteca(nome){
+
+    const biblioteca = JSON.parse(
+        localStorage.getItem("bibliotecaFeicoes") || "[]"
+    )
+
+    const feicao =
+        biblioteca.find(f=>f.nome===nome)
+
+    if(!feicao) return
+
+    fecharBiblioteca()
+
+    visualizarFeicao(
+        biblioteca.indexOf(feicao)
+    )
 
 }
