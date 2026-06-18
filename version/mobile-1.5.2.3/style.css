@@ -734,29 +734,27 @@ JANELA FEIÇÕES
 }
 
 #janelaBiblioteca{
-  display:none;
 
-  position:fixed;
+    position:fixed;
 
-  top:70px;
-  left:50%;
+    top:70px;
 
-  transform:translateX(-50%);
+    left:15px;
 
-  width:90%;
-  max-width:500px;
+    width:380px;
 
-  height:70vh;
+    height:75vh;
 
-  background:white;
+    background:white;
 
-  border-radius:14px;
+    border-radius:12px;
 
-  box-shadow:0 4px 20px rgba(0,0,0,.25);
+    box-shadow:0 8px 30px rgba(0,0,0,.25);
 
-  z-index:5000;
+    overflow:hidden;
 
-  overflow:hidden;
+    z-index:999999;
+
 }
 
 /* =========================
