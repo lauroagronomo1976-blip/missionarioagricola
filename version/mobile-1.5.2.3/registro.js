@@ -1537,15 +1537,6 @@ function visualizarFeicao(index){
 /* =========================
 BIBLIOTECA
 ========================= */
-
-function abrirBiblioteca(){
-
-  fecharMenu()
-
-  carregarBiblioteca()
-
-}
-
 function carregarBiblioteca(){
 
   const lista =
