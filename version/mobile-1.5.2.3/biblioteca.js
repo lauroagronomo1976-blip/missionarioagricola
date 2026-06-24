@@ -26,3 +26,11 @@ function fecharBiblioteca(){
     ).style.display = "none";
 
 }
+
+function abrirBiblioteca(){
+
+    fecharMenu();
+
+    carregarBiblioteca();
+
+}
