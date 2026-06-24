@@ -1546,14 +1546,6 @@ function abrirBiblioteca(){
 
 }
 
-function fecharBiblioteca(){
-
-  document.getElementById(
-    "janelaBiblioteca"
-  ).style.display = "none"
-
-}
-
 function carregarBiblioteca(){
 
   const lista =
