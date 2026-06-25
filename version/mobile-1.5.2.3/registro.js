@@ -1086,6 +1086,8 @@ SALVAR FEIÇÃO
 
 function salvarFeicao(){
 
+  console.log("Entrou em salvarFeicao");
+  
   if(
     pontos.length === 0 &&
     pontosGrade.length === 0
@@ -1102,7 +1104,7 @@ function salvarFeicao(){
   if(!nome) return
 
   const feicao = {
-
+console.log(feicao);
     id: Date.now(),
 
   nome:nome,
@@ -1131,11 +1133,15 @@ function salvarFeicao(){
 }
 
   bibliotecaFeicoes.push(feicao)
+console.log(bibliotecaFeicoes);
 
   localStorage.setItem(
     "bibliotecaFeicoes",
     JSON.stringify(bibliotecaFeicoes)
   )
+console.log(
+    localStorage.getItem("bibliotecaFeicoes")
+);
 
   gerarKMLFeicao(feicao)
 
