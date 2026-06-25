@@ -1103,6 +1103,8 @@ function salvarFeicao(){
 
   const feicao = {
 
+    id: Date.now(),
+
   nome:nome,
 
   data:new Date().toLocaleString(),
