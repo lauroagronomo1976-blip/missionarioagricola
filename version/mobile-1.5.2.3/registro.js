@@ -1104,33 +1104,34 @@ function salvarFeicao(){
   if(!nome) return
 
   const feicao = {
-console.log(feicao);
+
     id: Date.now(),
 
-  nome:nome,
+    nome: nome,
 
-  data:new Date().toLocaleString(),
+    data: new Date().toLocaleString(),
 
-  tipo:modo,
+    tipo: modo,
 
-  formato:"kml",
+    formato: "kml",
 
-  pontos:[...pontos],
+    pontos: [...pontos],
 
-  grade:[...pontosGrade],
+    grade: [...pontosGrade],
 
-  area:areaCalculada || 0,
+    area: areaCalculada || 0,
 
-  distancia:distancia || 0,
+    distancia: distancia || 0,
 
-  quantidadePontos:
-    pontos.length,
+    quantidadePontos: pontos.length,
 
-  altitudeMedia:0,
+    altitudeMedia: 0,
 
-  angulo:anguloGrade
+    angulo: anguloGrade
 
 }
+
+console.log(feicao);
 
   bibliotecaFeicoes.push(feicao)
 console.log(bibliotecaFeicoes);
